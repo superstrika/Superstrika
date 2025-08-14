@@ -1,0 +1,3 @@
+[console_scripts]
+motors = my_robot_package.superstrika.motorNode:main
+
