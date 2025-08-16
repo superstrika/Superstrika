@@ -47,4 +47,12 @@ class SuperStrika:
 
 robot = SuperStrika()
 print("SuperStrika robot initialized.")
-print("Current yaw:", robot.get_yaw())
+while True:
+    try:
+        # Read and print the current yaw
+        yaw = robot.get_yaw()
+        print(f"Current yaw: {yaw} degrees")
+        time.sleep(.2)  
+    except KeyboardInterrupt:
+        print("Exiting...")
+        break
