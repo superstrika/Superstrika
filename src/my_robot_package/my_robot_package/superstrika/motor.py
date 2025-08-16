@@ -22,7 +22,7 @@ class Motor:
             self.pwm2.value = 0
         else:
             self.pwm1.value = 0
-            self.pwm2.value = cycle / self.PWM_RANGE
+            self.pwm2.value = cycle / self.PWM_RANGEca
     
     def stopMotor(self):
         """Stops all motors"""

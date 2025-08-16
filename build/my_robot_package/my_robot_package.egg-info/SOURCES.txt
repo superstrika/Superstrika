@@ -1,7 +1,6 @@
 package.xml
 setup.cfg
 setup.py
-my_robot_package/motor_controller.py
 my_robot_package.egg-info/PKG-INFO
 my_robot_package.egg-info/SOURCES.txt
 my_robot_package.egg-info/dependency_links.txt
