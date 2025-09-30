@@ -1,9 +1,21 @@
 import serial
-import time
+import rclpy
+from rclpy.node import Node
+from std_msgs.msg import Float32MultiArray
 
-class Uart:
+class UartNode(Node):
 
     def __init__(self) -> None:
+        super().__init__("uart")
+
+        self.xyPublisher = self.create_publisher(
+            Float32MultiArray,
+            'xy',
+            10
+        )
+
+        
+
         self.ser = serial.Serial(
             port='/dev/ttyS0',
             baudrate=9600,
