@@ -142,3 +142,5 @@ class MPU6050:
 
     def set_accel_sensitivity(self, factor):
         self.accel_sensitivity_factor = factor
+
+print(9)

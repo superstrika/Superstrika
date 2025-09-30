@@ -1,15 +1,17 @@
-
+# SuperStrika.py
 
 from motor import Motor
 from Gyro import MPU6050
 import smbus
 import time
 
+
+
 class SuperStrika:
     def __init__(self, bus_num=1, mpu_addr=0x68):
         # Initialize four motors
         self.m1 = Motor(26, 25) 
-        self.m2 = Motor(24, 23) 
+        self.m2 = Motor(23, 24) 
         self.m3 = Motor(22, 21) 
         self.m4 = Motor(20, 19) 
         
@@ -23,7 +25,7 @@ class SuperStrika:
         self._last_error = 0
         self._last_time = time.time()
 
-    def PIDcalc(self, Sp, Pv, Kp, Ki, Kd):
+    def calc(self, Sp, Pv, Kp, Ki, Kd):
         error = Sp - Pv
         current_time = time.time()
         dt = current_time - self._last_time if self._last_time else 1.0
@@ -44,15 +46,14 @@ class SuperStrika:
         theta = self.MPU.get_theta()
         return theta['z']
 
+    def main(self, speed=100):
+        while True:
+            self.m1.startMotor(True, speed)
+            # self.m2.startMotor(True, speed)
+            # self.m3.startMotor(True, speed)
+            # self.m4.startMotor(True, speed)
 
 robot = SuperStrika()
-print("SuperStrika robot initialized.")
-while True:
-    try:
-        # Read and print the current yaw
-        yaw = robot.get_yaw()
-        print(f"Current yaw: {yaw} degrees")
-        time.sleep(.2)  
-    except KeyboardInterrupt:
-        print("Exiting...")
-        break
+robot.main(speed=1023)  # Example usage with speed set to 100
+
+
