@@ -9,6 +9,7 @@ class MotorsNode(Node):
     def __init__(self, enablePins: list[tuple[int, int]]):
         super().__init__('motors')
         self.PWM_RANGE = 1024
+        self.AXIS_ROTATION = 45 # deg
 
         #motor setup:
         self.motors = []
@@ -64,17 +65,21 @@ class MotorsNode(Node):
             self.get_logger().error(f'Error in vectorMovementCallback: {e}')
             print(e)
     
-    def calculate_speed(self, angle, magnitude, rotation):
+    def calculate_speed(self, Vx, Vy, rotation):
         # Calculate the speed of the motor
-        cos = math.cos(math.radians(angle + 45))
-        sin = math.sin(math.radians(angle + 45))
+        cos = math.cos(math.radians(self.AXIS_ROTATION))
+        sin = math.sin(math.radians(self.AXIS_ROTATION))
 
-        vx = magnitude * (0 if abs(cos) < 1.0e-10 else cos)
-        vy = magnitude * (0 if abs(sin) < 1.0e-10 else sin)
-        wheel1_speed = vy - rotation
-        wheel2_speed = vx + rotation
-        wheel3_speed = vy + rotation
-        wheel4_speed = vx - rotation
+        cos = (0 if abs(cos) < 1.0e-10 else cos)
+        sin = (0 if abs(sin) < 1.0e-10 else sin)
+
+        rotatedVx: float = Vx * cos - Vy * sin
+        rotatedVy: float = Vx * sin + Vy * cos
+
+        wheel1_speed = rotatedVy - rotation
+        wheel2_speed = rotatedVx + rotation
+        wheel3_speed = rotatedVy + rotation
+        wheel4_speed = rotatedVx - rotation
 
         return [wheel1_speed*100, wheel2_speed*100, wheel3_speed*100, wheel4_speed*100]
     
