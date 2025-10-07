@@ -14,7 +14,18 @@ class UartNode(Node):
             10
         )
 
-        
+        self.xyListener = self.create_subscription(
+            Float32MultiArray,
+            'xy',
+            self.distanceToVelocity,
+            10
+        )
+
+        self.VxVyPublisher = self.create_publisher(
+            Float32MultiArray,
+            'VxVy',
+            11
+        )
 
         self.ser = serial.Serial(
             port='/dev/ttyS0',
@@ -28,10 +39,12 @@ class UartNode(Node):
                 response = self.ser.readline().decode('utf-8').rstrip()
                 print("Received:", response)
 
+    def distanceToVelocity(self, msg: Float32MultiArray) -> None:
+        pass
+
 
 def main() -> None:
     uart = Uart()
-
     uart.scanForMessages()
 
 if __name__ == "__main__":
