@@ -62,6 +62,7 @@ class UartNode(Node):
             self.pidX.pidCalc(msg.data[0]),
             self.pidY.pidCalc(msg.data[1])
         ]
+        #for now, no use of goals
 
         self.VxVyPublisher.publish(speed)
 
