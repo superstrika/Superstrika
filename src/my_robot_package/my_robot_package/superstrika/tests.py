@@ -1,18 +1,23 @@
-from gpiozero import PWMLED
+from gpiozero import Motor
 from time import sleep
 
-# Pin 19 (BCM numbering)
-led = PWMLED(22)
-
-print("Running PWM test on GPIO19... Press CTRL+C to stop.")
+# Create motor object
+motor = Motor(forward=23, backward=24)
 
 try:
     while True:
-        # 
-        led.value = 1   
+        print("Motor: forward")
+        motor.forward()
+        sleep(2)
 
+        print("Motor: backward")
+        motor.backward()
+        sleep(2)
 
+        print("Motor: stop")
+        motor.stop()
+        sleep(1)
 
 except KeyboardInterrupt:
-    print("\nExiting program.")
-    led.off()
+    print("Program stopped")
+    motor.stop()
