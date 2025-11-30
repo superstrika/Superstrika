@@ -1,1 +1,1 @@
-/ros2/first_app/build/my_robot_package/my_robot_package/launch/motors.launch.py
+/ros2/Superstrika/build/my_robot_package/my_robot_package/launch/motors.launch.py
