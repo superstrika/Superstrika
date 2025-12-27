@@ -1,9 +1,15 @@
 import socket
-import time
+import serverManagment
 
 def main():
+    server = serverManagment.getServerInfo(True)
+
+    port = server["port"]
+    hostname = server["hostname"]
+
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
-        sock.connect(('127.0.0.1', 8081))
+        sock.connect((hostname, port))
+        print(f"Connected! hostname: {hostname}, port: {port}")
 
         while True:
             sock.sendall(input("> ").encode())

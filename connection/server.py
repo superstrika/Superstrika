@@ -1,15 +1,21 @@
 import socket
 import time
+import serverManagment
 
 def main():
-    port = 50100
+    server = serverManagment.getServerInfo(True) #same hostname
+    port = server["port"]
+    hostname = server["hostname"]
+
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
-        sock.bind(('', 8081))
-        print("Listening...")
+        sock.bind((hostname, port))
+
+        print(f"Listening... Port: {port}, Hostname: {hostname}")
         sock.listen(1)
+
         conn, addr = sock.accept()
         print(f"Connection by: {addr}")
-        # print(conn.recv(1024).decode())
+
         sock.setblocking(False)
         print("Socket is non-blocking. Attempting to receive data...")
 
