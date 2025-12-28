@@ -29,7 +29,7 @@ def getServerInfo(sameHost: bool = False):
     hostname = socket.gethostname()
 
     servers: list[dict] = savedServers("savedServers/")
-    servers = list(filter(lambda server: server["hostname"] != hostname if not sameHost else server["hostname"] == hostname, servers))
+    servers = list(filter(lambda server: server["hostname"].removesuffix(".local") != hostname if not sameHost else server["hostname"].removesuffix(".local") == hostname, servers))
 
     if len(servers) == 0:
         print("No saved servers found.")
