@@ -1,6 +1,7 @@
 import socket
 import time
 import serverManagment
+import commandManager
 
 def main():
     server = serverManagment.getServerInfo(True) #same hostname
@@ -25,6 +26,8 @@ def main():
 
                 if data:
                     print(data.decode())
+                    commandManager.runCommand(data.decode())
+
                 else:
                     print("Connection closed by slave")
                     break
