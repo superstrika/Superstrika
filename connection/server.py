@@ -4,7 +4,7 @@ import time
 def main():
     port = 50100
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
-        sock.bind(('', 8081))
+        sock.bind(('', 8082))
         print("Listening...")
         sock.listen(1)
         conn, addr = sock.accept()
