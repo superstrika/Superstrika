@@ -28,13 +28,29 @@ class dcmotdriver:
 
     
     def stophard(self):
-            self.mot1.value = 1
-            self.mot2.value = 1
+        self.mot1.value = 1
+        self.mot2.value = 1
+
+    def stop(self):
+        self.mot1.value = 0
+        self.mot2.value = 0
+    
+    def __del__(self):
+        self.mot1.value = 0
+        self.mot2.value = 0
+
 
 if __name__ == "__main__":
-     motor = dcmotdriver(19, 20)
-     motor2 = dcmotdriver(22, 23)
-     motor.motgo(100)
-     motor2.motgo(100)
+    motor = dcmotdriver(19, 20)
+    motor2 = dcmotdriver(21, 22)
+    motor3 = dcmotdriver(23, 24)
+    motor4 = dcmotdriver(25, 26)
+     
+    motor3.motgo(100)
+
+    input()
+
+    del motor, motor2, motor3, motor4
 
     
+ 
