@@ -52,7 +52,7 @@ import lgpio
 import time
 
 # GPIO 21 is Physical Pin 40
-pins = [19, 20, 21, 22, 23, 24, 25, 26]
+pins = [23, 24,19, 20, 21, 22,25, 26]
 CHIP_ID = 0  # Confirmed by your gpiodetect
 
 for pin in pins:

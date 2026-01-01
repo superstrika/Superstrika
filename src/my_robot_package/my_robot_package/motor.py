@@ -14,7 +14,8 @@ class dcmotdriver:
         
 
     def motgo(self, speed):
-        pwm_value = speed #convert to%
+        pwm_value = abs(speed
+                        ) #convert to%
         #print('speed pwm value = ', pwm_value)
         if speed > 0:
             self.mot1.value = pwm_value
@@ -41,12 +42,13 @@ class dcmotdriver:
 
 
 if __name__ == "__main__":
-    motor = dcmotdriver(19, 20)
+    motor1 = dcmotdriver(19, 20)
     motor2 = dcmotdriver(21, 22)
     motor3 = dcmotdriver(23, 24)
     motor4 = dcmotdriver(25, 26)
      
-    motor3.motgo(100)
+    motor2.motgo(30)
+    motor1.motgo(-30)
 
     input()
 
