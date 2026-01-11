@@ -3,7 +3,7 @@ from time import sleep
 
 class PWM7046:
 
-    def __init__(self, pin, freq, chipID=0):
+    def __init__(self, pin, freq=800, chipID=0):
 
         self._pin = pin
         self._freq = freq
