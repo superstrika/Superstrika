@@ -1,5 +1,5 @@
 import lgpio
-import time
+from time import sleep
 
 # UART Pins (BCM numbering)
 TX_PIN = 14
@@ -21,9 +21,11 @@ def check_pins():
         print(f"GPIO {pin:<5} | {state}")
 
 try:
-    lgpio.gpio_write(handle, TX_PIN, 0)
-    lgpio.gpio_write(handle, RX_PIN, 0)
-    check_pins()
+    # lgpio.gpio_write(handle, TX_PIN, 0)
+    # lgpio.gpio_write(handle, RX_PIN, 0)
+    while True:
+        check_pins()
+        sleep(0.3)
 
 finally:
     # Always close the handle to release resources

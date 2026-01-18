@@ -3,7 +3,7 @@ import time
 
 def get_serial():
     # Use /dev/serial0 as the alias
-    ser = serial.Serial('/dev/serial0', 115200, timeout=2)
+    ser = serial.Serial('/dev/ttyACM0', 115200, timeout=2)
     ser.reset_input_buffer()
     return ser
     
@@ -15,11 +15,11 @@ while True:
     try:
         if ser.in_waiting > 0:
             line = ser.readline().decode('utf-8', errors='ignore').strip()
-            if "P" in line:
-                print("GOT P")
-                ser.reset_input_buffer()
-                time.sleep(2)
-                continue
+            # if "P" in line:
+            #     print("GOT P")
+            #     ser.reset_input_buffer()
+            #     time.sleep(2)
+            #     continue
             if line:
                 count += 1
                 print(f"{count} Received: {line}")
@@ -31,7 +31,7 @@ while True:
         try:
             ser.close()
             time.sleep(1) 
-            ser = get_serial() # Hard reset the connection
+            ser = get_serial() # Hard rescet the connection
             ser.reset_input_buffer()
             print("Connected!")
         except:
