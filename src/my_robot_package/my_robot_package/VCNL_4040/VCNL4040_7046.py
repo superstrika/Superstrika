@@ -55,7 +55,7 @@ class VCNL4040_7046:
         :param threshold: The sensitivity value 
         """
         return self.get_proximity() > threshold
-
+ 
     def get_data(self) -> dict[str: int | float | bool]:
         return {
             "proximity": self.get_proximity(),

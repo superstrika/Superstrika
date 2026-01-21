@@ -21,11 +21,11 @@ class motor7046:
         return self._speed
 
     @speed.setter
-    def speed(self, speed):
+    def speed(self, speed: float):
         self._speed = speed
         pwm_value = abs(self._speed)
 
-        if self._peed > 0:
+        if self._speed > 0:
             self.mot1.value = pwm_value
             self.mot2.value = 0
         elif self._speed < 0:
@@ -52,6 +52,7 @@ class motor7046:
 
     @staticmethod
     def calculate_speed(Vx, Vy, rotation):
+        Vx = -Vx
         AXIS_ROTATION = 45
         rad = math.radians(AXIS_ROTATION)  # Or self.AXIS_ROTATION
         cos = math.cos(rad)
@@ -77,16 +78,18 @@ class motor7046:
 
 
 if __name__ == "__main__":
-    motor1 = motor7046(19, 20, True) # green
-    motor2 = motor7046(21, 22) # white
+    motor1 = motor7046(19, 20) # green
+    motor2 = motor7046(21, 22, True) # white
     motor3 = motor7046(23, 24, True) # orange
-    motor4 = motor7046(25, 26) # orange white
+    motor4 = motor7046(25, 26) # orange
+
+    # motor3.speed = -100
 
     motors: motor7046 = [motor3, motor1, motor2, motor4]
     speeds = motor1.calculate_speed(0, 100, 0)
     print(speeds)
     for i in range(len(speeds)):
-        motors[i].setSpeed(speeds[i])
+        motors[i].speed = speeds[i]
         
 
     input()
