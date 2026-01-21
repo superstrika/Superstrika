@@ -1,7 +1,7 @@
 from pwm7046 import PWM7046
 import math
 
-        
+
     
 class motor7046:
     def __init__(self, pin1, pin2, switch: bool = False):
