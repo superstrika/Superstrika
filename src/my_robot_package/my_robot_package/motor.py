@@ -81,10 +81,12 @@ if __name__ == "__main__":
     motor1 = motor7046(19, 20) # green
     motor2 = motor7046(21, 22, True) # white
     motor3 = motor7046(23, 24, True) # orange
-    motor4 = motor7046(25, 26) # orange white
+    motor4 = motor7046(25, 26) # orange
+
+    # motor3.speed = -100
 
     motors: motor7046 = [motor3, motor1, motor2, motor4]
-    speeds = motor1.calculate_speed(0, 70, 10)
+    speeds = motor1.calculate_speed(0, 100, 0)
     print(speeds)
     for i in range(len(speeds)):
         motors[i].speed = speeds[i]

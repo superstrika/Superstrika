@@ -1,10 +1,6 @@
 import lgpio
 from time import sleep
 
-# UART Pins (BCM numbering)
-TX_PIN = 14
-RX_PIN = 15
-
 # Open the GPIO chip (0 is the default for Pi 4)
 handle = lgpio.gpiochip_open(0)
 
@@ -12,7 +8,7 @@ def check_pins():
     print(f"{'GPIO':<10} | {'LEVEL':<10}")
     print("-" * 22)
     
-    for pin in [TX_PIN, RX_PIN]:
+    for pin in range(3, 30):
         # Get the logical level (0 or 1)
         # Note: lgpio_gpio_read works even if the pin is set to UART mode
         level = lgpio.gpio_read(handle, pin)
