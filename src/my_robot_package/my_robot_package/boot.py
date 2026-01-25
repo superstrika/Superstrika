@@ -13,6 +13,8 @@ for pin in pins:
 
     except Exception as e:
         print(f"Error: {e}")
-
+from relay import Relay
+r = Relay(7)
+r.on()
 
 time.sleep(0.1)
