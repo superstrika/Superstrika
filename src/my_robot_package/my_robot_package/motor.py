@@ -1,9 +1,10 @@
 from pwm7046 import PWM7046
+import lgpio
 import math
-
-
     
 class motor7046:
+    motorCount = 0
+
     def __init__(self, pin1, pin2, switch: bool = False):
 
         if switch:
@@ -15,6 +16,11 @@ class motor7046:
         self._speed = 0
         self.mot1.value = 0  # start PWM with 0% duty cycle
         self.mot2.value = 0
+
+        if motor7046.motorCount == 0:
+            # turn on switch
+
+        motor7046.motorCount += 1
 
     @property
     def speed(self):
@@ -46,9 +52,13 @@ class motor7046:
         self.mot2.value = 0
 
     def __del__(self):
+        motor7046.motorCount -= 1
         self._speed = 0
         self.mot1.value = 0
         self.mot2.value = 0
+
+        if motor7046.motorCount == 0:
+            # turn off switch
 
     @staticmethod
     def calculate_speed(Vx, Vy, rotation):
