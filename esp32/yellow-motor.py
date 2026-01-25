@@ -1,28 +1,19 @@
-from pwm7046 import PWM7046
-import lgpio
+import machine
 import math
     
-class motor7046:
-    motorCount = 0
+class yellowMotor7046:
 
-    def __init__(self, pin1, pin2, switch_pin: int = 7, switch: bool = False):
+    def __init__(self, pin1, pin2, switch: bool = False):
 
         if switch:
             pin1, pin2 = pin2, pin1
 
-        self.mot1 = PWM7046(pin1, 800)
-        self.mot2 = PWM7046(pin2, 800)
+        self.mot1 = machine.PWM(machine.Pin(pin1))
+        self.mot2 = machine.PWM(machine.Pin(pin2))
 
         self._speed = 0
-        self.mot1.value = 0  # start PWM with 0% duty cycle
-        self.mot2.value = 0
-
-        if motor7046.motorCount == 0:
-            self._h = lgpio.gpiochip_open(chipID)
-            lgpio.gpio_claim_output(self._h, switch_pin)
-            lgpio.gpio_write(self._h, switch_pin, 1)
-
-        motor7046.motorCount += 1
+        self.mot1.duty_u16(0)  # start PWM with 0% duty cycle
+        self.mot2.duty_u16(0)
 
     @property
     def speed(self):
@@ -32,35 +23,33 @@ class motor7046:
     def speed(self, speed: float):
         self._speed = speed
         pwm_value = abs(self._speed)
+        pwm_value = map(pwm_value, 0, 100, 0, 65535)
 
         if self._speed > 0:
-            self.mot1.value = pwm_value
-            self.mot2.value = 0
+            self.mot1.duty_u16(pwm_value)
+            self.mot2.duty_u16(0)
         elif self._speed < 0:
-            self.mot1.value = 0
-            self.mot2.value = pwm_value
+            self.mot1.duty_u16(0)
+            self.mot2.duty_u16(pwm_value)
         else:
-            self.mot1.value = 0
-            self.mot2.value = 0
+            self.mot1.duty_u16(0)
+            self.mot2.duty_u16(0)
 
     def stophard(self):
         self._speed = 1
-        self.mot1.value = 1
-        self.mot2.value = 1
+        self.mot1.duty_u16(1)
+        self.mot2.duty_u16(1)
 
     def stop(self):
         self._speed = 0
-        self.mot1.value = 0
-        self.mot2.value = 0
+        self.mot1.duty_u16(0)
+        self.mot2.duty_u16(0)
 
     def __del__(self):
-        motor7046.motorCount -= 1
         self._speed = 0
-        self.mot1.value = 0
-        self.mot2.value = 0
+        self.mot1.duty_u16(0)
+        self.mot2.duty_u16(0)
 
-        if motor7046.motorCount == 0:
-            lgpio.gpio_write(self._h, switch_pin, 0)
 
     @staticmethod
     def calculate_speed(Vx, Vy, rotation):
@@ -90,23 +79,7 @@ class motor7046:
 
 
 if __name__ == "__main__":
-    motor1 = motor7046(19, 20) # green
-    motor2 = motor7046(21, 22, True) # white
-    motor3 = motor7046(23, 24, True) # orange
-    motor4 = motor7046(25, 26) # orange
-
-    # motor3.speed = -100
-
-    motors: motor7046 = [motor3, motor1, motor2, motor4]
-    speeds = motor1.calculate_speed(0, 100, 0)
-    print(speeds)
-    for i in range(len(speeds)):
-        motors[i].speed = speeds[i]
-        
-
-    input()
-
-    del motor1, motor2, motor3, motor4
+    pass
 
     
  
