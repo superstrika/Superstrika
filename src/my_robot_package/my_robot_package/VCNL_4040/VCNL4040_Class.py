@@ -16,7 +16,7 @@ class VCNL4040Wrapper:
             else:
                 self.i2c = i2c_bus
 
-            # 2. Initialize the Driver
+            # 2. Initialize the Driverp
             self.sensor = adafruit_vcnl4040.VCNL4040(self.i2c)
             
             # 3. Configure for Maximum Range (200mA)
