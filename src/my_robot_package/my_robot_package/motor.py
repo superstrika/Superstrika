@@ -4,8 +4,9 @@ import math
     
 class motor7046:
     motorCount = 0
+    _h = 0
 
-    def __init__(self, pin1, pin2, switch_pin: int = 7, switch: bool = False):
+    def __init__(self, pin1, pin2, switch_pin: int = 7, switch: bool = False, chipID: int = 0):
 
         if switch:
             pin1, pin2 = pin2, pin1
@@ -17,10 +18,12 @@ class motor7046:
         self.mot1.value = 0  # start PWM with 0% duty cycle
         self.mot2.value = 0
 
+        self._switch_pin = switch_pin
+
         if motor7046.motorCount == 0:
-            self._h = lgpio.gpiochip_open(chipID)
-            lgpio.gpio_claim_output(self._h, switch_pin)
-            lgpio.gpio_write(self._h, switch_pin, 1)
+            motor7046._h = lgpio.gpiochip_open(chipID)
+            lgpio.gpio_claim_output(motor7046._h, self._switch_pin)
+            lgpio.gpio_write(motor7046._h, self._switch_pin, 1)
 
         motor7046.motorCount += 1
 
@@ -60,7 +63,7 @@ class motor7046:
         self.mot2.value = 0
 
         if motor7046.motorCount == 0:
-            lgpio.gpio_write(self._h, switch_pin, 0)
+            lgpio.gpio_write(motor7046._h, self._switch_pin, 0)
 
     @staticmethod
     def calculate_speed(Vx, Vy, rotation):
