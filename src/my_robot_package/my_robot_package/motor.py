@@ -5,7 +5,7 @@ import math
 class motor7046:
     motorCount = 0
 
-    def __init__(self, pin1, pin2, switch_pin: int = 16, switch: bool = False):
+    def __init__(self, pin1, pin2, switch_pin: int = 7, switch: bool = False):
 
         if switch:
             pin1, pin2 = pin2, pin1
