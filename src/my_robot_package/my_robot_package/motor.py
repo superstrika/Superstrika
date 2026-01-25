@@ -5,7 +5,7 @@ import math
 class motor7046:
     motorCount = 0
 
-    def __init__(self, pin1, pin2, switch: bool = False):
+    def __init__(self, pin1, pin2, switch_pin: int = 16, switch: bool = False):
 
         if switch:
             pin1, pin2 = pin2, pin1
@@ -18,7 +18,9 @@ class motor7046:
         self.mot2.value = 0
 
         if motor7046.motorCount == 0:
-            # turn on switch
+            self._h = lgpio.gpiochip_open(chipID)
+            lgpio.gpio_claim_output(self._h, switch_pin)
+            lgpio.gpio_write(self._h, switch_pin, 1)
 
         motor7046.motorCount += 1
 
@@ -58,7 +60,7 @@ class motor7046:
         self.mot2.value = 0
 
         if motor7046.motorCount == 0:
-            # turn off switch
+            lgpio.gpio_write(self._h, switch_pin, 0)
 
     @staticmethod
     def calculate_speed(Vx, Vy, rotation):
