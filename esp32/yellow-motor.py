@@ -23,7 +23,10 @@ class yellowMotor7046:
     def speed(self, speed: float):
         self._speed = speed
         pwm_value = abs(self._speed)
-        pwm_value = map(pwm_value, 0, 100, 0, 65535)
+        pwm_value = int(pwm_value * (65536 / 100))
+        if (pwm_value > 65535):
+            pwm_value = 65535
+        print(f"sends: {pwm_value}")
 
         if self._speed > 0:
             self.mot1.duty_u16(pwm_value)

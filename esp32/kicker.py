@@ -15,5 +15,6 @@ class Kicker:
         self.motor.speed = 0
 
 if __name__ == "__main__":
-    kicker = Kicker(12, 13)
-    kicker.kick(1)
+    kicker = Kicker(27, 26)
+    kicker.kick(10)
+
