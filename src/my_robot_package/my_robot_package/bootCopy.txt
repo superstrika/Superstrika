@@ -2,7 +2,7 @@ source /home/superstrika/cubie-1/Superstrika/venv/bin/activate
 enable_uart=1
 
 enable_jtag=0
-gpio=23,25,26=op,dl
-gpio=7=op,dh
+gpio=19-26=op,dl
+gpio=7=op,dl
 
 echo "Setup Finished"
