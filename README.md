@@ -63,6 +63,14 @@ If ROS 2 commands are not detected, ensure your environment is sourced:
 source /opt/ros/humble/setup.sh
 ```
 
+### Boot file
+If you'd like to change the boot file in your raspberry pi 4:
+```bash
+sudo nvim /boot/firmware/config.txt
+```
+
+An example for a boot file: ```src/my_robot_package/my_robot_package/bootCopy.txt```
+
 ---
 
 *Maintained by the Superstrika Team.*
