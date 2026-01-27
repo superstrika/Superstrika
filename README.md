@@ -42,10 +42,11 @@ Our design philosophy follows a two-tier approach:
 
 A huge thank you to the following people who helped make this project possible:
 
-- **[Gal Arbel](https://github.com/galarb)** - For mentorship and technical guidance.
-- **[Tomer Ozer](https://github.com/TomerOzer)** - For support in system architecture.
-- **[Yoav Aharoni](https://github.com/teddybearpc)** - For hardware and electronic expertise.
-- **[Noam Ron](https://github.com/NoamRon1)** - Lead developer and team captain.
+- **[Gal Arbel](https://github.com/galarb)** - Team mentor.
+- **[Tomer Ozer](https://github.com/TomerOzer)** - Team member.
+- **[Yoav Aharoni](https://github.com/teddybearpc)** - Team member.
+- **[Noam Ron](https://github.com/NoamRon1)** - Team member.
+- **[Itamar Hoter Ishai](https://github.com/itamarhoter)** - Team member
 
 ---
 
