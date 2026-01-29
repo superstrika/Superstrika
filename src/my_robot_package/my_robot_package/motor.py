@@ -92,29 +92,43 @@ class motor7046:
 
         return [(s / max_val) * 100 for s in speeds]
 
+class multipleMotors:
+    def __init__(self, pins: list[int]):
+        motor1 = motor7046(pins[0], pins[1], switch=True) # green
+        motor2 = motor7046(pins[2], pins[3], switch=False) # white
+        motor3 = motor7046(pins[4], pins[5], switch=False) # orange
+        motor4 = motor7046(pins[6], pins[7], switch=True) # orange
+
+        self.motors: list[motor7046] = [motor1, motor2, motor3, motor4]
+    
+    def setSpeed(Vx, Vy):
+        motor1.speed = Vx
+        motor2.speed = Vx
+        motor3.speed = Vy
+        motor4.speed = Vy
 
 if __name__ == "__main__":
-    # motor1 = motor7046(19, 20, switch=True) # green
-    # motor2 = motor7046(21, 22, switch=False) # white
-    # motor3 = motor7046(23, 24, switch=False) # orange
-    # motor4 = motor7046(25, 26, switch=True) # orange
+    motor1 = motor7046(19, 20, switch=False) # green
+    motor2 = motor7046(21, 22, switch=False) # white
+    motor3 = motor7046(23, 24, switch=True) # orange
+    motor4 = motor7046(25, 6, switch=True) # orange
 
-    # # motor3.speed = -100
+    # motor3.speed = -100
 
-    # motors: motor7046 = [motor3, motor1, motor2, motor4]
-    # speeds = motor1.calculate_speed(0, 70, 0)
-    # print(speeds)
-    # for i in range(len(speeds)):
-    #     motors[i].speed = -speeds[i]
+    motors: motor7046 = [motor1, motor2, motor3, motor4]
+    speeds = motor1.calculate_speed(0, 70, 0)
+    print(speeds)
+    for i in range(len(speeds)):
+        motors[i].speed = speeds[i]
         
 
-    # input()
-
-    # del motor1, motor2, motor3, motor4
-
-    motor = motor7046(25, 6, switch=False)
-    motor.speed = -100
     input()
-    del motor
+
+    del motor1, motor2, motor3, motor4
+
+    # motor = motor7046(25, 6, switch=False)
+    # motor.speed = -100
+    # input()
+    # del motor
     
  

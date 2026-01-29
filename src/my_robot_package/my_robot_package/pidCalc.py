@@ -27,5 +27,10 @@ class PidCalc:
         self.lastTime = time.time()
         self.prevError = error
 
-        speed = max(-self.maxSpeed, max(self.maxSpeed, speed))
+        # speed = max(-self.maxSpeed, max(self.maxSpeed, speed))
+        if (abs(speed) > self.maxSpeed):
+            if (speed > 0):
+                speed = self.maxSpeed
+            else:
+                speed = -self.maxSpeed
         return speed
