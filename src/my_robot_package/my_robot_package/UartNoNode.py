@@ -16,7 +16,7 @@ class UartNode():
 
     def scanForMessages(self) -> None:
         while True:
-            print(self.ser.in_waiting)
+            # print(self.ser.in_waiting)
             if self.ser.in_waiting > 0:
                 response = self.ser.readline().decode('utf-8').rstrip()
                 print("Received:", response)
@@ -30,6 +30,7 @@ class UartNode():
 
                 except Exception as e:
                     print(e)
+
             # else:
                 # print("Still Waiting...")
 

@@ -10,7 +10,7 @@ print(f"Scanning I2C bus {BUS_NUMBER} for devices...")
 found_devices = []
 
 # I2C addresses range from 0x03 to 0x77
-for device in range(60, 120):
+for device in range(0, 120):
     print(f"Trying {device}")
     try:
         # Try reading a single byte from the device address

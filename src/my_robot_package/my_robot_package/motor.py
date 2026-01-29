@@ -9,6 +9,7 @@ class motor7046:
     def __init__(self, pin1, pin2, switch_pin: int = 7, switch: bool = False, chipID: int = 0):
 
         if switch:
+            print("hi")
             pin1, pin2 = pin2, pin1
 
         self.mot1 = PWM7046(pin1, 800)
@@ -20,10 +21,10 @@ class motor7046:
 
         self._switch_pin = switch_pin
 
-        if motor7046.motorCount == 0:
-            motor7046._h = lgpio.gpiochip_open(chipID)
-            lgpio.gpio_claim_output(motor7046._h, self._switch_pin)
-            lgpio.gpio_write(motor7046._h, self._switch_pin, 1)
+        # if motor7046.motorCount == 0:
+        #     motor7046._h = lgpio.gpiochip_open(chipID)
+        #     lgpio.gpio_claim_output(motor7046._h, self._switch_pin)
+        #     lgpio.gpio_write(motor7046._h, self._switch_pin, 1)
 
         motor7046.motorCount += 1
 
@@ -62,8 +63,8 @@ class motor7046:
         self.mot1.value = 0
         self.mot2.value = 0
 
-        if motor7046.motorCount == 0:
-            lgpio.gpio_write(motor7046._h, self._switch_pin, 0)
+        # if motor7046.motorCount == 0:
+        #     lgpio.gpio_write(motor7046._h, self._switch_pin, 0)
 
     @staticmethod
     def calculate_speed(Vx, Vy, rotation):
@@ -93,23 +94,27 @@ class motor7046:
 
 
 if __name__ == "__main__":
-    motor1 = motor7046(19, 20) # green
-    motor2 = motor7046(21, 22, True) # white
-    motor3 = motor7046(23, 24, True) # orange
-    motor4 = motor7046(25, 26) # orange
+    # motor1 = motor7046(19, 20, switch=True) # green
+    # motor2 = motor7046(21, 22, switch=False) # white
+    # motor3 = motor7046(23, 24, switch=False) # orange
+    # motor4 = motor7046(25, 26, switch=True) # orange
 
-    # motor3.speed = -100
+    # # motor3.speed = -100
 
-    motors: motor7046 = [motor3, motor1, motor2, motor4]
-    speeds = motor1.calculate_speed(0, 100, 0)
-    print(speeds)
-    for i in range(len(speeds)):
-        motors[i].speed = speeds[i]
+    # motors: motor7046 = [motor3, motor1, motor2, motor4]
+    # speeds = motor1.calculate_speed(0, 70, 0)
+    # print(speeds)
+    # for i in range(len(speeds)):
+    #     motors[i].speed = -speeds[i]
         
 
+    # input()
+
+    # del motor1, motor2, motor3, motor4
+
+    motor = motor7046(25, 6, switch=False)
+    motor.speed = -100
     input()
-
-    del motor1, motor2, motor3, motor4
-
+    del motor
     
  
