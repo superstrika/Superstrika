@@ -19,7 +19,7 @@ class PidCalc:
 
 
         self.integral += error * dt
-        self.integral = max(-self.maxIntegral, min(self.integral, self.maxIntegral))
+        # self.integral = max(-self.maxIntegral, min(self.integral, self.maxIntegral))
 
         derivative = (error - self.prevError) / dt if dt > 0 else 0.0
         speed = self.kp * error + self.ki * self.integral + self.kd * derivative

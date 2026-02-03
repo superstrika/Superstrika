@@ -1,20 +1,18 @@
-from motor import motor7046
+from motor import multipleMotors, motor7046
 
 def main() -> None:
-    motor1 = motor7046(19, 20, switch=False) # green
-    motor2 = motor7046(21, 22, switch=False) # white
-    motor3 = motor7046(23, 24, switch=True) # orange
-    motor4 = motor7046(25, 6, switch=True) # orange
+    motors = multipleMotors([19, 20, 21, 22, 23, 24, 25, 6])
+    speed = 100
 
-    motors: motor7046 = [motor1, motor2, motor3, motor4]
-    speeds = motor1.calculate_speed(0, 70, 0)
-
-    print(speeds)
-    for i in range(len(speeds)):
-        motors[i].speed = speeds[i]
-        print(f"Running motor {i} on value: {speeds[i]}")
-        input()
-        motors[i].speed = 0
+    print(speed)
+    motors.setSpeed(speed, 0, 0, 0)
+    input()
+    motors.setSpeed(0, speed, 0, 0)
+    input()
+    motors.setSpeed(0, 0, speed, 0)
+    input()
+    motors.setSpeed(0, 0, 0, speed)
+    input()
 
 
 if __name__ == "__main__":
