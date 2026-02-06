@@ -2,7 +2,7 @@ import socket
 import serverManagment
 
 def main():
-    server = serverManagment.getServerInfo(True)
+    server = serverManagment.getServerInfo()
 
     port = server["port"]
     hostname = server["hostname"]

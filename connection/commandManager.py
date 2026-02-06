@@ -35,4 +35,12 @@ def runCommand(cmd: str) -> None:
             print(f"Command executed: 2 with params: {params}")
 
 
+"""
+Command Guide:
+1. ball found. Template: 1#<ballX>#<ballY>#<BlueGoalX>#<BlueGoalY>#<YellowGoalX>#<YellowGoalY>
+   Example: 1#0.0#100#0#250#0#0#0
+2. 
+"""
+
+
 
