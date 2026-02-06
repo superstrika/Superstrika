@@ -3,14 +3,10 @@ import math
     
 class yellowMotor7046:
 
-    def __init__(self, pin1, pin2, switch: bool = False):
-
-        if switch:
-            pin1, pin2 = pin2, pin1
-
+    def __init__(self, pin1, pin2):
+        
         self.mot1 = machine.PWM(machine.Pin(pin1))
         self.mot2 = machine.PWM(machine.Pin(pin2))
-
         self._speed = 0
         self.mot1.duty_u16(0)  # start PWM with 0% duty cycle
         self.mot2.duty_u16(0)
@@ -22,12 +18,20 @@ class yellowMotor7046:
     @speed.setter
     def speed(self, speed: float):
         self._speed = speed
-        pwm_value = abs(self._speed)
-        pwm_value = int(pwm_value * (65536 / 100))
-        if (pwm_value > 65535):
+        # Calculate raw value
+        raw_value = int(self._speed * (65535 / 100))
+        
+        # Print the raw signed value
+
+
+        # Get absolute value for duty cycle
+        pwm_value = abs(raw_value)
+        
+        # Clamp to max 16-bit integer size
+        if pwm_value > 65535:
             pwm_value = 65535
         print(f"sends: {pwm_value}")
-
+        # Handle Direction
         if self._speed > 0:
             self.mot1.duty_u16(pwm_value)
             self.mot2.duty_u16(0)
@@ -86,3 +90,4 @@ if __name__ == "__main__":
 
     
  
+
