@@ -9,7 +9,7 @@ def main():
     hostname = server["hostname"]
 
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
-        sock.bind((hostname, port))
+        sock.bind(("", port))
 
         print(f"Listening... Port: {port}, Hostname: {hostname}")
         sock.listen(1)
