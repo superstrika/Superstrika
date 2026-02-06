@@ -9,6 +9,7 @@ def savedServers(dirPath: str) -> list[dict]:
         return results
 
     for path in root.rglob("*.json"):
+        # print(path)
         if not path.is_file():
             continue
         try:
@@ -28,8 +29,19 @@ def savedServers(dirPath: str) -> list[dict]:
 def getServerInfo(sameHost: bool = False):
     hostname = socket.gethostname()
 
-    servers: list[dict] = savedServers("savedServers/")
-    servers = list(filter(lambda server: server["hostname"].removesuffix(".local") != hostname if not sameHost else server["hostname"].removesuffix(".local") == hostname, servers))
+    servers: list[dict] = savedServers("/home/superstrika/cubie-1/Superstrika/connection/savedServers")
+    # servers = list(filter(lambda server: server["hostname"].removesuffix(".local") != hostname if not sameHost else server["hostname"].removesuffix(".local") == hostname, servers))
+    tempServers = servers
+    servers: list[dict] = []
+    for server in tempServers:
+        if sameHost:
+            if server["hostname"].removesuffix(".local") == hostname:
+                servers.append(server)
+        else:
+            if server["hostname"].removesuffix(".local") != hostname:
+                server.append(server)     
+
+    print(servers)
 
     if len(servers) == 0:
         print("No saved servers found.")
