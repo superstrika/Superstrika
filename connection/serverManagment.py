@@ -39,7 +39,7 @@ def getServerInfo(sameHost: bool = False):
                 servers.append(server)
         else:
             if server["hostname"].removesuffix(".local") != hostname:
-                server.append(server)     
+                servers.append(server)     
 
     print(servers)
 
