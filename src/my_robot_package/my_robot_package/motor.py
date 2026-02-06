@@ -37,9 +37,9 @@ class motor7046:
             self.mot2.value = 0
 
     def stophard(self):
-        self._speed = 1
-        self.mot1.value = 1
-        self.mot2.value = 1
+        self._speed = 100
+        self.mot1.value = 100
+        self.mot2.value = 100
 
     def stop(self):
         self._speed = 0
@@ -47,7 +47,6 @@ class motor7046:
         self.mot2.value = 0
 
     def __del__(self):
-        motor7046.motorCount -= 1
         self._speed = 0
         self.mot1.value = 0
         self.mot2.value = 0
