@@ -3,6 +3,7 @@ import math
     
 class motor7046:
     _h = 0
+    MIN_SPEED = 30
 
     def __init__(self, pin1, pin2, switch: bool = False, chipID: int = 0):
 
@@ -82,7 +83,7 @@ class motor7046:
         elif speed < -100:
             speed = -100
 
-        return [speed for i in range(4)] # [speed, speed, speed, speed] 
+        return [(speed if i % 2 == 0 else -speed) for i in range(4)] # [speed, speed, speed, speed] 
 
 class multipleMotors:
     def __init__(self, pins: list[int]):

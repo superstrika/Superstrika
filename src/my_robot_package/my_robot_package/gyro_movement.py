@@ -11,7 +11,7 @@ class GyroMovemnet:
         self._gyro = MPU6050(self._i2c)
 
         self.motors = multipleMotors([19, 20, 21, 22, 23, 24, 25, 6])
-        self._pidYaw = PidCalc(0.45, 0.01, 0.1, 100, 100)
+        self._pidYaw = PidCalc(0.35, 0.15, 0.01, 10, 100, 100)
         self._errorOffset = errorOffset
 
     @staticmethod
@@ -26,6 +26,12 @@ class GyroMovemnet:
             print(error)
             speed: float = self._pidYaw.pidCalc(error)
             # print(speed)
+            if (speed > 10 and speed < 30):
+                speed += 20
+            
+            if (speed < -10 and speed > -30):
+                speed -= 20
+
             speeds: list[int] = motor7046.calculate_rotation_speed(speed)
             self.motors.setSpeed(speeds[0], speeds[1], speeds[2], speeds[3])
             # self.motors.setSpeed(0, 100)
@@ -45,5 +51,5 @@ class GyroMovemnet:
             sleep(0.3)
 
 if __name__ == "__main__":
-    mov = GyroMovemnet()
+    mov = GyroMovemnet(1)
     mov.move(90)
