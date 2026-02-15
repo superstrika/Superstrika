@@ -1,11 +1,11 @@
 import lgpio
-import pwm7046
+import input7046
 from time import sleep
 
 class TCRT5000:
     
     def __init__(self, pin, chipID=0):
-        self._sensor = pwm7046.PWM7046(pin, chipID=chipID)
+        self._sensor = input7046.Input7046(pin, chipID=chipID)
         self._Field_value: int = None
         self._value = None
 
@@ -18,8 +18,8 @@ class TCRT5000:
             reading.append(self._sensor.read())
             sleep(0.01)
 
-        self._Filed_value = 0 if reading.count(0) > reading.count(1) else 1
-        print(f"Calibration completed! Filed_value set to: {self._Filed_value}")
+        self._Field_value = 0 if reading.count(0) > reading.count(1) else 1
+        print(f"Calibration completed! Filed_value set to: {self._Field_value}")
 
 
     def read(self):
@@ -28,8 +28,16 @@ class TCRT5000:
 
         return self._value
     
-
     @property
     def value(self):
         return self.read()
 
+if __name__ == "__main__":
+    s = TCRT5000(4)
+    s.calibrate()
+
+    while True:
+        print(s.value)
+    # s = pwm7046.Input7046(4)
+    # while True:
+    #     print(s.read())

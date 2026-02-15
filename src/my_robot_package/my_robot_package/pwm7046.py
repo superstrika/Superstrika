@@ -27,13 +27,6 @@ class PWM7046:
         else:
             raise Exception("Error: Value must be between 0 and 100!")
         
-
-    
-    def read(self):
-        return lgpio.gpio_read(self._h, self._pin)
-
-        
-        
 if __name__ == "__main__":
     # motors = [i for i in range(19, 27)]
     
