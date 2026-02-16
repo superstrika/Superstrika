@@ -1,5 +1,4 @@
 import board
-import busio
 import adafruit_vcnl4040
 
 class VCNL4040_7046:
@@ -18,8 +17,9 @@ class VCNL4040_7046:
                 self.i2c = i2c_bus
 
             # 2. Initialize the Driverp
+            print("hi")
             self.sensor = adafruit_vcnl4040.VCNL4040(self.i2c)
-            
+r            
             # 3. Configure for Maximum Range (200mA)
             # This makes the sensor 'see' further by default
             self.sensor.proximity_led_current = adafruit_vcnl4040.LED_200MA
