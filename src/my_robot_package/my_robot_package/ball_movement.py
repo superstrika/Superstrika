@@ -70,6 +70,10 @@ class UartNode():
         #for now, no use of goals
 
         print(f"Vx: {speed[0]}, Vy: {speed[1]}")
+
+
+
+        
 def main() -> None:
     uart = UartNode()
     uart.scanForMessages()
