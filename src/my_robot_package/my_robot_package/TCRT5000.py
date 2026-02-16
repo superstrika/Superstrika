@@ -38,6 +38,3 @@ if __name__ == "__main__":
 
     while True:
         print(s.value)
-    # s = pwm7046.Input7046(4)
-    # while True:
-    #     print(s.read())

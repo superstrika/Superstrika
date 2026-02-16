@@ -3,6 +3,7 @@ from gyro import MPU6050
 from motor import multipleMotors, motor7046
 from smbus2 import SMBus as I2C  # For RPI compatibility
 from time import sleep
+import data
 
 class GyroMovemnet:
     
@@ -10,7 +11,7 @@ class GyroMovemnet:
         self._i2c = I2C(1)
         self._gyro = MPU6050(self._i2c)
 
-        self.motors = multipleMotors([19, 20, 21, 22, 23, 24, 25, 6])
+        self.motors = multipleMotors(data.MOTOR_PINS)
         self._pidYaw = PidCalc(0.35, 0.15, 0.01, 10, 100, 100)
         self._errorOffset = errorOffset
 
