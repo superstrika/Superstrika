@@ -1,12 +1,14 @@
 import motor
 import data
 from time import sleep
-import lgpioIRQ
+import gpiodIRQ
 
 class EdgeLineDetection:
     def __init__(self):
         self.motors = motor.multipleMotors(data.MOTOR_PINS)
-        self.irq = lgpioIRQ.IRQ(data.TCRT_PINS, [self.escapeLeft, self.escapeRight, self.escapeForward])
+        self.leftIRQ = gpiodIRQ.GPIOD_IRQ(data.TCRT_PINS[0], self.escapeLeft, False)
+        self.rightIRQ = gpiodIRQ.GPIOD_IRQ(data.TCRT_PINS[1], self.escapeRight, False)
+        self.forwardIRQ = gpiodIRQ.GPIOD_IRQ(data.TCRT_PINS[2], self.escapeForward, False)
 
     def escapeLeft(self):
         print("Escaping left!")
@@ -27,6 +29,7 @@ class EdgeLineDetection:
         self.motors.setSpeedVxVy(0, 0)
 
 if __name__ == "__main__":
-    e = EdgeLineDetection
-    e.escapeLeft()
+    e = EdgeLineDetection()
     
+    while True:
+        sleep(0.1)

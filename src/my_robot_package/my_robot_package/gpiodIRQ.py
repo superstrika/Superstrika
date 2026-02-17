@@ -5,22 +5,19 @@ import time
 import datetime
 
 class GPIOD_IRQ:
-    def __init__(self, pin: int, escape_func, rising: bool, chip_path="/dev/gpiochip0"):
+    def __init__(self, pin: int, escape_func, rising: bool, chipID=0):
         self.pin = pin
         self.escape_func = escape_func
-        self.chip_path = chip_path
-        
-        # Determine target event type: 1 is RISING, 2 is FALLING
-        self.target_event_type = Edge.FALLING
-        
+        self.chip_path = f"/dev/gpiochip{chipID}"
+                
         self._last_interrupt_time = 0
-        self._debounce_ns = 1_000_000_000  # 100ms
+        self._debounce_ns = 1_000_000_000  # 1s
         
         self._running = False
-        self.start()
-
+        self.rising = rising
         self.first = True
-        self.count = 0
+
+        self.start()
 
     def start(self):
         self._running = True
@@ -39,7 +36,7 @@ class GPIOD_IRQ:
                     self.pin: gpiod.LineSettings(
                         direction=Direction.INPUT,
                         bias=Bias.PULL_UP,
-                        edge_detection=Edge.FALLING
+                        edge_detection=Edge.FALLING if not self.rising else Edge.RISING
                     )
                 }
             ) as request:
@@ -50,20 +47,12 @@ class GPIOD_IRQ:
                             # DEBUG: Uncomment the line below to see EVERY edge detected
                             # print(f"DEBUG: Edge detected: {event.event_type}")
                             # print(f"DEBUG: Edge detected: {self.target_event_type}")
+                        
+                            dt = event.timestamp_ns - self._last_interrupt_time
+                            if dt > self._debounce_ns:
+                                self.escape_func()
+                                self._last_interrupt_time = event.timestamp_ns
 
-                            if self.first:
-                                print("Calibrating...")
-                                self.first = False
-                                self.target_event_type = event.event_type
-                                time.sleep(1)
-                                break
-                            
-                            if event.event_type == self.target_event_type:
-                                dt = event.timestamp_ns - self._last_interrupt_time
-                                if dt > self._debounce_ns:
-                                    self.count += 1
-                                    self.escape_func(self.count)
-                                    self._last_interrupt_time = event.timestamp_ns
         except Exception as e:
             print(f"\n[FATAL ERROR] IRQ Thread for pin {self.pin} died: {e}")
 
@@ -73,8 +62,8 @@ class GPIOD_IRQ:
             self._thread.join(timeout=1.0)
 
 # --- Test Execution ---
-def action(count):
-    print(f"\n{count} >>> SENSOR TRIGGERED! <<<")
+def action():
+    print(f"\n>>> SENSOR TRIGGERED! <<<")
 
 if __name__ == "__main__":
     # Test with BCM 4
