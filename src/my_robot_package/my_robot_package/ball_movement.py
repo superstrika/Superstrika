@@ -3,7 +3,7 @@ from pidCalc import PidCalc
 import os
 import motor
 
-class UartNode():
+class CamMovement():
 
     def __init__(self) -> None:
 
@@ -75,8 +75,8 @@ class UartNode():
 
         
 def main() -> None:
-    uart = UartNode()
-    uart.scanForMessages()
+    rob = CamMovement()
+    rob.scanForMessages()
 
 if __name__ == "__main__":
     main()

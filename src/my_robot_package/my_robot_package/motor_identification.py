@@ -1,8 +1,9 @@
 from motor import multipleMotors, motor7046
+import data
 
 def main() -> None:
-    motors = multipleMotors([19, 20, 21, 22, 23, 24, 25, 6])
-    speed = 100
+    motors = multipleMotors(data.MOTOR_PINS)
+    speed = -100
 
     print(speed)
     motors.setSpeed(speed, 0, 0, 0)

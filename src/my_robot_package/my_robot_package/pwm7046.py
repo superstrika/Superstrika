@@ -37,31 +37,31 @@ if __name__ == "__main__":
     #     led.value = 20
     #     led.value = 0
     #     i += 1
-    mot1 = PWM7046(19)
-    mot2 = PWM7046(20)
-    mot3 = PWM7046(21)
-    mot4 = PWM7046(22)
-    mot5 = PWM7046(23)
-    mot6 = PWM7046(24)
-    mot7 = PWM7046(25)
-    mot8 = PWM7046(26)
+    # mot1 = PWM7046(19)
+    # mot2 = PWM7046(20)
+    # mot3 = PWM7046(21)
+    # mot4 = PWM7046(22)
+    # mot5 = PWM7046(23)
+    # mot6 = PWM7046(24)
+    # mot7 = PWM7046(25)
+    # mot8 = PWM7046(26)
 
-    value: int = 20
-    value2: int = 0
-    mot1.value = value
-    mot2.value = value2
-    mot3.value = value
-    mot4.value = value2
-    mot5.value = value
-    mot6.value = value2
-    mot7.value = value
-    mot8.value = value2
+    # value: int = 20
+    # value2: int = 0
+    # mot1.value = value
+    # mot2.value = value2
+    # mot3.value = value
+    # mot4.value = value2
+    # mot5.value = value
+    # mot6.value = value2
+    # mot7.value = value
+    # mot8.value = value2
 
     
 
-    # led = PWM7046(21, 800)
+    led = PWM7046(12)
     # led2 = PWM7046(24, 800)
-    # led.value = 0
+    led.value = 100
     # led2.value = 0
 
     input()

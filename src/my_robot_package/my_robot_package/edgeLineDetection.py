@@ -12,7 +12,8 @@ class EdgeLineDetection:
 
     def escapeLeft(self):
         print("Escaping left!")
-        self.motors.setSpeedVxVy(-100, 0)
+        speeds = motor.motor7046.calculate_speed(-100, 0)
+        self.motors.setSpeed(*(tuple(speeds)))
         sleep(0.1)
         self.motors.setSpeedVxVy(0, 0)
 
