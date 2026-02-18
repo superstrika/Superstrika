@@ -21,7 +21,17 @@ MIN_ANGLE: int = 140
 MAX_ANGLE: int = 180
 
 """----------------------------------------------
+              Serial configuration
+----------------------------------------------"""
+SERIAL_FREQUENCY: int = 115200
+
+"""----------------------------------------------
                Log configuration
 ----------------------------------------------"""
 LOG_PATH: str = './logs/main.log'
 LOG_FORMAT: str = "[%(levelname)s] %(cls)s: %(funcName)s: %(message)s"
+
+"""----------------------------------------------
+              Error Management
+----------------------------------------------"""
+SPIN_MAX_ERROR = 1
