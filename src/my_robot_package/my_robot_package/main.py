@@ -31,6 +31,7 @@ class Hunt:
 
     def camSearch(self, delay=0.3) -> tuple[float, float] | None:
         self.log.info("Initializing Camera Search...")
+        print("Initializing Camera Search...")
 
         for angle in range(data.MAX_ANGLE, data.MIN_ANGLE, -10):
 
@@ -40,17 +41,28 @@ class Hunt:
             ballX, ballY = self.serial.getBallLocation()
             if ballX != 0 or ballY != 0:
                 self.log.info(f"Ball Found: {ballX}, {ballY}")
+                print(f"Ball Found: {ballX}, {ballY}")
                 return ballX, ballY
 
 
         self.log.info("Camera Search failed...")
+        print("Camera Search failed...")
         return None
 
-    def spinToBall(self):
+    def spinToBall(self) -> None:
         self.log.info("Spinning to Ball...")
+        print("Spinning to Ball...")
 
         pid = PidCalc(0, 0, 0, 100, 100, 500, verbose=False)
 
-        error = pid.pidCalc(self.serial.getBallLocation()[0])
+        error = self.serial.getBallLocation()[0]
         while abs(error) > data.SPIN_MAX_ERROR:
-            pass
+            speed = pid.pidCalc(error)
+
+            speeds = motor.motor7046.calculate_rotation_speed(speed)
+
+            self.motors.setSpeed(*tuple(speeds))
+            error = self.serial.getBallLocation()[0]
+
+        self.log.info("Spun successfully...")
+        print("Spun successfully...")
