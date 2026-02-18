@@ -39,7 +39,9 @@ def runCommand(cmd: str) -> None:
 Command Guide:
 1. ball found. Template: 1#<ballX>#<ballY>#<BlueGoalX>#<BlueGoalY>#<YellowGoalX>#<YellowGoalY>
    Example: 1#0.0#100#0#250#0#0#0
-2. 
+2. go to ball. Template: 2
+   Example: 2
+3. 
 """
 
 

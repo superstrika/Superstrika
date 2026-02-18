@@ -1,5 +1,6 @@
 import lgpio
 from time import sleep
+import logging
 
 class PWM7046:
 
@@ -12,6 +13,11 @@ class PWM7046:
         self._h = lgpio.gpiochip_open(chipID)
         lgpio.gpio_claim_output(self._h, pin)
 
+        self.log = logging.LoggerAdapter(
+            logging.getLogger(__name__),
+            {'cls': self.__class__.__name__}
+        )
+
     @property
     def value(self):
         return self._value
@@ -23,8 +29,10 @@ class PWM7046:
 
             lgpio.tx_pwm(self._h, self._pin, self._freq, self._value)
             print(f"Hardware updated: GPIO {self._pin} is now at {value_}%")
+            self.log.debug(f"Hardware updated: GPIO {self._pin} is now at {value_}%")
 
         else:
+            self.log.error("Error: Value must be between 0 and 100!")
             raise Exception("Error: Value must be between 0 and 100!")
         
 if __name__ == "__main__":

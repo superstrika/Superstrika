@@ -1,15 +1,21 @@
 import pwm7046
 from time import sleep
+import logging
 
 s = pwm7046.PWM7046(12, 50)
 
 class Servo:
-    def __init__(self, pin: int):
+    def __init__(self, pin: int, chipID: int = 0):
         self.FREQ = 50
 
         self.servoAngle = 0
 
-        self.servo = pwm7046.PWM7046(pin, self.FREQ)
+        self.servo = pwm7046.PWM7046(pin, self.FREQ, chipID)
+
+        self.log = logging.LoggerAdapter(
+            logging.getLogger(__name__),
+            {'cls': self.__class__.__name__}
+        )
 
     @staticmethod
     def calculateDuty(angle: int):
@@ -22,11 +28,15 @@ class Servo:
     @angle.setter
     def angle(self, angle: int):
         if (angle < 0 or angle > 180):
+            self.log.error("Error: angle must be between 0 and 180")
             raise Exception("Error: angle must be between 0 and 180")
 
         duty = Servo.calculateDuty(angle)
-        print(f"Hardware updated: Servo is now at angle: {angle} in duty {duty}")
         self.servo.value = duty
+
+        self.log.debug(f"Changed angle to {angle} in duty {duty}")
+        print(f"Changed angle to {angle} in duty {duty}")
+
         sleep(0.5)
         self.servo.value = 0
 
