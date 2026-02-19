@@ -152,6 +152,9 @@ class MPU6050:
     def set_accel_sensitivity(self, factor):
         self.accel_sensitivity_factor = factor
 
+    def get_z_angle(self):
+        return self.get_theta()['z']
+
 if __name__ == "__main__":
     i2c = I2C(1)
     gyro = MPU6050(i2c)

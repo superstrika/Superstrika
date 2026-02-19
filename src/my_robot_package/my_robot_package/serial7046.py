@@ -97,3 +97,8 @@ class Serial7046:
         except Exception as e:
             self.log.error(e)
             print(e)
+
+    def getGoalLocation(self, blueGoal: bool) -> tuple[float, float] | None:
+        if blueGoal:
+            return self.getBlueGoalLocation()
+        return self.getYellowGoalLocation()

@@ -32,6 +32,16 @@ LOG_PATH: str = './logs/main.log'
 LOG_FORMAT: str = "[%(levelname)s] %(cls)s: %(funcName)s: %(message)s"
 
 """----------------------------------------------
-              Error Management
+              Hunt Configuration
 ----------------------------------------------"""
-SPIN_MAX_ERROR = 1
+ROTATION_SPEED: int = 30
+
+SPIN_SEARCH_ERROR: float = 3
+SPIN_TO_BALL_ERROR: float = 1
+GO_TO_BALL_ERROR: float = 1
+ROBOT_BALL_DISTANCE: float = 1
+
+"""----------------------------------------------
+              Game configuration
+----------------------------------------------"""
+SELF_IS_BLUE: bool = True
