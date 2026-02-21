@@ -1,5 +1,6 @@
 from pwm7046 import PWM7046
 import math
+import logging
     
 class motor7046:
     _h = 0
@@ -17,6 +18,11 @@ class motor7046:
         self._speed = 0
         self.mot1.value = 0  # start PWM with 0% duty cycle
         self.mot2.value = 0
+
+        self.log = logging.LoggerAdapter(
+            logging.getLogger(__name__),
+            {'cls': self.__class__.__name__}
+        )
 
     @property
     def speed(self):
@@ -37,15 +43,19 @@ class motor7046:
             self.mot1.value = 0
             self.mot2.value = 0
 
+        self.log.debug(f"Motor speed is now: {speed}")
+
     def stophard(self):
         self._speed = 100
         self.mot1.value = 100
         self.mot2.value = 100
+        self.log.debug(f"Stopped hard!")
 
     def stop(self):
         self._speed = 0
         self.mot1.value = 0
         self.mot2.value = 0
+        self.log.debug(f"Motor speed is now: 0")
 
     def __del__(self):
         self._speed = 0
@@ -76,7 +86,8 @@ class motor7046:
         max_val = max(list(map(abs, speeds)) + [100])
 
         return [(i if abs(i) > 1 else 0) for i in [(s / max_val) * 100 for s in speeds]]
-    
+
+    @staticmethod
     def calculate_rotation_speed(speed):
         if speed > 100:
             speed = 100
@@ -86,11 +97,11 @@ class motor7046:
         return [(speed if i % 2 == 0 else -speed) for i in range(4)] # [speed, speed, speed, speed] 
 
 class multipleMotors:
-    def __init__(self, pins: list[int]):
-        motor1 = motor7046(pins[0], pins[1], switch=True) # green
-        motor2 = motor7046(pins[2], pins[3], switch=False) # white
-        motor3 = motor7046(pins[4], pins[5], switch=False) # orange
-        motor4 = motor7046(pins[6], pins[7], switch=True) # orange
+    def __init__(self, pins: list[int], chipID: int = 0):
+        motor1 = motor7046(pins[0], pins[1], switch=True, chipID=chipID)
+        motor2 = motor7046(pins[2], pins[3], switch=False, chipID=chipID)
+        motor3 = motor7046(pins[4], pins[5], switch=False, chipID=chipID)
+        motor4 = motor7046(pins[6], pins[7], switch=True, chipID=chipID)
 
         self.motors: list[motor7046] = [motor1, motor2, motor3, motor4]
     

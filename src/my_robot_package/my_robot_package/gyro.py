@@ -23,13 +23,12 @@ Functions:
 """
 
 import time
+import logging
 
 try:
     from machine import I2C
 except ImportError:
     from smbus2 import SMBus as I2C  # For RPI compatibility
-
-
 
 class MPU6050:
     def __init__(self, i2c, addr=0x68):
@@ -42,9 +41,16 @@ class MPU6050:
         self._ACCEL_XOUT_H = 0x3B
         self._GYRO_XOUT_H = 0x43
         self.omega_offset = {'x': 0.0, 'y': 0.0, 'z': 0.0}  # avoid AttributeError
+
+        self.log = logging.LoggerAdapter(
+            logging.getLogger(__name__),
+            {'cls': self.__class__.__name__}
+        )
+
         try:
             self._write_register(self._PWR_MGMT_1, 0x00)  # Wake up sensor
         except Exception as e:
+            self.log.error("MPU6050 Initialization failed: {}".format(e))
             raise RuntimeError("MPU6050 Initialization failed: {}".format(e))
 
         time.sleep(0.1)
@@ -106,7 +112,10 @@ class MPU6050:
                 offset[axis] += omega[axis]
             time.sleep(0.01)
         offset = {axis: val / samples for axis, val in offset.items()}
+
+        self.log.debug(f"Calibration complete. \u03c9 offset: {offset}")
         print("Calibration complete. \u03c9 offset:", offset)
+
         return offset
 
     def update(self):
@@ -142,6 +151,9 @@ class MPU6050:
 
     def set_accel_sensitivity(self, factor):
         self.accel_sensitivity_factor = factor
+
+    def get_z_angle(self):
+        return self.get_theta()['z']
 
 if __name__ == "__main__":
     i2c = I2C(1)

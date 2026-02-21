@@ -5,7 +5,7 @@ from smbus2 import SMBus as I2C  # For RPI compatibility
 from time import sleep
 import data
 
-class GyroMovemnet:
+class GyroMovement:
     
     def __init__(self, errorOffset: float = 0.5):
         self._i2c = I2C(1)
@@ -20,13 +20,12 @@ class GyroMovemnet:
         angle = gyro.get_theta()['z']
         return angle
     
-    def move(self, setPoint: int) -> None:
-        error: float = setPoint - GyroMovemnet.getYaw(self._gyro)
+    def spinToAngle(self, setPoint: int) -> None:
+        error: float = setPoint - GyroMovement.getYaw(self._gyro)
+
         while (abs(error) > self._errorOffset):
-            error: float = setPoint - GyroMovemnet.getYaw(self._gyro)
-            print(error)
             speed: float = self._pidYaw.pidCalc(error)
-            # print(speed)
+
             if (speed > 10 and speed < 30):
                 speed += 20
             
@@ -35,22 +34,10 @@ class GyroMovemnet:
 
             speeds: list[int] = motor7046.calculate_rotation_speed(speed)
             self.motors.setSpeed(speeds[0], speeds[1], speeds[2], speeds[3])
-            # self.motors.setSpeed(0, 100)
-            # self.motors[0].speed = x
-            # self.motors[1].speed = x
-            # self.motors[2].speed = y
-            # self.motors[3].speed = y
-            # for i in range(2):
-            #     print(int(speeds[i]), end=", ")
-            #     speed = speeds[i]
-                
-            #     if (speed < 1 and speed > -1): speed = 0 
-            #     self.motors[i].speed = speed
-            #     self.motors[i+2].speed = speed
 
-            print()
             sleep(0.3)
+            error: float = setPoint - GyroMovement.getYaw(self._gyro)
 
 if __name__ == "__main__":
-    mov = GyroMovemnet(1)
-    mov.move(90)
+    mov = GyroMovement(1)
+    mov.spinToAngle(90)
