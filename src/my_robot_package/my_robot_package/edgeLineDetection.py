@@ -21,7 +21,6 @@ class EdgeLineDetection:
         speeds = motor.motor7046.calculate_speed(-100, 0, 0)
         self.motors.setSpeed(*(tuple(speeds)))
 
-        print("Escaping left!")
         self.log.warning("Escaping left!")
 
         sleep(0.1)
@@ -31,6 +30,9 @@ class EdgeLineDetection:
         print(f"Escaping right: {data.TCRT_PINS[1]}")
         speeds = motor.motor7046.calculate_speed(100, 0, 0)
         self.motors.setSpeed(*(tuple(speeds)))
+
+        self.log.warning("Escaping right!")
+
         sleep(0.1)
         self.motors.setSpeedVxVy(0, 0)
 
@@ -38,6 +40,9 @@ class EdgeLineDetection:
         print(f"Escaping forward: {data.TCRT_PINS[2]}")
         speeds = motor.motor7046.calculate_speed(0, 100, 0)
         self.motors.setSpeed(*(tuple(speeds)))
+
+        self.log.warning("Escaping forward!")
+
         sleep(0.1)
         self.motors.setSpeedVxVy(0, 0)
 
