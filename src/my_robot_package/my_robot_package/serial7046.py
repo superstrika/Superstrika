@@ -25,6 +25,7 @@ class Serial7046:
         try:
             for _ in range(5):
                 response = self.readMessage()
+                print(response)
 
                 response: list[float] = response.split('#')
                 for i in range(len(response)):

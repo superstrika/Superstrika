@@ -34,10 +34,10 @@ LOG_FORMAT: str = "[%(levelname)s] %(cls)s: %(funcName)s: %(message)s"
 """----------------------------------------------
               Hunt Configuration
 ----------------------------------------------"""
-ROTATION_SPEED: int = 30
+ROTATION_SPEED: int = 25
 
 SPIN_SEARCH_ERROR: float = 3
-SPIN_TO_BALL_ERROR: float = 1
+SPIN_TO_BALL_ERROR: float = 3
 GO_TO_BALL_ERROR: float = 1
 ROBOT_BALL_DISTANCE: float = 1
 

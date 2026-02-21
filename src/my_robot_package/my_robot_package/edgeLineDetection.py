@@ -23,7 +23,7 @@ class EdgeLineDetection:
 
         self.log.warning("Escaping left!")
 
-        sleep(0.1)
+        sleep(0.15)
         self.motors.setSpeedVxVy(0, 0)
 
     def escapeRight(self):
@@ -33,7 +33,7 @@ class EdgeLineDetection:
 
         self.log.warning("Escaping right!")
 
-        sleep(0.1)
+        sleep(0.15)
         self.motors.setSpeedVxVy(0, 0)
 
     def escapeForward(self):
@@ -43,7 +43,7 @@ class EdgeLineDetection:
 
         self.log.warning("Escaping forward!")
 
-        sleep(0.1)
+        sleep(0.15)
         self.motors.setSpeedVxVy(0, 0)
 
 if __name__ == "__main__":

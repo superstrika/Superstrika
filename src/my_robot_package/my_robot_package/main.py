@@ -9,20 +9,26 @@ import logging
 import serial7046
 from pidCalc import PidCalc
 
+try:
+    from machine import I2C
+except ImportError:
+    from smbus2 import SMBus as I2C  # For RPI compatibility
+
 logging.basicConfig(filename=data.LOG_PATH, filemode='w', level=logging.DEBUG, format=data.LOG_FORMAT)
 
 class Hunt:
     def __init__(self):
         # motors
+        self.i2c = I2C(data.I2C_ID)
         self.servo = servo.Servo(data.SERVO_PIN, data.CHIP_ID)
         self.motors = motor.multipleMotors(data.MOTOR_PINS, data.CHIP_ID)
 
         #sensors
-        self.gyro = gyro.MPU6050(data.I2C_ID)
+        self.gyro = gyro.MPU6050(self.i2c)
         self.serial = serial7046.Serial7046(data.SERIAL_FREQUENCY)
 
         # processes
-        self.lineDetection = edgeLineDetection.EdgeLineDetection(data.TCRT_PINS, data.CHIP_ID)
+        # self.lineDetection = edgeLineDetection.EdgeLineDetection(data.TCRT_PINS, data.CHIP_ID)
 
         self.log = logging.LoggerAdapter(
             logging.getLogger(__name__),
@@ -55,34 +61,40 @@ class Hunt:
         print("Camera Search failed...")
         return None
 
-    def spinSearch(self, delay=0.3) -> tuple[float, float] | None:
+    def spinSearch(self, delay=0.15, right: bool = True) -> tuple[float, float] | None:
         """
         Spins the robot 360 degrees or until ball is found.
         :param delay: the delay between the start of spinning to first angle check.
         :return: [0] - X coordinate of the returned object. [1] - Y coordinate of the returned object. None if not found.
         """
+        speed = data.ROTATION_SPEED if right else -data.ROTATION_SPEED
 
         self.log.info("Initializing Spin Search...")
         print("Initializing Spin Search...")
 
         startAngle = self.gyro.get_z_angle()
-
-        self.motors.setSpeed(*tuple(motor.motor7046.calculate_rotation_speed(data.ROTATION_SPEED)))
+        speeds = motor.motor7046.calculate_rotation_speed(speed)
+        self.motors.setSpeed(*tuple(speeds))
         sleep(delay)
         print(f"DEBUG: {self.gyro.get_z_angle()} <- {startAngle}")
 
         angle = self.gyro.get_z_angle()
-        while (startAngle + data.SPIN_SEARCH_ERROR < angle) and (startAngle - data.SPIN_SEARCH_ERROR > angle):
-
+        print(f"DEBUG: angle: {angle}")
+        print(f"DEBUG: startAngle: {startAngle}")
+        print(f"DEBUG: error: {data.SPIN_SEARCH_ERROR}")
+        while (startAngle + data.SPIN_SEARCH_ERROR > angle) or (startAngle - data.SPIN_SEARCH_ERROR < angle):
+            self.motors.setSpeedVxVy(0, 0)
             ballX, ballY = self.serial.getBallLocation()
             if ballX != 0 or ballY != 0:
-                self.motors.setSpeedVxVy(0, 0)
                 self.log.info(f"Ball Found: {ballX}, {ballY}")
                 print(f"Ball Found: {ballX}, {ballY}")
                 return ballX, ballY
 
+
             angle = self.gyro.get_z_angle()
             print(f"Angle: {angle}")
+            self.motors.setSpeed(*tuple(speeds))
+            sleep(delay)
 
         self.log.info("Spin search failed...")
         print("Spin search failed...")
@@ -95,7 +107,7 @@ class Hunt:
         self.log.info("Spinning to Ball...")
         print("Spinning to Ball...")
 
-        pid = PidCalc(0, 0, 0, 100, 100, 500, verbose=False)
+        pid = PidCalc(1.2, 0.07, 0.02, 100, 100, 500, verbose=True)
 
         error = self.serial.getBallLocation()[0]
         while abs(error) > data.SPIN_TO_BALL_ERROR:
@@ -106,6 +118,16 @@ class Hunt:
             self.motors.setSpeed(*tuple(speeds))
             error = self.serial.getBallLocation()[0]
 
+        if (self.serial.getBallLocation()[0] == 0):
+            self.motors.setSpeedVxVy(0, 0)
+            self.log.info("Spun too much: ball lost")
+            print("Spun too much: ball lost")
+            self.spinSearch(right=error < 0)
+            self.spinToBall()
+            return
+            
+
+        self.motors.setSpeedVxVy(0, 0)
         self.log.info("Spun successfully...")
         print("Spun successfully...")
 
@@ -147,3 +169,7 @@ class Hunt:
         # hit the ball:
         self.goToBall()
 
+if __name__ == "__main__":
+    r = Hunt()
+    r.spinSearch()
+    r.spinToBall()

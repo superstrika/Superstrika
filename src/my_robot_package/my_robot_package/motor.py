@@ -1,6 +1,7 @@
 from pwm7046 import PWM7046
 import math
 import logging
+import data
     
 class motor7046:
     _h = 0
@@ -65,20 +66,23 @@ class motor7046:
     @staticmethod
     def calculate_speed(Vx, Vy, rotation):
         AXIS_ROTATION = -45
+        Vy = -Vy
         rad = math.radians(AXIS_ROTATION)  # Or self.AXIS_ROTATION
         cos = math.cos(rad)
         sin = math.sin(rad)
 
         # Standard rotation matrix to find the 'Wheel-Aligned' components
-        rotatedVx = Vx * cos - Vy * sin
-        rotatedVy = Vx * sin + Vy * cos
+        # rotatedVx = Vx * cos - Vy * sin
+        # rotatedVy = Vx * sin + Vy * cos
+        rotatedVx = Vy * cos - Vx * sin
+        rotatedVy = Vy * sin + Vx * cos
 
         # 2. Assign to wheels based on the X-pattern
         # In an X-drive, the diagonal pairs handle the rotated vectors
-        wheel1_speed = rotatedVy + rotation  # Front Left
-        wheel2_speed = rotatedVx - rotation  # Front Right
-        wheel3_speed = rotatedVy - rotation  # Rear Right
-        wheel4_speed = rotatedVx + rotation  # Rear Left
+        wheel1_speed = rotatedVx - rotation  # Front Right
+        wheel2_speed = rotatedVx + rotation  # Rear Left
+        wheel3_speed = rotatedVy + rotation  # Front Left
+        wheel4_speed = rotatedVy - rotation  # Rear Right
 
         # 3. Normalization (Scaling)
         # This ensures that if the math results in '141', it scales back to '100'
@@ -118,27 +122,36 @@ class multipleMotors:
         self.motors[3].speed = V4
 
 if __name__ == "__main__":
-    motor1 = motor7046(19, 20, switch=False) # green
-    motor2 = motor7046(21, 22, switch=False) # white
-    motor3 = motor7046(23, 24, switch=True) # orange
-    motor4 = motor7046(25, 6, switch=True) # orange
+    # motor1 = motor7046(19, 20, switch=False) # green
+    # motor2 = motor7046(21, 22, switch=False) # white
+    # motor3 = motor7046(23, 24, switch=True) # orange
+    # motor4 = motor7046(25, 6, switch=True) # orange
 
-    # motor3.speed = -100
+    # # motor3.speed = -100
 
-    motors: motor7046 = [motor1, motor2, motor3, motor4]
-    speeds = motor1.calculate_speed(0, 70, 0)
-    print(speeds)
-    for i in range(len(speeds)):
-        motors[i].speed = speeds[i]
+    # motors: motor7046 = [motor1, motor2, motor3, motor4]
+    # speeds = motor1.calculate_speed(0, 70, 0)
+    # print(speeds)
+    # for i in range(len(speeds)):
+    #     motors[i].speed = speeds[i]
         
 
-    input()
+    # input()
 
-    del motor1, motor2, motor3, motor4
+    # del motor1, motor2, motor3, motor4
 
     # motor = motor7046(25, 6, switch=False)
     # motor.speed = -100
     # input()
     # del motor
+
+    motors = multipleMotors(data.MOTOR_PINS)
+    speeds = motor7046.calculate_speed(60, 0, 0)
+    print(speeds)
+    motors.setSpeed(*(tuple(speeds)))
+
+    input()
+
+    motors.setSpeedVxVy(0, 0)
     
  
