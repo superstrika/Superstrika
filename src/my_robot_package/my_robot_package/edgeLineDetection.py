@@ -11,21 +11,23 @@ class EdgeLineDetection:
         self.forwardIRQ = gpiodIRQ.GPIOD_IRQ(data.TCRT_PINS[2], self.escapeForward, False)
 
     def escapeLeft(self):
-        print("Escaping left!")
-        speeds = motor.motor7046.calculate_speed(-100, 0)
+        print(f"Escaping left: {data.TCRT_PINS[0]}")
+        speeds = motor.motor7046.calculate_speed(-100, 0, 0)
         self.motors.setSpeed(*(tuple(speeds)))
         sleep(0.1)
         self.motors.setSpeedVxVy(0, 0)
 
     def escapeRight(self):
-        print("Escaping right!")
-        self.motors.setSpeedVxVy(100, 0)
+        print(f"Escaping right: {data.TCRT_PINS[1]}")
+        speeds = motor.motor7046.calculate_speed(100, 0, 0)
+        self.motors.setSpeed(*(tuple(speeds)))
         sleep(0.1)
         self.motors.setSpeedVxVy(0, 0)
 
     def escapeForward(self):
-        print("Escaping forward!")
-        self.motors.setSpeedVxVy(0, 100)
+        print(f"Escaping forward: {data.TCRT_PINS[2]}")
+        speeds = motor.motor7046.calculate_speed(0, 100, 0)
+        self.motors.setSpeed(*(tuple(speeds)))
         sleep(0.1)
         self.motors.setSpeedVxVy(0, 0)
 
