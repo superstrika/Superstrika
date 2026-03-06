@@ -8,6 +8,8 @@ RELAY_PIN: int = 7
 
 DISABLED_MOTOR_PIN: int = 26 # Grounded by mistake. Fix: changed 26 to 8.
 
+DRIBLER_PIN: list[int] = [13, 16]
+
 """----------------------------------------------
               Chip configuration
 ----------------------------------------------"""
