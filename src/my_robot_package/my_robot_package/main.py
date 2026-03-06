@@ -28,7 +28,7 @@ class Hunt:
         self.serial = serial7046.Serial7046(data.SERIAL_FREQUENCY)
 
         # processes
-        # self.lineDetection = edgeLineDetection.EdgeLineDetection(data.TCRT_PINS, data.CHIP_ID)
+        self.lineDetection = edgeLineDetection.EdgeLineDetection(chipID=data.CHIP_ID, motors=self.motors)
 
         self.log = logging.LoggerAdapter(
             logging.getLogger(__name__),

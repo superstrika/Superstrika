@@ -5,8 +5,14 @@ import gpiodIRQ
 import logging
 
 class EdgeLineDetection:
-    def __init__(self, pins: list[int], chipID: int = 0):
-        self.motors = motor.multipleMotors(data.MOTOR_PINS)
+    def __init__(self, pins: list[int] = None, chipID: int = 0, motors: motor.multipleMotors = None):
+        if motors:
+            self.motors = motors
+        elif pins:
+            self.motors = motor.multipleMotors(data.MOTOR_PINS)
+        else:
+            raise Exception("No motors specified!")
+
         self.leftIRQ = gpiodIRQ.GPIOD_IRQ(pins[0], self.escapeLeft, False, chipID=chipID)
         self.rightIRQ = gpiodIRQ.GPIOD_IRQ(pins[1], self.escapeRight, False, chipID=chipID)
         self.forwardIRQ = gpiodIRQ.GPIOD_IRQ(pins[2], self.escapeForward, False, chipID=chipID)
