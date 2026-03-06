@@ -8,6 +8,8 @@ import data
 import logging
 import serial7046
 from pidCalc import PidCalc
+import gyroMovement
+import math
 
 try:
     from machine import I2C
@@ -29,6 +31,7 @@ class Hunt:
 
         # processes
         self.lineDetection = edgeLineDetection.EdgeLineDetection(chipID=data.CHIP_ID, motors=self.motors)
+        self.gyroMovement = gyroMovement.GyroMovement(self.i2c, self.gyro, self.motors)
 
         self.log = logging.LoggerAdapter(
             logging.getLogger(__name__),
@@ -99,37 +102,63 @@ class Hunt:
         self.log.info("Spin search failed...")
         print("Spin search failed...")
 
-    def spinToBall(self) -> None:
+    # def spinToBall(self) -> None:
+    #     """
+    #     Spins the robot until robot is straight at the ball.
+    #     """
+    #
+    #     self.log.info("Spinning to Ball...")
+    #     print("Spinning to Ball...")
+    #
+    #     pid = PidCalc(1.2, 0.07, 0.02, 100, 100, 500, verbose=True)
+    #
+    #     error = self.serial.getBallLocation()[0]
+    #     while abs(error) > data.SPIN_TO_BALL_ERROR:
+    #         speed = pid.pidCalc(error)
+    #
+    #         speeds = motor.motor7046.calculate_rotation_speed(speed)
+    #
+    #         self.motors.setSpeed(*tuple(speeds))
+    #         error = self.serial.getBallLocation()[0]
+    #
+    #     if (self.serial.getBallLocation()[0] == 0):
+    #         self.motors.setSpeedVxVy(0, 0)
+    #         self.log.info("Spun too much: ball lost")
+    #         print("Spun too much: ball lost")
+    #         self.spinSearch(right=error < 0)
+    #         self.spinToBall()
+    #         return
+    #
+    #
+    #     self.motors.setSpeedVxVy(0, 0)
+    #     self.log.info("Spun successfully...")
+    #     print("Spun successfully...")
+
+    def spinToBall(self):
         """
         Spins the robot until robot is straight at the ball.
         """
+        ballX, ballY = self.serial.getBallLocation()
+        lastError: int = 0
 
-        self.log.info("Spinning to Ball...")
-        print("Spinning to Ball...")
+        while abs(ballX) > data.SPIN_TO_BALL_ERROR:
+            angle = int(math.atan2(ballY, ballX))
 
-        pid = PidCalc(1.2, 0.07, 0.02, 100, 100, 500, verbose=True)
+            self.log.debug(f"Found ball in angle: {angle}. Spinning...")
+            print(f"Found ball in angle: {angle}. Spinning...")
 
-        error = self.serial.getBallLocation()[0]
-        while abs(error) > data.SPIN_TO_BALL_ERROR:
-            speed = pid.pidCalc(error)
+            self.gyroMovement.spinToAngle(int(angle))
 
-            speeds = motor.motor7046.calculate_rotation_speed(speed)
+            lastError = angle
+            ballX, ballY = self.serial.getBallLocation()
 
-            self.motors.setSpeed(*tuple(speeds))
-            error = self.serial.getBallLocation()[0]
-
-        if (self.serial.getBallLocation()[0] == 0):
+        if self.serial.getBallLocation()[0] == 0:
             self.motors.setSpeedVxVy(0, 0)
             self.log.info("Spun too much: ball lost")
             print("Spun too much: ball lost")
-            self.spinSearch(right=error < 0)
+            self.spinSearch(right=lastError < 0)
             self.spinToBall()
-            return
-            
 
-        self.motors.setSpeedVxVy(0, 0)
-        self.log.info("Spun successfully...")
-        print("Spun successfully...")
 
     def goToBall(self, delay=0.3) -> None:
         self.log.info("Going to Ball...")
