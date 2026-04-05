@@ -1,0 +1,209 @@
+[DEBUG] PWM7046: value: Hardware updated: GPIO 20 is now at 0%
+[DEBUG] PWM7046: value: Hardware updated: GPIO 19 is now at 0%
+[DEBUG] PWM7046: value: Hardware updated: GPIO 21 is now at 0%
+[DEBUG] PWM7046: value: Hardware updated: GPIO 22 is now at 0%
+[DEBUG] PWM7046: value: Hardware updated: GPIO 23 is now at 0%
+[DEBUG] PWM7046: value: Hardware updated: GPIO 24 is now at 0%
+[DEBUG] PWM7046: value: Hardware updated: GPIO 8 is now at 0%
+[DEBUG] PWM7046: value: Hardware updated: GPIO 25 is now at 0%
+[DEBUG] MPU6050: _calibrate_gyro: Calibration complete. ω offset: {'x': 0.470267175572519, 'y': 2.39854961832061, 'z': -0.4148473282442749}
+[INFO] Hunt: spinSearch: Initializing Spin Search...
+[DEBUG] PWM7046: value: Hardware updated: GPIO 20 is now at 25%
+[DEBUG] PWM7046: value: Hardware updated: GPIO 19 is now at 0%
+[DEBUG] motor7046: speed: Motor speed is now: 25
+[DEBUG] PWM7046: value: Hardware updated: GPIO 21 is now at 0%
+[DEBUG] PWM7046: value: Hardware updated: GPIO 22 is now at 25%
+[DEBUG] motor7046: speed: Motor speed is now: -25
+[DEBUG] PWM7046: value: Hardware updated: GPIO 23 is now at 25%
+[DEBUG] PWM7046: value: Hardware updated: GPIO 24 is now at 0%
+[DEBUG] motor7046: speed: Motor speed is now: 25
+[DEBUG] PWM7046: value: Hardware updated: GPIO 8 is now at 0%
+[DEBUG] PWM7046: value: Hardware updated: GPIO 25 is now at 25%
+[DEBUG] motor7046: speed: Motor speed is now: -25
+[DEBUG] PWM7046: value: Hardware updated: GPIO 20 is now at 0%
+[DEBUG] PWM7046: value: Hardware updated: GPIO 19 is now at 0%
+[DEBUG] motor7046: speed: Motor speed is now: 0
+[DEBUG] PWM7046: value: Hardware updated: GPIO 21 is now at 0%
+[DEBUG] PWM7046: value: Hardware updated: GPIO 22 is now at 0%
+[DEBUG] motor7046: speed: Motor speed is now: 0
+[DEBUG] PWM7046: value: Hardware updated: GPIO 23 is now at 0%
+[DEBUG] PWM7046: value: Hardware updated: GPIO 24 is now at 0%
+[DEBUG] motor7046: speed: Motor speed is now: 0
+[DEBUG] PWM7046: value: Hardware updated: GPIO 8 is now at 0%
+[DEBUG] PWM7046: value: Hardware updated: GPIO 25 is now at 0%
+[DEBUG] motor7046: speed: Motor speed is now: 0
+[DEBUG] PWM7046: value: Hardware updated: GPIO 20 is now at 25%
+[DEBUG] PWM7046: value: Hardware updated: GPIO 19 is now at 0%
+[DEBUG] motor7046: speed: Motor speed is now: 25
+[DEBUG] PWM7046: value: Hardware updated: GPIO 21 is now at 0%
+[DEBUG] PWM7046: value: Hardware updated: GPIO 22 is now at 25%
+[DEBUG] motor7046: speed: Motor speed is now: -25
+[DEBUG] PWM7046: value: Hardware updated: GPIO 23 is now at 25%
+[DEBUG] PWM7046: value: Hardware updated: GPIO 24 is now at 0%
+[DEBUG] motor7046: speed: Motor speed is now: 25
+[DEBUG] PWM7046: value: Hardware updated: GPIO 8 is now at 0%
+[DEBUG] PWM7046: value: Hardware updated: GPIO 25 is now at 25%
+[DEBUG] motor7046: speed: Motor speed is now: -25
+[DEBUG] PWM7046: value: Hardware updated: GPIO 20 is now at 0%
+[DEBUG] PWM7046: value: Hardware updated: GPIO 19 is now at 0%
+[DEBUG] motor7046: speed: Motor speed is now: 0
+[DEBUG] PWM7046: value: Hardware updated: GPIO 21 is now at 0%
+[DEBUG] PWM7046: value: Hardware updated: GPIO 22 is now at 0%
+[DEBUG] motor7046: speed: Motor speed is now: 0
+[DEBUG] PWM7046: value: Hardware updated: GPIO 23 is now at 0%
+[DEBUG] PWM7046: value: Hardware updated: GPIO 24 is now at 0%
+[DEBUG] motor7046: speed: Motor speed is now: 0
+[DEBUG] PWM7046: value: Hardware updated: GPIO 8 is now at 0%
+[DEBUG] PWM7046: value: Hardware updated: GPIO 25 is now at 0%
+[DEBUG] motor7046: speed: Motor speed is now: 0
+[DEBUG] PWM7046: value: Hardware updated: GPIO 20 is now at 25%
+[DEBUG] PWM7046: value: Hardware updated: GPIO 19 is now at 0%
+[DEBUG] motor7046: speed: Motor speed is now: 25
+[DEBUG] PWM7046: value: Hardware updated: GPIO 21 is now at 0%
+[DEBUG] PWM7046: value: Hardware updated: GPIO 22 is now at 25%
+[DEBUG] motor7046: speed: Motor speed is now: -25
+[DEBUG] PWM7046: value: Hardware updated: GPIO 23 is now at 25%
+[DEBUG] PWM7046: value: Hardware updated: GPIO 24 is now at 0%
+[DEBUG] motor7046: speed: Motor speed is now: 25
+[DEBUG] PWM7046: value: Hardware updated: GPIO 8 is now at 0%
+[DEBUG] PWM7046: value: Hardware updated: GPIO 25 is now at 25%
+[DEBUG] motor7046: speed: Motor speed is now: -25
+[DEBUG] PWM7046: value: Hardware updated: GPIO 20 is now at 0%
+[DEBUG] PWM7046: value: Hardware updated: GPIO 19 is now at 0%
+[DEBUG] motor7046: speed: Motor speed is now: 0
+[DEBUG] PWM7046: value: Hardware updated: GPIO 21 is now at 0%
+[DEBUG] PWM7046: value: Hardware updated: GPIO 22 is now at 0%
+[DEBUG] motor7046: speed: Motor speed is now: 0
+[DEBUG] PWM7046: value: Hardware updated: GPIO 23 is now at 0%
+[DEBUG] PWM7046: value: Hardware updated: GPIO 24 is now at 0%
+[DEBUG] motor7046: speed: Motor speed is now: 0
+[DEBUG] PWM7046: value: Hardware updated: GPIO 8 is now at 0%
+[DEBUG] PWM7046: value: Hardware updated: GPIO 25 is now at 0%
+[DEBUG] motor7046: speed: Motor speed is now: 0
+[DEBUG] PWM7046: value: Hardware updated: GPIO 20 is now at 25%
+[DEBUG] PWM7046: value: Hardware updated: GPIO 19 is now at 0%
+[DEBUG] motor7046: speed: Motor speed is now: 25
+[DEBUG] PWM7046: value: Hardware updated: GPIO 21 is now at 0%
+[DEBUG] PWM7046: value: Hardware updated: GPIO 22 is now at 25%
+[DEBUG] motor7046: speed: Motor speed is now: -25
+[DEBUG] PWM7046: value: Hardware updated: GPIO 23 is now at 25%
+[DEBUG] PWM7046: value: Hardware updated: GPIO 24 is now at 0%
+[DEBUG] motor7046: speed: Motor speed is now: 25
+[DEBUG] PWM7046: value: Hardware updated: GPIO 8 is now at 0%
+[DEBUG] PWM7046: value: Hardware updated: GPIO 25 is now at 25%
+[DEBUG] motor7046: speed: Motor speed is now: -25
+[DEBUG] PWM7046: value: Hardware updated: GPIO 20 is now at 0%
+[DEBUG] PWM7046: value: Hardware updated: GPIO 19 is now at 0%
+[DEBUG] motor7046: speed: Motor speed is now: 0
+[DEBUG] PWM7046: value: Hardware updated: GPIO 21 is now at 0%
+[DEBUG] PWM7046: value: Hardware updated: GPIO 22 is now at 0%
+[DEBUG] motor7046: speed: Motor speed is now: 0
+[DEBUG] PWM7046: value: Hardware updated: GPIO 23 is now at 0%
+[DEBUG] PWM7046: value: Hardware updated: GPIO 24 is now at 0%
+[DEBUG] motor7046: speed: Motor speed is now: 0
+[DEBUG] PWM7046: value: Hardware updated: GPIO 8 is now at 0%
+[DEBUG] PWM7046: value: Hardware updated: GPIO 25 is now at 0%
+[DEBUG] motor7046: speed: Motor speed is now: 0
+[DEBUG] PWM7046: value: Hardware updated: GPIO 20 is now at 25%
+[DEBUG] PWM7046: value: Hardware updated: GPIO 19 is now at 0%
+[DEBUG] motor7046: speed: Motor speed is now: 25
+[DEBUG] PWM7046: value: Hardware updated: GPIO 21 is now at 0%
+[DEBUG] PWM7046: value: Hardware updated: GPIO 22 is now at 25%
+[DEBUG] motor7046: speed: Motor speed is now: -25
+[DEBUG] PWM7046: value: Hardware updated: GPIO 23 is now at 25%
+[DEBUG] PWM7046: value: Hardware updated: GPIO 24 is now at 0%
+[DEBUG] motor7046: speed: Motor speed is now: 25
+[DEBUG] PWM7046: value: Hardware updated: GPIO 8 is now at 0%
+[DEBUG] PWM7046: value: Hardware updated: GPIO 25 is now at 25%
+[DEBUG] motor7046: speed: Motor speed is now: -25
+[DEBUG] PWM7046: value: Hardware updated: GPIO 20 is now at 0%
+[DEBUG] PWM7046: value: Hardware updated: GPIO 19 is now at 0%
+[DEBUG] motor7046: speed: Motor speed is now: 0
+[DEBUG] PWM7046: value: Hardware updated: GPIO 21 is now at 0%
+[DEBUG] PWM7046: value: Hardware updated: GPIO 22 is now at 0%
+[DEBUG] motor7046: speed: Motor speed is now: 0
+[DEBUG] PWM7046: value: Hardware updated: GPIO 23 is now at 0%
+[DEBUG] PWM7046: value: Hardware updated: GPIO 24 is now at 0%
+[DEBUG] motor7046: speed: Motor speed is now: 0
+[DEBUG] PWM7046: value: Hardware updated: GPIO 8 is now at 0%
+[DEBUG] PWM7046: value: Hardware updated: GPIO 25 is now at 0%
+[DEBUG] motor7046: speed: Motor speed is now: 0
+[DEBUG] PWM7046: value: Hardware updated: GPIO 20 is now at 25%
+[DEBUG] PWM7046: value: Hardware updated: GPIO 19 is now at 0%
+[DEBUG] motor7046: speed: Motor speed is now: 25
+[DEBUG] PWM7046: value: Hardware updated: GPIO 21 is now at 0%
+[DEBUG] PWM7046: value: Hardware updated: GPIO 22 is now at 25%
+[DEBUG] motor7046: speed: Motor speed is now: -25
+[DEBUG] PWM7046: value: Hardware updated: GPIO 23 is now at 25%
+[DEBUG] PWM7046: value: Hardware updated: GPIO 24 is now at 0%
+[DEBUG] motor7046: speed: Motor speed is now: 25
+[DEBUG] PWM7046: value: Hardware updated: GPIO 8 is now at 0%
+[DEBUG] PWM7046: value: Hardware updated: GPIO 25 is now at 25%
+[DEBUG] motor7046: speed: Motor speed is now: -25
+[DEBUG] PWM7046: value: Hardware updated: GPIO 20 is now at 0%
+[DEBUG] PWM7046: value: Hardware updated: GPIO 19 is now at 0%
+[DEBUG] motor7046: speed: Motor speed is now: 0
+[DEBUG] PWM7046: value: Hardware updated: GPIO 21 is now at 0%
+[DEBUG] PWM7046: value: Hardware updated: GPIO 22 is now at 0%
+[DEBUG] motor7046: speed: Motor speed is now: 0
+[DEBUG] PWM7046: value: Hardware updated: GPIO 23 is now at 0%
+[DEBUG] PWM7046: value: Hardware updated: GPIO 24 is now at 0%
+[DEBUG] motor7046: speed: Motor speed is now: 0
+[DEBUG] PWM7046: value: Hardware updated: GPIO 8 is now at 0%
+[DEBUG] PWM7046: value: Hardware updated: GPIO 25 is now at 0%
+[DEBUG] motor7046: speed: Motor speed is now: 0
+[INFO] Hunt: spinSearch: Ball Found: 10.406, 18.3333
+[INFO] Hunt: spinToBall: Spinning to Ball...
+[INFO] PidCalc: pidCalc: --------------------pidCalc--------------------------
+[INFO] PidCalc: pidCalc: Integral: 8.286972183856966
+[INFO] PidCalc: pidCalc: Derivative: 0
+[INFO] PidCalc: pidCalc: Error: 25.341340000000002
+[INFO] PidCalc: pidCalc: Speed: 30.98969605286999
+[INFO] PidCalc: pidCalc: Last Error: 0
+[INFO] PidCalc: pidCalc: Dt: 0.3270139694213867
+[INFO] PidCalc: pidCalc: ----------------------------------------------
+[DEBUG] PWM7046: value: Hardware updated: GPIO 20 is now at 30.98969605286999%
+[DEBUG] PWM7046: value: Hardware updated: GPIO 19 is now at 0%
+[DEBUG] motor7046: speed: Motor speed is now: 30.98969605286999
+[DEBUG] PWM7046: value: Hardware updated: GPIO 21 is now at 0%
+[DEBUG] PWM7046: value: Hardware updated: GPIO 22 is now at 30.98969605286999%
+[DEBUG] motor7046: speed: Motor speed is now: -30.98969605286999
+[DEBUG] PWM7046: value: Hardware updated: GPIO 23 is now at 30.98969605286999%
+[DEBUG] PWM7046: value: Hardware updated: GPIO 24 is now at 0%
+[DEBUG] motor7046: speed: Motor speed is now: 30.98969605286999
+[DEBUG] PWM7046: value: Hardware updated: GPIO 8 is now at 0%
+[DEBUG] PWM7046: value: Hardware updated: GPIO 25 is now at 30.98969605286999%
+[DEBUG] motor7046: speed: Motor speed is now: -30.98969605286999
+[INFO] PidCalc: pidCalc: --------------------pidCalc--------------------------
+[INFO] PidCalc: pidCalc: Integral: 12.96453332187891
+[INFO] PidCalc: pidCalc: Derivative: 0
+[INFO] PidCalc: pidCalc: Error: 14.420781999999999
+[INFO] PidCalc: pidCalc: Speed: 18.21245573253152
+[INFO] PidCalc: pidCalc: Last Error: 25.341340000000002
+[INFO] PidCalc: pidCalc: Dt: 0.32436251640319824
+[INFO] PidCalc: pidCalc: ----------------------------------------------
+[DEBUG] PWM7046: value: Hardware updated: GPIO 20 is now at 18.21245573253152%
+[DEBUG] PWM7046: value: Hardware updated: GPIO 19 is now at 0%
+[DEBUG] motor7046: speed: Motor speed is now: 18.21245573253152
+[DEBUG] PWM7046: value: Hardware updated: GPIO 21 is now at 0%
+[DEBUG] PWM7046: value: Hardware updated: GPIO 22 is now at 18.21245573253152%
+[DEBUG] motor7046: speed: Motor speed is now: -18.21245573253152
+[DEBUG] PWM7046: value: Hardware updated: GPIO 23 is now at 18.21245573253152%
+[DEBUG] PWM7046: value: Hardware updated: GPIO 24 is now at 0%
+[DEBUG] motor7046: speed: Motor speed is now: 18.21245573253152
+[DEBUG] PWM7046: value: Hardware updated: GPIO 8 is now at 0%
+[DEBUG] PWM7046: value: Hardware updated: GPIO 25 is now at 18.21245573253152%
+[DEBUG] motor7046: speed: Motor speed is now: -18.21245573253152
+[DEBUG] PWM7046: value: Hardware updated: GPIO 20 is now at 0%
+[DEBUG] PWM7046: value: Hardware updated: GPIO 19 is now at 0%
+[DEBUG] motor7046: speed: Motor speed is now: 0
+[DEBUG] PWM7046: value: Hardware updated: GPIO 21 is now at 0%
+[DEBUG] PWM7046: value: Hardware updated: GPIO 22 is now at 0%
+[DEBUG] motor7046: speed: Motor speed is now: 0
+[DEBUG] PWM7046: value: Hardware updated: GPIO 23 is now at 0%
+[DEBUG] PWM7046: value: Hardware updated: GPIO 24 is now at 0%
+[DEBUG] motor7046: speed: Motor speed is now: 0
+[DEBUG] PWM7046: value: Hardware updated: GPIO 8 is now at 0%
+[DEBUG] PWM7046: value: Hardware updated: GPIO 25 is now at 0%
+[DEBUG] motor7046: speed: Motor speed is now: 0
+[INFO] Hunt: spinToBall: Spun successfully...
