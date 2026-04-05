@@ -23,15 +23,15 @@ class Hunt:
         # motors
         self.i2c = I2C(data.I2C_ID)
         self.servo = servo.Servo(data.SERVO_PIN, data.CHIP_ID)
-        self.motors = motor.multipleMotors(data.MOTOR_PINS, data.CHIP_ID)
+        self.motors = motor.multipleMotors(data.MOTOR_PINS, data.CHIP_ID, verbose=False, speedVerbose=True)
 
         #sensors
-        self.gyro = gyro.MPU6050(self.i2c)
+        # self.gyro = gyro.MPU6050(self.i2c)
         self.serial = serial7046.Serial7046(data.SERIAL_FREQUENCY)
 
         # processes
-        self.lineDetection = edgeLineDetection.EdgeLineDetection(chipID=data.CHIP_ID, motors=self.motors)
-        self.gyroMovement = gyroMovement.GyroMovement(self.i2c, self.gyro, self.motors)
+        # self.lineDetection = edgeLineDetection.EdgeLineDetection(chipID=data.CHIP_ID, motors=self.motors)
+        # self.gyroMovement = gyroMovement.GyroMovement(self.i2c, self.gyro, self.motors)
 
         self.log = logging.LoggerAdapter(
             logging.getLogger(__name__),
@@ -160,16 +160,17 @@ class Hunt:
             self.spinToBall()
 
 
-    def goToBall(self, delay=0.3) -> None:
-        self.log.info("Going to Ball...")
-        print("Going to Ball...")
+    def goToBallX(self, delay=0.3) -> None:
+        self.log.info("Going to BallX...")
+        print("Going to BallX...")
         sp = data.ROBOT_BALL_DISTANCE
 
-        pid = PidCalc(0, 0, 0, 100, 100, 500, verbose=False)
+        pid = PidCalc(0.8, 0.1, 0.05, 100, 100, 500, verbose=False)
         pv = self.serial.getBallLocation()[1] # Y distance
 
         while abs(pv - sp) > data.GO_TO_BALL_ERROR:
             speed = pid.pidCalc(pv - sp)
+            print(f"Speed {speed}")
             self.motors.setSpeed(*tuple(motor.motor7046.calculate_speed(0, speed, 0)))
 
             sleep(delay)
@@ -177,6 +178,27 @@ class Hunt:
 
         self.log.info(f"Got to Ball successfully... e: {pv - sp}")
         print(f"Got to Ball successfully... e: {pv - sp}")
+    
+    def goToBall(self, delay=0.3) -> None:
+        self.log.info("Going to BallX...")
+        print("Going to BallX...")
+        sp = data.ROBOT_BALL_DISTANCE
+
+        pidY = PidCalc(0.5, 0.1, 0.1, 100, 100, 500, verbose=False)
+        pidX = PidCalc(0.05, 0.05, 0.1, 100, 100, 500, verbose=False)
+        pv = self.serial.getBallLocation() # distance
+
+        while (abs(pv[0] - sp[0]) > data.GO_TO_BALL_ERROR) or (abs(pv[1] - sp[1]) > data.GO_TO_BALL_ERROR):
+            speedX = pidX.pidCalc(pv[0] - sp[0])
+            speedY = pidY.pidCalc(pv[1] - sp[1])
+            print(f"Vx: {speedX}, Vy: {speedY}")
+            self.motors.setSpeed(*tuple(motor.motor7046.calculate_speed(speedX, speedY, 0)))
+
+            sleep(delay)
+            pv = self.serial.getBallLocation()
+
+        self.log.info(f"Got to Ball successfully... e: {pv[0] - sp[0]}, {pv[1] - sp[1]}")
+        print(f"Got to Ball successfully... e: {pv[0] - sp[0]}, {pv[1] - sp[1]}")
 
     def hunt(self):
         ballX, ballY = self.camSearch()
@@ -200,5 +222,6 @@ class Hunt:
 
 if __name__ == "__main__":
     r = Hunt()
-    r.spinSearch()
-    r.spinToBall()
+    # r.spinSearch()
+    # r.spinToBall()
+    r.goToBall()

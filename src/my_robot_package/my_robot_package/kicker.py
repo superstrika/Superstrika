@@ -18,8 +18,8 @@ class Kicker:
                 self.motor.speed = 100
             else:
                 self.motor.speed = i * p
-            sleep(i*0.6 + 0.3)
-        speed(1)
+            sleep(i + 0.3)
+        
             
     def release(self):
         print("Releasing")
@@ -31,5 +31,4 @@ if __name__ == "__main__":
     kicker = Kicker(25, 26)
     # kicker.loadPoint(43)
     # sleep(0.25)
-    kicker.load(100)
-    kicker.release()
+    kicker.load(h)
