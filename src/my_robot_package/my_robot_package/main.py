@@ -26,12 +26,12 @@ class Hunt:
         self.motors = motor.multipleMotors(data.MOTOR_PINS, data.CHIP_ID, verbose=False, speedVerbose=True)
 
         #sensors
-        # self.gyro = gyro.MPU6050(self.i2c)
+        self.gyro = gyro.MPU6050(self.i2c)
         self.serial = serial7046.Serial7046(data.SERIAL_FREQUENCY)
 
         # processes
         # self.lineDetection = edgeLineDetection.EdgeLineDetection(chipID=data.CHIP_ID, motors=self.motors)
-        # self.gyroMovement = gyroMovement.GyroMovement(self.i2c, self.gyro, self.motors)
+        self.gyroMovement = gyroMovement.GyroMovement(self.i2c, self.gyro, self.motors)
 
         self.log = logging.LoggerAdapter(
             logging.getLogger(__name__),
@@ -159,7 +159,6 @@ class Hunt:
             self.spinSearch(right=lastError < 0)
             self.spinToBall()
 
-
     def goToBallX(self, delay=0.3) -> None:
         self.log.info("Going to BallX...")
         print("Going to BallX...")
@@ -222,6 +221,6 @@ class Hunt:
 
 if __name__ == "__main__":
     r = Hunt()
-    # r.spinSearch()
-    # r.spinToBall()
-    r.goToBall()
+    r.spinSearch()
+    r.spinToBall()
+    # r.goToBall()

@@ -1,122 +1,150 @@
-[DEBUG] PWM7046: value: Hardware updated: GPIO 20 is now at 0%
-[DEBUG] PWM7046: value: Hardware updated: GPIO 19 is now at 0%
-[DEBUG] PWM7046: value: Hardware updated: GPIO 22 is now at 0%
-[DEBUG] PWM7046: value: Hardware updated: GPIO 21 is now at 0%
-[DEBUG] PWM7046: value: Hardware updated: GPIO 23 is now at 0%
-[DEBUG] PWM7046: value: Hardware updated: GPIO 24 is now at 0%
 [DEBUG] PWM7046: value: Hardware updated: GPIO 26 is now at 0%
 [DEBUG] PWM7046: value: Hardware updated: GPIO 25 is now at 0%
+[DEBUG] PWM7046: value: Hardware updated: GPIO 22 is now at 0%
+[DEBUG] PWM7046: value: Hardware updated: GPIO 21 is now at 0%
+[DEBUG] PWM7046: value: Hardware updated: GPIO 24 is now at 0%
+[DEBUG] PWM7046: value: Hardware updated: GPIO 23 is now at 0%
+[DEBUG] PWM7046: value: Hardware updated: GPIO 19 is now at 0%
+[DEBUG] PWM7046: value: Hardware updated: GPIO 20 is now at 0%
 [INFO] Hunt: goToBall: Going to BallX...
 [INFO] PidCalc: pidCalc: --------------------pidCalc--------------------------
-[INFO] PidCalc: pidCalc: Integral: -5.225115524039269
+[INFO] PidCalc: pidCalc: Integral: -1.9758364614987376
 [INFO] PidCalc: pidCalc: Derivative: 0
-[INFO] PidCalc: pidCalc: Error: -18.41498
-[INFO] PidCalc: pidCalc: Speed: -1.1820047762019634
+[INFO] PidCalc: pidCalc: Error: -7.521666000000001
+[INFO] PidCalc: pidCalc: Speed: -0.47487512307493696
 [INFO] PidCalc: pidCalc: Last Error: 0
-[INFO] PidCalc: pidCalc: Dt: 0.28374266624450684
+[INFO] PidCalc: pidCalc: Dt: 0.26268601417541504
 [INFO] PidCalc: pidCalc: ----------------------------------------------
 [INFO] PidCalc: pidCalc: --------------------pidCalc--------------------------
-[INFO] PidCalc: pidCalc: Integral: 24.91410191493988
+[INFO] PidCalc: pidCalc: Integral: 23.468311055755613
 [INFO] PidCalc: pidCalc: Derivative: 0
-[INFO] PidCalc: pidCalc: Error: 87.57392
-[INFO] PidCalc: pidCalc: Speed: 46.27837019149399
+[INFO] PidCalc: pidCalc: Error: 89.03392
+[INFO] PidCalc: pidCalc: Speed: 46.86379110557556
 [INFO] PidCalc: pidCalc: Last Error: 0
-[INFO] PidCalc: pidCalc: Dt: 0.28449225425720215
+[INFO] PidCalc: pidCalc: Dt: 0.26358842849731445
 [INFO] PidCalc: pidCalc: ----------------------------------------------
-[DEBUG] PWM7046: value: Hardware updated: GPIO 20 is now at 45.09636541529203%
-[DEBUG] PWM7046: value: Hardware updated: GPIO 19 is now at 0%
-[DEBUG] motor7046: speed: Motor speed is now: 45.09636541529203
-[DEBUG] PWM7046: value: Hardware updated: GPIO 22 is now at 47.460374967695955%
-[DEBUG] PWM7046: value: Hardware updated: GPIO 21 is now at 0%
-[DEBUG] motor7046: speed: Motor speed is now: 47.460374967695955
-[DEBUG] PWM7046: value: Hardware updated: GPIO 23 is now at 47.460374967695955%
-[DEBUG] PWM7046: value: Hardware updated: GPIO 24 is now at 0%
-[DEBUG] motor7046: speed: Motor speed is now: 47.460374967695955
-[DEBUG] PWM7046: value: Hardware updated: GPIO 26 is now at 45.09636541529203%
+[DEBUG] PWM7046: value: Hardware updated: GPIO 26 is now at 47.338666228650496%
 [DEBUG] PWM7046: value: Hardware updated: GPIO 25 is now at 0%
-[DEBUG] motor7046: speed: Motor speed is now: 45.09636541529203
-[INFO] PidCalc: pidCalc: --------------------pidCalc--------------------------
-[INFO] PidCalc: pidCalc: Integral: -10.3342814791584
-[INFO] PidCalc: pidCalc: Derivative: 0
-[INFO] PidCalc: pidCalc: Error: -16.654059999999998
-[INFO] PidCalc: pidCalc: Speed: -1.34941707395792
-[INFO] PidCalc: pidCalc: Last Error: -18.41498
-[INFO] PidCalc: pidCalc: Dt: 0.3067820072174072
-[INFO] PidCalc: pidCalc: ----------------------------------------------
-[INFO] PidCalc: pidCalc: --------------------pidCalc--------------------------
-[INFO] PidCalc: pidCalc: Integral: 50.805793687400815
-[INFO] PidCalc: pidCalc: Derivative: 0
-[INFO] PidCalc: pidCalc: Error: 84.40299999999999
-[INFO] PidCalc: pidCalc: Speed: 47.28207936874008
-[INFO] PidCalc: pidCalc: Last Error: 87.57392
-[INFO] PidCalc: pidCalc: Dt: 0.3067626953125
-[INFO] PidCalc: pidCalc: ----------------------------------------------
-[DEBUG] PWM7046: value: Hardware updated: GPIO 20 is now at 45.932662294782155%
-[DEBUG] PWM7046: value: Hardware updated: GPIO 19 is now at 0%
-[DEBUG] motor7046: speed: Motor speed is now: 45.932662294782155
-[DEBUG] PWM7046: value: Hardware updated: GPIO 22 is now at 48.631496442698%
+[DEBUG] motor7046: speed: Motor speed is now: 47.338666228650496
+[DEBUG] PWM7046: value: Hardware updated: GPIO 22 is now at 46.38891598250062%
 [DEBUG] PWM7046: value: Hardware updated: GPIO 21 is now at 0%
-[DEBUG] motor7046: speed: Motor speed is now: 48.631496442698
-[DEBUG] PWM7046: value: Hardware updated: GPIO 23 is now at 48.631496442698%
+[DEBUG] motor7046: speed: Motor speed is now: 46.38891598250062
 [DEBUG] PWM7046: value: Hardware updated: GPIO 24 is now at 0%
-[DEBUG] motor7046: speed: Motor speed is now: 48.631496442698
-[DEBUG] PWM7046: value: Hardware updated: GPIO 26 is now at 45.932662294782155%
-[DEBUG] PWM7046: value: Hardware updated: GPIO 25 is now at 0%
-[DEBUG] motor7046: speed: Motor speed is now: 45.932662294782155
-[INFO] PidCalc: pidCalc: --------------------pidCalc--------------------------
-[INFO] PidCalc: pidCalc: Integral: -15.592420537900924
-[INFO] PidCalc: pidCalc: Derivative: 0
-[INFO] PidCalc: pidCalc: Error: -17.12482
-[INFO] PidCalc: pidCalc: Speed: -1.6358620268950463
-[INFO] PidCalc: pidCalc: Last Error: -16.654059999999998
-[INFO] PidCalc: pidCalc: Dt: 0.30704784393310547
-[INFO] PidCalc: pidCalc: ----------------------------------------------
-[INFO] PidCalc: pidCalc: --------------------pidCalc--------------------------
-[INFO] PidCalc: pidCalc: Integral: 73.89210966515064
-[INFO] PidCalc: pidCalc: Derivative: 0
-[INFO] PidCalc: pidCalc: Error: 75.17114000000001
-[INFO] PidCalc: pidCalc: Speed: 44.97478096651507
-[INFO] PidCalc: pidCalc: Last Error: 84.40299999999999
-[INFO] PidCalc: pidCalc: Dt: 0.3071167469024658
-[INFO] PidCalc: pidCalc: ----------------------------------------------
-[DEBUG] PWM7046: value: Hardware updated: GPIO 20 is now at 43.33891893962002%
+[DEBUG] PWM7046: value: Hardware updated: GPIO 23 is now at 47.338666228650496%
+[DEBUG] motor7046: speed: Motor speed is now: -47.338666228650496
 [DEBUG] PWM7046: value: Hardware updated: GPIO 19 is now at 0%
-[DEBUG] motor7046: speed: Motor speed is now: 43.33891893962002
-[DEBUG] PWM7046: value: Hardware updated: GPIO 22 is now at 46.61064299341012%
-[DEBUG] PWM7046: value: Hardware updated: GPIO 21 is now at 0%
-[DEBUG] motor7046: speed: Motor speed is now: 46.61064299341012
-[DEBUG] PWM7046: value: Hardware updated: GPIO 23 is now at 46.61064299341012%
-[DEBUG] PWM7046: value: Hardware updated: GPIO 24 is now at 0%
-[DEBUG] motor7046: speed: Motor speed is now: 46.61064299341012
-[DEBUG] PWM7046: value: Hardware updated: GPIO 26 is now at 43.33891893962002%
+[DEBUG] PWM7046: value: Hardware updated: GPIO 20 is now at 46.38891598250062%
+[DEBUG] motor7046: speed: Motor speed is now: -46.38891598250062
+[INFO] PidCalc: pidCalc: --------------------pidCalc--------------------------
+[INFO] PidCalc: pidCalc: Integral: -3.4553501828395845
+[INFO] PidCalc: pidCalc: Derivative: 0
+[INFO] PidCalc: pidCalc: Error: -4.8188075999999995
+[INFO] PidCalc: pidCalc: Speed: -0.4137078891419792
+[INFO] PidCalc: pidCalc: Last Error: -7.521666000000001
+[INFO] PidCalc: pidCalc: Dt: 0.30702900886535645
+[INFO] PidCalc: pidCalc: ----------------------------------------------
+[INFO] PidCalc: pidCalc: --------------------pidCalc--------------------------
+[INFO] PidCalc: pidCalc: Integral: 48.16031891259193
+[INFO] PidCalc: pidCalc: Derivative: 0
+[INFO] PidCalc: pidCalc: Error: 80.40203999999999
+[INFO] PidCalc: pidCalc: Speed: 45.017051891259186
+[INFO] PidCalc: pidCalc: Last Error: 89.03392
+[INFO] PidCalc: pidCalc: Dt: 0.30710673332214355
+[INFO] PidCalc: pidCalc: ----------------------------------------------
+[DEBUG] PWM7046: value: Hardware updated: GPIO 26 is now at 45.43075978040117%
 [DEBUG] PWM7046: value: Hardware updated: GPIO 25 is now at 0%
-[DEBUG] motor7046: speed: Motor speed is now: 43.33891893962002
-[INFO] PidCalc: pidCalc: --------------------pidCalc--------------------------
-[INFO] PidCalc: pidCalc: Integral: -22.46968201601982
-[INFO] PidCalc: pidCalc: Derivative: 0
-[INFO] PidCalc: pidCalc: Error: -20.74654
-[INFO] PidCalc: pidCalc: Speed: -2.1608111008009914
-[INFO] PidCalc: pidCalc: Last Error: -17.12482
-[INFO] PidCalc: pidCalc: Dt: 0.33148956298828125
-[INFO] PidCalc: pidCalc: ----------------------------------------------
-[INFO] PidCalc: pidCalc: --------------------pidCalc--------------------------
-[INFO] PidCalc: pidCalc: Integral: 89.06268064763546
-[INFO] PidCalc: pidCalc: Derivative: 0
-[INFO] PidCalc: pidCalc: Error: 45.75702
-[INFO] PidCalc: pidCalc: Speed: 31.784778064763543
-[INFO] PidCalc: pidCalc: Last Error: 75.17114000000001
-[INFO] PidCalc: pidCalc: Dt: 0.3315463066101074
-[INFO] PidCalc: pidCalc: ----------------------------------------------
-[DEBUG] PWM7046: value: Hardware updated: GPIO 20 is now at 29.623966963962552%
+[DEBUG] motor7046: speed: Motor speed is now: 45.43075978040117
+[DEBUG] PWM7046: value: Hardware updated: GPIO 22 is now at 44.603344002117204%
+[DEBUG] PWM7046: value: Hardware updated: GPIO 21 is now at 0%
+[DEBUG] motor7046: speed: Motor speed is now: 44.603344002117204
+[DEBUG] PWM7046: value: Hardware updated: GPIO 24 is now at 0%
+[DEBUG] PWM7046: value: Hardware updated: GPIO 23 is now at 45.43075978040117%
+[DEBUG] motor7046: speed: Motor speed is now: -45.43075978040117
 [DEBUG] PWM7046: value: Hardware updated: GPIO 19 is now at 0%
-[DEBUG] motor7046: speed: Motor speed is now: 29.623966963962552
-[DEBUG] PWM7046: value: Hardware updated: GPIO 22 is now at 33.945589165564535%
-[DEBUG] PWM7046: value: Hardware updated: GPIO 21 is now at 0%
-[DEBUG] motor7046: speed: Motor speed is now: 33.945589165564535
-[DEBUG] PWM7046: value: Hardware updated: GPIO 23 is now at 33.945589165564535%
-[DEBUG] PWM7046: value: Hardware updated: GPIO 24 is now at 0%
-[DEBUG] motor7046: speed: Motor speed is now: 33.945589165564535
-[DEBUG] PWM7046: value: Hardware updated: GPIO 26 is now at 29.623966963962552%
+[DEBUG] PWM7046: value: Hardware updated: GPIO 20 is now at 44.603344002117204%
+[DEBUG] motor7046: speed: Motor speed is now: -44.603344002117204
+[INFO] PidCalc: pidCalc: --------------------pidCalc--------------------------
+[INFO] PidCalc: pidCalc: Integral: -4.75509774046154
+[INFO] PidCalc: pidCalc: Derivative: 0
+[INFO] PidCalc: pidCalc: Error: -4.238308
+[INFO] PidCalc: pidCalc: Speed: -0.449670287023077
+[INFO] PidCalc: pidCalc: Last Error: -4.8188075999999995
+[INFO] PidCalc: pidCalc: Dt: 0.30666661262512207
+[INFO] PidCalc: pidCalc: ----------------------------------------------
+[INFO] PidCalc: pidCalc: --------------------pidCalc--------------------------
+[INFO] PidCalc: pidCalc: Integral: 69.56282265045166
+[INFO] PidCalc: pidCalc: Derivative: 0
+[INFO] PidCalc: pidCalc: Error: 69.74708000000001
+[INFO] PidCalc: pidCalc: Speed: 41.82982226504517
+[INFO] PidCalc: pidCalc: Last Error: 80.40203999999999
+[INFO] PidCalc: pidCalc: Dt: 0.30685877799987793
+[INFO] PidCalc: pidCalc: ----------------------------------------------
+[DEBUG] PWM7046: value: Hardware updated: GPIO 26 is now at 42.27949255206825%
 [DEBUG] PWM7046: value: Hardware updated: GPIO 25 is now at 0%
-[DEBUG] motor7046: speed: Motor speed is now: 29.623966963962552
+[DEBUG] motor7046: speed: Motor speed is now: 42.27949255206825
+[DEBUG] PWM7046: value: Hardware updated: GPIO 22 is now at 41.3801519780221%
+[DEBUG] PWM7046: value: Hardware updated: GPIO 21 is now at 0%
+[DEBUG] motor7046: speed: Motor speed is now: 41.3801519780221
+[DEBUG] PWM7046: value: Hardware updated: GPIO 24 is now at 0%
+[DEBUG] PWM7046: value: Hardware updated: GPIO 23 is now at 42.27949255206825%
+[DEBUG] motor7046: speed: Motor speed is now: -42.27949255206825
+[DEBUG] PWM7046: value: Hardware updated: GPIO 19 is now at 0%
+[DEBUG] PWM7046: value: Hardware updated: GPIO 20 is now at 41.3801519780221%
+[DEBUG] motor7046: speed: Motor speed is now: -41.3801519780221
+[INFO] PidCalc: pidCalc: --------------------pidCalc--------------------------
+[INFO] PidCalc: pidCalc: Integral: -8.243099480972958
+[INFO] PidCalc: pidCalc: Derivative: 0
+[INFO] PidCalc: pidCalc: Error: -11.272662
+[INFO] PidCalc: pidCalc: Speed: -0.975788074048648
+[INFO] PidCalc: pidCalc: Last Error: -4.238308
+[INFO] PidCalc: pidCalc: Dt: 0.3094213008880615
+[INFO] PidCalc: pidCalc: ----------------------------------------------
+[INFO] PidCalc: pidCalc: --------------------pidCalc--------------------------
+[INFO] PidCalc: pidCalc: Integral: 84.31160480044366
+[INFO] PidCalc: pidCalc: Derivative: 0
+[INFO] PidCalc: pidCalc: Error: 47.41874
+[INFO] PidCalc: pidCalc: Speed: 32.14053048004437
+[INFO] PidCalc: pidCalc: Last Error: 69.74708000000001
+[INFO] PidCalc: pidCalc: Dt: 0.311032772064209
+[INFO] PidCalc: pidCalc: ----------------------------------------------
+[DEBUG] PWM7046: value: Hardware updated: GPIO 26 is now at 33.11631855409302%
+[DEBUG] PWM7046: value: Hardware updated: GPIO 25 is now at 0%
+[DEBUG] motor7046: speed: Motor speed is now: 33.11631855409302
+[DEBUG] PWM7046: value: Hardware updated: GPIO 22 is now at 31.16474240599572%
+[DEBUG] PWM7046: value: Hardware updated: GPIO 21 is now at 0%
+[DEBUG] motor7046: speed: Motor speed is now: 31.16474240599572
+[DEBUG] PWM7046: value: Hardware updated: GPIO 24 is now at 0%
+[DEBUG] PWM7046: value: Hardware updated: GPIO 23 is now at 33.11631855409302%
+[DEBUG] motor7046: speed: Motor speed is now: -33.11631855409302
+[DEBUG] PWM7046: value: Hardware updated: GPIO 19 is now at 0%
+[DEBUG] PWM7046: value: Hardware updated: GPIO 20 is now at 31.16474240599572%
+[DEBUG] motor7046: speed: Motor speed is now: -31.16474240599572
+[INFO] PidCalc: pidCalc: --------------------pidCalc--------------------------
+[INFO] PidCalc: pidCalc: Integral: -12.37710264936514
+[INFO] PidCalc: pidCalc: Derivative: -0.042109733912300024
+[INFO] PidCalc: pidCalc: Error: -12.64892
+[INFO] PidCalc: pidCalc: Speed: -1.2555121058594871
+[INFO] PidCalc: pidCalc: Last Error: -11.272662
+[INFO] PidCalc: pidCalc: Dt: 0.3268265724182129
+[INFO] PidCalc: pidCalc: ----------------------------------------------
+[INFO] PidCalc: pidCalc: --------------------pidCalc--------------------------
+[INFO] PidCalc: pidCalc: Integral: 89.8124281643343
+[INFO] PidCalc: pidCalc: Derivative: -0.9362166678054376
+[INFO] PidCalc: pidCalc: Error: 16.84366
+[INFO] PidCalc: pidCalc: Speed: 17.309451149652887
+[INFO] PidCalc: pidCalc: Last Error: 47.41874
+[INFO] PidCalc: pidCalc: Dt: 0.3265812397003174
+[INFO] PidCalc: pidCalc: ----------------------------------------------
+[DEBUG] PWM7046: value: Hardware updated: GPIO 26 is now at 18.564963255512374%
+[DEBUG] PWM7046: value: Hardware updated: GPIO 25 is now at 0%
+[DEBUG] motor7046: speed: Motor speed is now: 18.564963255512374
+[DEBUG] PWM7046: value: Hardware updated: GPIO 22 is now at 16.0539390437934%
+[DEBUG] PWM7046: value: Hardware updated: GPIO 21 is now at 0%
+[DEBUG] motor7046: speed: Motor speed is now: 16.0539390437934
+[DEBUG] PWM7046: value: Hardware updated: GPIO 24 is now at 0%
+[DEBUG] PWM7046: value: Hardware updated: GPIO 23 is now at 18.564963255512374%
+[DEBUG] motor7046: speed: Motor speed is now: -18.564963255512374
+[DEBUG] PWM7046: value: Hardware updated: GPIO 19 is now at 0%
+[DEBUG] PWM7046: value: Hardware updated: GPIO 20 is now at 16.0539390437934%
+[DEBUG] motor7046: speed: Motor speed is now: -16.0539390437934
 [INFO] Hunt: goToBall: Got to Ball successfully... e: -1.0, -1.0
