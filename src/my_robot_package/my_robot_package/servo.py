@@ -40,6 +40,8 @@ class Servo:
         self.log.debug(f"Changed angle to {angle} in duty {duty}")
         print(f"Changed angle to {angle} in duty {duty}")
 
+        self.servoAngle = angle
+
         sleep(delay)
         self.servo.value = 0
 

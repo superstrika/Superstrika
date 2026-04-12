@@ -112,7 +112,7 @@ class Hunt:
         self.log.info("Spinning to Ball...")
         print("Spinning to Ball...")
     
-        pid = PidCalc(1.2, 0.05, 0.04, 100, 100, 500, verbose=True)
+        pid = PidCalc(1.2, 0.2, 0.1, 150, 100, 500, verbose=False)
     
         error = self.serial.getBallLocation()[0]
         while abs(error) > data.SPIN_TO_BALL_ERROR:
@@ -132,7 +132,21 @@ class Hunt:
             self.spinSearch(right=error < 0, delay=0.15)
             self.spinToBall()
             return
-    
+
+        angle = self.gyro.get_z_angle()
+        
+        # print(f"Right now at {angle} deg.")
+
+        # if error < 0:
+        #     angle += 2
+        # else:
+        #     angle -= 2
+
+        # print(f"Spinning to {angle} deg.")
+        
+        # self.gyroMovement.spinToAngle(angle)
+
+
         self.log.info("Spun successfully...")
         print("Spun successfully...")
 

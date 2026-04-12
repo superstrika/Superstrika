@@ -38,7 +38,7 @@ LOG_FORMAT: str = "[%(levelname)s] %(cls)s: %(funcName)s: %(message)s"
 ROTATION_SPEED: int = 35
 
 SPIN_SEARCH_ERROR: float = 3
-SPIN_TO_BALL_ERROR: float = 3
+SPIN_TO_BALL_ERROR: float = 1.5
 GO_TO_BALL_ERROR: float = 1
 ROBOT_BALL_DISTANCE: float = (1, 1)
 
