@@ -18,7 +18,7 @@ CHIP_ID: int = 0
 """----------------------------------------------
               Camera configuration
 ----------------------------------------------"""
-MIN_ANGLE: int = 140
+MIN_ANGLE: int = 75
 MAX_ANGLE: int = 180
 
 """----------------------------------------------
@@ -35,7 +35,7 @@ LOG_FORMAT: str = "[%(levelname)s] %(cls)s: %(funcName)s: %(message)s"
 """----------------------------------------------
               Hunt Configuration
 ----------------------------------------------"""
-ROTATION_SPEED: int = 25
+ROTATION_SPEED: int = 35
 
 SPIN_SEARCH_ERROR: float = 3
 SPIN_TO_BALL_ERROR: float = 3

@@ -30,8 +30,8 @@ class Hunt:
         self.serial = serial7046.Serial7046(data.SERIAL_FREQUENCY)
 
         # processes
-        # self.lineDetection = edgeLineDetection.EdgeLineDetection(chipID=data.CHIP_ID, motors=self.motors)
-        self.gyroMovement = gyroMovement.GyroMovement(self.i2c, self.gyro, self.motors)
+        self.lineDetection = edgeLineDetection.EdgeLineDetection(pins=data.TCRT_PINS, chipID=data.CHIP_ID, motors=self.motors)
+        self.gyroMovement = gyroMovement.GyroMovement(self.i2c, self.gyro, self.motors, pidValues=[0.25, 0.01, 0.01, 500, 100, 100])
 
         self.log = logging.LoggerAdapter(
             logging.getLogger(__name__),
@@ -48,10 +48,11 @@ class Hunt:
         self.log.info("Initializing Camera Search...")
         print("Initializing Camera Search...")
 
+        self.servo.angle = data.MAX_ANGLE
+
         for angle in range(data.MAX_ANGLE, data.MIN_ANGLE, -10):
 
-            self.servo.angle = angle
-            sleep(delay) # seconds
+            self.servo.setAngle(angle, delay * ((data.MAX_ANGLE - angle) / data.MIN_ANGLE))
 
             ballX, ballY = self.serial.getBallLocation()
             if ballX != 0 or ballY != 0:
@@ -64,10 +65,11 @@ class Hunt:
         print("Camera Search failed...")
         return None
 
-    def spinSearch(self, delay=0.15, right: bool = True) -> tuple[float, float] | None:
+    def spinSearch(self, delay=0.25, right: bool = True) -> tuple[float, float] | None:
         """
         Spins the robot 360 degrees or until ball is found.
         :param delay: the delay between the start of spinning to first angle check.
+        :param right: the direction of the spinning
         :return: [0] - X coordinate of the returned object. [1] - Y coordinate of the returned object. None if not found.
         """
         speed = data.ROTATION_SPEED if right else -data.ROTATION_SPEED
@@ -93,7 +95,7 @@ class Hunt:
                 print(f"Ball Found: {ballX}, {ballY}")
                 return ballX, ballY
 
-
+            
             angle = self.gyro.get_z_angle()
             print(f"Angle: {angle}")
             self.motors.setSpeed(*tuple(speeds))
@@ -102,62 +104,65 @@ class Hunt:
         self.log.info("Spin search failed...")
         print("Spin search failed...")
 
-    # def spinToBall(self) -> None:
-    #     """
-    #     Spins the robot until robot is straight at the ball.
-    #     """
-    #
-    #     self.log.info("Spinning to Ball...")
-    #     print("Spinning to Ball...")
-    #
-    #     pid = PidCalc(1.2, 0.07, 0.02, 100, 100, 500, verbose=True)
-    #
-    #     error = self.serial.getBallLocation()[0]
-    #     while abs(error) > data.SPIN_TO_BALL_ERROR:
-    #         speed = pid.pidCalc(error)
-    #
-    #         speeds = motor.motor7046.calculate_rotation_speed(speed)
-    #
-    #         self.motors.setSpeed(*tuple(speeds))
-    #         error = self.serial.getBallLocation()[0]
-    #
-    #     if (self.serial.getBallLocation()[0] == 0):
-    #         self.motors.setSpeedVxVy(0, 0)
-    #         self.log.info("Spun too much: ball lost")
-    #         print("Spun too much: ball lost")
-    #         self.spinSearch(right=error < 0)
-    #         self.spinToBall()
-    #         return
-    #
-    #
-    #     self.motors.setSpeedVxVy(0, 0)
-    #     self.log.info("Spun successfully...")
-    #     print("Spun successfully...")
-
-    def spinToBall(self):
+    def spinToBall(self) -> None:
         """
         Spins the robot until robot is straight at the ball.
         """
-        ballX, ballY = self.serial.getBallLocation()
-        lastError: int = 0
+    
+        self.log.info("Spinning to Ball...")
+        print("Spinning to Ball...")
+    
+        pid = PidCalc(1.2, 0.05, 0.04, 100, 100, 500, verbose=True)
+    
+        error = self.serial.getBallLocation()[0]
+        while abs(error) > data.SPIN_TO_BALL_ERROR:
+            speed = pid.pidCalc(error)
+    
+            speeds = motor.motor7046.calculate_rotation_speed(speed)
+    
+            self.motors.setSpeed(*tuple(speeds))
+            error = self.serial.getBallLocation()[0]
+    
+        self.motors.setSpeedVxVy(0, 0)
 
-        while abs(ballX) > data.SPIN_TO_BALL_ERROR:
-            angle = int(math.atan2(ballY, ballX))
-
-            self.log.debug(f"Found ball in angle: {angle}. Spinning...")
-            print(f"Found ball in angle: {angle}. Spinning...")
-
-            self.gyroMovement.spinToAngle(int(angle))
-
-            lastError = angle
-            ballX, ballY = self.serial.getBallLocation()
-
-        if self.serial.getBallLocation()[0] == 0:
-            self.motors.setSpeedVxVy(0, 0)
+        if (self.serial.getBallLocation()[0] == 0):
             self.log.info("Spun too much: ball lost")
             print("Spun too much: ball lost")
-            self.spinSearch(right=lastError < 0)
+            input
+            self.spinSearch(right=error < 0, delay=0.15)
             self.spinToBall()
+            return
+    
+        self.log.info("Spun successfully...")
+        print("Spun successfully...")
+
+    # def spinToBall(self):
+    #     """
+    #     Spins the robot until robot is straight at the ball.
+    #     """
+    #     ballX, ballY = self.serial.getBallLocation()
+    #     print(f"ballX: {ballX}, ballY: {ballY}")
+    #     lastError: int = 0
+
+    #     while abs(ballX) > data.SPIN_TO_BALL_ERROR:
+    #         angle = int(math.degrees(math.atan2(ballY, ballX)))
+    #         # print(angle)
+
+    #         self.log.debug(f"Found ball in angle: {angle}. Spinning...")
+    #         print(f"Found ball in angle: {angle}. Spinning...")
+
+    #         self.gyroMovement.spinToAngle(int(angle))
+
+    #         lastError = angle
+    #         ballX, ballY = self.serial.getBallLocation()
+
+    #     if self.serial.getBallLocation()[0] == 0:
+    #         self.motors.setSpeedVxVy(0, 0)
+    #         self.log.info("Spun too much: ball lost")
+    #         print("Spun too much: ball lost")
+    #         input()
+    #         self.spinSearch(right=lastError < 0)
+    #         self.spinToBall()
 
     def goToBallX(self, delay=0.3) -> None:
         self.log.info("Going to BallX...")
@@ -219,8 +224,17 @@ class Hunt:
         # hit the ball:
         self.goToBall()
 
+    def __del__(self):
+        self.motors.setSpeedVxVy(0, 0)
+
 if __name__ == "__main__":
     r = Hunt()
-    r.spinSearch()
+    # r.spinSearch(0.25)
+    # r.spinToBall()
+    # r.camSearch(delay=0.3)
     r.spinToBall()
+    # while True:
+    #     pass
+    # r.spinSearch()
+    # r.spinToBall()
     # r.goToBall()

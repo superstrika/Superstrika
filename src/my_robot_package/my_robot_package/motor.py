@@ -124,7 +124,7 @@ class motor7046:
         elif speed < -100:
             speed = -100
 
-        return [(speed if i % 2 == 0 else -speed) for i in range(4)] # [speed, speed, speed, speed] 
+        return [-speed for i in range(4)] # [speed, speed, speed, speed] 
 
 class multipleMotors:
     def __init__(self, pins: list[int], chipID: int = 0, verbose: bool = True, speedVerbose: bool = False):
