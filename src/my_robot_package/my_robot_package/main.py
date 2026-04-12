@@ -9,6 +9,7 @@ import logging
 import serial7046
 from pidCalc import PidCalc
 import gyroMovement
+import threading
 import math
 
 try:
@@ -29,8 +30,13 @@ class Hunt:
         self.gyro = gyro.MPU6050(self.i2c)
         self.serial = serial7046.Serial7046(data.SERIAL_FREQUENCY)
 
+        #race conditions
+        self.lock = threading.Lock()
+        self.condition = threading.Condition(self.lock)
+        self.priority_active = False
+
         # processes
-        self.lineDetection = edgeLineDetection.EdgeLineDetection(pins=data.TCRT_PINS, chipID=data.CHIP_ID, motors=self.motors)
+        self.lineDetection = edgeLineDetection.EdgeLineDetection(pins=data.TCRT_PINS, chipID=data.CHIP_ID, motors=self.motors, parent=self)
         self.gyroMovement = gyroMovement.GyroMovement(self.i2c, self.gyro, self.motors, pidValues=[0.25, 0.01, 0.01, 500, 100, 100])
 
         self.log = logging.LoggerAdapter(
