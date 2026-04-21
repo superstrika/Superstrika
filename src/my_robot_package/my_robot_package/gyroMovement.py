@@ -45,5 +45,5 @@ class GyroMovement:
             error: float = setPoint - self.gyro.get_z_angle()
 
 if __name__ == "__main__":
-    mov = GyroMovement(1)
+    mov = GyroMovement()
     mov.spinToAngle(90)

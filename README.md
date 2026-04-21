@@ -72,6 +72,12 @@ sudo nvim /boot/firmware/config.txt
 
 An example for a boot file: ```src/my_robot_package/my_robot_package/bootCopy.txt```
 
+To show all connected i2c devices run:
+
+``` bash
+sudo i2cdetect -y 1
+```
+
 ---
 
 *Maintained by the Superstrika Team.*

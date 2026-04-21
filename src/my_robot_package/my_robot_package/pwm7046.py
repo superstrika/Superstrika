@@ -4,7 +4,8 @@ import logging
 
 class PWM7046:
 
-    def __init__(self, pin, freq=800, chipID=0):
+    def __init__(self, pin, freq=800, chipID=0, verbose: bool = True):
+        self.verbose = verbose
 
         self._pin = pin
         self._freq = freq
@@ -28,7 +29,9 @@ class PWM7046:
             self._value = value_
 
             lgpio.tx_pwm(self._h, self._pin, self._freq, self._value)
-            print(f"Hardware updated: GPIO {self._pin} is now at {value_}%")
+
+            if self.verbose:
+                print(f"Hardware updated: GPIO {self._pin} is now at {value_}%")
             self.log.debug(f"Hardware updated: GPIO {self._pin} is now at {value_}%")
 
         else:

@@ -1,4 +1,8 @@
 lgpio
-
+smbus2
+gpiod
+board
+pyusb
+pyserial
 adafruit-blinka
 adafruit-circuitpython-vcnl4040
