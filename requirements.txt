@@ -1,0 +1,4 @@
+lgpio
+
+adafruit-blinka
+adafruit-circuitpython-vcnl4040
