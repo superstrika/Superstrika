@@ -247,14 +247,60 @@ class Hunt:
     def __del__(self):
         self.motors.setSpeedVxVy(0, 0)
 
+class Keep:
+    def __init__(self):
+        # motors
+        self.i2c = I2C(data.I2C_ID)
+        self.servo = servo.Servo(data.SERVO_PIN, data.CHIP_ID)
+        self.motors = motor.multipleMotors(data.MOTOR_PINS, data.CHIP_ID, verbose=False, speedVerbose=True)
+
+        #sensors
+        self.gyro = gyro.MPU6050(self.i2c)
+        self.serial = serial7046.Serial7046(data.SERIAL_FREQUENCY)
+
+        #race conditions
+        # self.lock = threading.Lock()
+        # self.condition = threading.Condition(self.lock)
+        # self.priority_active = False
+
+        # processes
+        # self.lineDetection = edgeLineDetection.EdgeLineDetection(pins=data.TCRT_PINS, chipID=data.CHIP_ID, motors=self.motors, parent=self)
+        self.gyroMovement = gyroMovement.GyroMovement(self.i2c, self.gyro, self.motors, pidValues=[0.25, 0.01, 0.01, 500, 100, 100])
+
+        self.log = logging.LoggerAdapter(
+            logging.getLogger(__name__),
+            {'cls': self.__class__.__name__}
+        )
+
+    def trackBall(self):
+        self.log.info("Tracking Ball")
+        print("Tracking Ball")
+
+        pid = PidCalc(1.2, 0.2, 0.1, 150, 100, 500, verbose=False)
+
+        while True:
+            deltaX = self.serial.getBallLocation()[0]
+
+            if deltaX == 0:
+                continue
+
+            speedX = pid.pidCalc(deltaX)
+            self.motors.setSpeed(*tuple(motor.motor7046.calculate_speed(speedX, 0, 0)))
+
+
 if __name__ == "__main__":
-    r = Hunt()
-    # r.spinSearch(0.25)
-    # r.spinToBall()
-    # r.camSearch(delay=0.3)
-    r.spinToBall()
-    # while True:
-    #     pass
-    # r.spinSearch()
-    # r.spinToBall()
-    # r.goToBall()
+    if data.SELF_IS_HUNTER:
+        r = Hunt()
+        # r.spinSearch(0.25)
+        # r.spinToBall()
+        # r.camSearch(delay=0.3)
+        r.spinToBall()
+        # while True:
+        #     pass
+        # r.spinSearch()
+        # r.spinToBall()
+        # r.goToBall()
+    else:
+        r = Keep()
+
+        r.trackBall()
