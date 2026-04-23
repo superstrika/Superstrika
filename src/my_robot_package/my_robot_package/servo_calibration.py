@@ -10,22 +10,22 @@ class servoCalibration:
         else:
             self._servo = servo.Servo(servo_)
         
-        self.MIN_ANGLE = 85
-        self.MAX_ANGLE = 180
+        self.MIN_ANGLE = data.MIN_ANGLE
+        self.MAX_ANGLE = data.MAX_ANGLE
 
         if auto_calibrate:
             self.calibrate()
 
     def calibrate(self):
         input("Press enter to start the callibration...")
-        self._servo.angle = self.MIN_ANGLE
-
-        print(f"Moving servo to {self.MIN_ANGLE} deg. Move the camera to the desired position.")
-
-        input("To continue press enter...")
         self._servo.angle = self.MAX_ANGLE
 
-        print(f"Moving servo to {self.MAX_ANGLE} deg. Make sure this is the desired \"max\" position.")
+        print(f"Moving servo to {self.MAX_ANGLE} deg. Move the camera to the desired position.")
+
+        input("To continue press enter...")
+        self._servo.angle = self.MIN_ANGLE
+
+        print(f"Moving servo to {self.MIN_ANGLE} deg. Make sure this is the desired \"min\" position.")
 
         print("Enter 'y' to repeat.")
         chr = input()

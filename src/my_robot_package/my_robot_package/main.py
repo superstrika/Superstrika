@@ -21,19 +21,24 @@ logging.basicConfig(filename=data.LOG_PATH, filemode='w', level=logging.DEBUG, f
 
 class Hunt:
     def __init__(self):
+        #race conditions of motors
+        self.lock = threading.Lock()
+        self.condition = threading.Condition(self.lock)
+        self.priority_active = False
+
+        #race conditions of servo
+        self.servoLock = threading.Lock()
+        self.servoCondition = threading.Condition(self.servoLock)
+        self.servoPriorityActive = False
+
         # motors
         self.i2c = I2C(data.I2C_ID)
         self.servo = servo.Servo(data.SERVO_PIN, data.CHIP_ID)
-        self.motors = motor.multipleMotors(data.MOTOR_PINS, data.CHIP_ID, verbose=False, speedVerbose=True)
+        self.motors = motor.multipleMotors(data.MOTOR_PINS, data.CHIP_ID, verbose=False, speedVerbose=True, parent=self)
 
         #sensors
         self.gyro = gyro.MPU6050(self.i2c)
         self.serial = serial7046.Serial7046(data.SERIAL_FREQUENCY)
-
-        #race conditions
-        self.lock = threading.Lock()
-        self.condition = threading.Condition(self.lock)
-        self.priority_active = False
 
         # processes
         self.lineDetection = edgeLineDetection.EdgeLineDetection(pins=data.TCRT_PINS, chipID=data.CHIP_ID, motors=self.motors, parent=self)
@@ -87,21 +92,22 @@ class Hunt:
         speeds = motor.motor7046.calculate_rotation_speed(speed)
         self.motors.setSpeed(*tuple(speeds))
         sleep(delay)
-        print(f"DEBUG: {self.gyro.get_z_angle()} <- {startAngle}")
+        self.motors.stop()
+        # print(f"DEBUG: {self.gyro.get_z_angle()} <- {startAngle}")
 
         angle = self.gyro.get_z_angle()
-        print(f"DEBUG: angle: {angle}")
-        print(f"DEBUG: startAngle: {startAngle}")
-        print(f"DEBUG: error: {data.SPIN_SEARCH_ERROR}")
+        # print(f"DEBUG: angle: {angle}")
+        # print(f"DEBUG: startAngle: {startAngle}")
+        # print(f"DEBUG: error: {data.SPIN_SEARCH_ERROR}")
         while (startAngle + data.SPIN_SEARCH_ERROR > angle) or (startAngle - data.SPIN_SEARCH_ERROR < angle):
-            self.motors.setSpeedVxVy(0, 0)
+            self.motors.stop()
             ballX, ballY = self.serial.getBallLocation()
+            # input(f"Stopped... {self.serial.getBallLocation()}")
             if ballX != 0 or ballY != 0:
                 self.log.info(f"Ball Found: {ballX}, {ballY}")
                 print(f"Ball Found: {ballX}, {ballY}")
                 return ballX, ballY
 
-            
             angle = self.gyro.get_z_angle()
             print(f"Angle: {angle}")
             self.motors.setSpeed(*tuple(speeds))
@@ -118,7 +124,7 @@ class Hunt:
         self.log.info("Spinning to Ball...")
         print("Spinning to Ball...")
     
-        pid = PidCalc(1.2, 0.2, 0.1, 150, 100, 500, verbose=False)
+        pid = PidCalc(1.5, 0.3, 0.1, 150, 100, 500, verbose=True)
     
         error = self.serial.getBallLocation()[0]
         while abs(error) > data.SPIN_TO_BALL_ERROR:
@@ -129,13 +135,14 @@ class Hunt:
             self.motors.setSpeed(*tuple(speeds))
             error = self.serial.getBallLocation()[0]
     
-        self.motors.setSpeedVxVy(0, 0)
+        self.motors.stop()
+        sleep(0.3)
 
         if (self.serial.getBallLocation()[0] == 0):
             self.log.info("Spun too much: ball lost")
             print("Spun too much: ball lost")
-            input
-            self.spinSearch(right=error < 0, delay=0.15)
+            input()
+            self.spinSearch(right=error < 0)
             self.spinToBall()
             return
 
@@ -177,7 +184,7 @@ class Hunt:
     #         ballX, ballY = self.serial.getBallLocation()
 
     #     if self.serial.getBallLocation()[0] == 0:
-    #         self.motors.setSpeedVxVy(0, 0)
+    #         self.motors.stop()
     #         self.log.info("Spun too much: ball lost")
     #         print("Spun too much: ball lost")
     #         input()
@@ -245,16 +252,19 @@ class Hunt:
         self.goToBall()
 
     def __del__(self):
-        self.motors.setSpeedVxVy(0, 0)
+        self.motors.stop()
 
 if __name__ == "__main__":
     r = Hunt()
     # r.spinSearch(0.25)
     # r.spinToBall()
     # r.camSearch(delay=0.3)
-    r.spinToBall()
+    # r.spinToBall()
     # while True:
     #     pass
     # r.spinSearch()
     # r.spinToBall()
-    # r.goToBall()
+    try:
+        r.goToBall()
+    except KeyboardInterrupt:
+        r.motors.stop()

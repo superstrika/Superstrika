@@ -1,8 +1,9 @@
 """----------------------------------------------
                    GPIO
 ----------------------------------------------"""
-MOTOR_PINS: list[int] = [25, 26, 21, 22, 23, 24, 19, 20]
-# MOTOR_PINS: list[int] = [23, 24, 19, 20, 25, 26, 21, 22]
+# MOTOR_PINS: list[int] = [25, 26, 21, 22, 23, 24, 19, 20]
+# MOTOR_PINS: list[int] = [19, 20, 23, 24, 25, 26, 21, 22]
+MOTOR_PINS: list[int] = [23, 24, 21, 22, 25, 26, 19, 20]
 TCRT_PINS: list[int] = [1, 0, 5]
 SERVO_PIN: int = 6
 RELAY_PIN: int = 7
@@ -35,7 +36,7 @@ LOG_FORMAT: str = "[%(levelname)s] %(cls)s: %(funcName)s: %(message)s"
 """----------------------------------------------
               Hunt Configuration
 ----------------------------------------------"""
-ROTATION_SPEED: int = 35
+ROTATION_SPEED: int = 25
 
 SPIN_SEARCH_ERROR: float = 3
 SPIN_TO_BALL_ERROR: float = 1.5

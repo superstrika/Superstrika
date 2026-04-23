@@ -96,6 +96,7 @@ class motor7046:
 
         # return [(i if abs(i) > 1 else 0) for i in [(s / max_val) * 100 for s in speeds]]
 
+        # Front Left
         wheel1_speed = Vy - Vx + rotation
         # Front Right
         wheel2_speed = Vx + Vy - rotation
@@ -127,34 +128,45 @@ class motor7046:
         return [-speed for i in range(4)] # [speed, speed, speed, speed] 
 
 class multipleMotors:
-    def __init__(self, pins: list[int], chipID: int = 0, verbose: bool = True, speedVerbose: bool = False):
+    def __init__(self, pins: list[int], chipID: int = 0, verbose: bool = True, speedVerbose: bool = False, parent = None):
+
+        self.parent = parent
 
         if speedVerbose == True:
             verbose = False
         self.speedVerbose = speedVerbose
 
-        motor1 = motor7046(pins[0], pins[1], switch=True, chipID=chipID, verbose=verbose)
-        motor2 = motor7046(pins[2], pins[3], switch=True, chipID=chipID, verbose=verbose)
+        motor1 = motor7046(pins[0], pins[1], switch=False, chipID=chipID, verbose=verbose)
+        motor2 = motor7046(pins[2], pins[3], switch=False, chipID=chipID, verbose=verbose)
         motor3 = motor7046(pins[4], pins[5], switch=True, chipID=chipID, verbose=verbose)
-        motor4 = motor7046(pins[6], pins[7], switch=False, chipID=chipID, verbose=verbose)
+        motor4 = motor7046(pins[6], pins[7], switch=True, chipID=chipID, verbose=verbose)
 
         self.motors: list[motor7046] = [motor1, motor2, motor3, motor4]
     
-    def setSpeedVxVy(self, Vx, Vy):
-        if self.speedVerbose:
-            print(f"Vx: {Vx}. Vy: {Vy}")
-        self.motors[0].speed = Vx
-        self.motors[1].speed = Vx
-        self.motors[2].speed = Vy
-        self.motors[3].speed = Vy
+    def stop(self):
+        self.setSpeed(0, 0, 0, 0)
 
     def setSpeed(self, V1, V2, V3, V4):
-        if self.speedVerbose:
-            print(f"V1: {V1}. V2: {V2}. V3: {V3}. V4: {V4}")
-        self.motors[0].speed = V1
-        self.motors[1].speed = V2
-        self.motors[2].speed = V3
-        self.motors[3].speed = V4
+
+        if self.parent:
+            with self.parent.condition:
+                while self.parent.priority_active:
+                    print("Waiting for interupt...")
+                    self.parent.condition.wait()
+            
+                if self.speedVerbose:
+                    print(f"V1: {V1}. V2: {V2}. V3: {V3}. V4: {V4}")
+                self.motors[0].speed = V1
+                self.motors[1].speed = V2
+                self.motors[2].speed = V3
+                self.motors[3].speed = V4
+        else:
+            if self.speedVerbose:
+                print(f"V1: {V1}. V2: {V2}. V3: {V3}. V4: {V4}")
+            self.motors[0].speed = V1
+            self.motors[1].speed = V2
+            self.motors[2].speed = V3
+            self.motors[3].speed = V4
 
 if __name__ == "__main__":
     # motor1 = motor7046(19, 20, switch=False) # green
@@ -187,6 +199,6 @@ if __name__ == "__main__":
 
     input()
 
-    motors.setSpeedVxVy(0, 0)
+    motors.stop()
     
  

@@ -23,6 +23,7 @@ class Serial7046:
     def getBallLocation(self) -> tuple[float, float] | None:
         ballLocation: list[tuple[float, float]] = []
         try:
+            self.ser.reset_input_buffer()
             for _ in range(5):
                 response = self.readMessage()
                 # print(response)
@@ -30,7 +31,7 @@ class Serial7046:
                 response: list[float] = response.split('#')
                 for i in range(len(response)):
                     response[i] = float(response[i])
-
+                print((response[0], response[1]))
                 ballLocation.append((response[0], response[1]))
 
             avgX: float = 0
@@ -103,3 +104,9 @@ class Serial7046:
         if blueGoal:
             return self.getBlueGoalLocation()
         return self.getYellowGoalLocation()
+    
+
+if __name__ == "__main__":
+    ser = Serial7046()
+    while True:
+        print(ser.getBallLocation())
