@@ -1,0 +1,14 @@
+[Unit]
+Description=Console Web Viewer Running Superstrika Robot
+After=local-fs.target
+
+[Service]
+Type=simple
+User=admin
+WorkingDirectory=/home/superstrika/cubie-1/src/my_robot_package/my_robot_package/console
+ExecStart=/home/superstrika/cubie-1/src/my_robot_package/my_robot_package/.venv/bin/python /home/superstrika/cubie-1/src/my_robot_package/my_robot_package/console/server.py
+Restart=always
+RestartSec=1
+
+[Install]
+WantedBy=multi-user.target
