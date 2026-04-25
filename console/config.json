@@ -1,0 +1,8 @@
+{
+  "host": "0.0.0.0",
+  "port": 8080,
+  "python_executable": "",
+  "script": "sample_task.py",
+  "args": [],
+  "log_file": "console.log"
+}
