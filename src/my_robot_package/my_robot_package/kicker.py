@@ -3,7 +3,7 @@ from time import sleep
 
 class Kicker:
     # GEAR_TEETH = 4
-    GEAR_TEETH = 3
+    GEAR_TEETH = 1
 
     def __init__(self, pin1, pin2):
         self.motor = motor.motor7046(pin1, pin2, switch=False)
@@ -28,7 +28,8 @@ class Kicker:
         self.motor.speed = 0
 
 if __name__ == "__main__":
-    kicker = Kicker(25, 26)
+    kicker = Kicker(17, 18)
     # kicker.loadPoint(43)
     # sleep(0.25)
-    kicker.load(h)
+    kicker.load(23)
+    kicker.motor.speed = 0

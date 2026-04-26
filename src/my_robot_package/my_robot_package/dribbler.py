@@ -1,10 +1,25 @@
 import motor
+import data
 
-def dribbler_test():
-    dribbler = motor.motor7046(13, 16)  # Example GPIO pins
-    dribbler.speed = -100
-    input("Dribbler running at full speed. Press Enter to stop.")
-    dribbler.speed = 0  # Stop the dribbler
+class Dribbler:
+    def __init__(self, pins: tuple[int, int]):
+        self.dribbler = motor.motor7046(*pins)
+    
+    def start(self):
+        self.dribbler.speed = 100
+    
+    def stop(self):
+        self.dribbler.stop()
+    
+    def counterStart(self):
+        self.dribbler.speed = -100
 
 if __name__ == "__main__":
-    dribbler_test()
+    d = Dribbler(tuple(data.DRIBLER_PIN))
+    d.start()
+    input()
+    d.stop()
+    input()
+    d.counterStart()
+    input()
+    d.stop()

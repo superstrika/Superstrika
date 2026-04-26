@@ -42,11 +42,23 @@ class Serial7046:
             avgX /= len(ballLocation)
             avgY /= len(ballLocation)
 
+            if avgX == 0:
+                avgX = None
+            
+            if avgY == 0:
+                avgY = None
+
             return avgX, avgY
 
         except Exception as e:
             self.log.error(e)
             print(e)
+    
+    def isBallDetected(self) -> bool:
+        dis = self.getBallLocation()
+        if not dis[0] or not dis[1]:
+            return False
+        return True
 
     def getBlueGoalLocation(self) -> tuple[float, float] | None:
         goalLocation: list[tuple[float, float]] = []

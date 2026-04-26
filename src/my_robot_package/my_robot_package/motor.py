@@ -144,11 +144,11 @@ class multipleMotors:
         self.motors: list[motor7046] = [motor1, motor2, motor3, motor4]
     
     def stop(self):
-        self.setSpeed(0, 0, 0, 0)
+        self.setSpeed(1, 1, 1, 1)
 
     def setSpeed(self, V1, V2, V3, V4):
 
-        if self.parent:
+        if self.parent and not (V1 == 1 and V2 == 1 and V3 == 1 and V4 == 1):
             with self.parent.condition:
                 while self.parent.priority_active:
                     print("Waiting for interupt...")

@@ -5,6 +5,7 @@ import edgeLineDetection
 import gyro
 import input7046
 import data
+from VCNL_4040.VCNL4040_7046 import VCNL4040 as VCNL
 import logging
 import serial7046
 from pidCalc import PidCalc
@@ -39,6 +40,12 @@ class Hunt:
         #sensors
         self.gyro = gyro.MPU6050(self.i2c)
         self.serial = serial7046.Serial7046(data.SERIAL_FREQUENCY)
+
+        #vcnl
+        self.vcnl = VCNL()
+        self.vcnl.led_current = self.vcnl.LED_100MA
+        self.vcnl.proximity_high_definition = True
+        self.vcnl.proximity_integration_time = self.vcnl.PS_8T
 
         # processes
         self.lineDetection = edgeLineDetection.EdgeLineDetection(pins=data.TCRT_PINS, chipID=data.CHIP_ID, motors=self.motors, parent=self)
@@ -211,48 +218,106 @@ class Hunt:
         print(f"Got to Ball successfully... e: {pv - sp}")
     
     def goToBall(self, delay=0.3) -> None:
-        self.log.info("Going to BallX...")
-        print("Going to BallX...")
+        self.log.info("Going to Ball...")
+        print("Going to Ball...")
         sp = data.ROBOT_BALL_DISTANCE
 
         pidY = PidCalc(0.5, 0.1, 0.1, 100, 100, 500, verbose=False)
         pidX = PidCalc(0.05, 0.05, 0.1, 100, 100, 500, verbose=False)
+
         pv = self.serial.getBallLocation() # distance
+        print(f"{pv=}")
+
+        if not pv[0] or not pv[1]:
+            self.motors.stop()
+            return None            
+            # pv = self.serial.getBallLocation()
 
         while (abs(pv[0] - sp[0]) > data.GO_TO_BALL_ERROR) or (abs(pv[1] - sp[1]) > data.GO_TO_BALL_ERROR):
+
             speedX = pidX.pidCalc(pv[0] - sp[0])
-            speedY = pidY.pidCalc(pv[1] - sp[1])
+            speedY = pidY.pidCalc(pv[1] - sp[1]) if pv[1] > 10 else 30
             print(f"Vx: {speedX}, Vy: {speedY}")
+
             self.motors.setSpeed(*tuple(motor.motor7046.calculate_speed(speedX, speedY, 0)))
 
             sleep(delay)
             pv = self.serial.getBallLocation()
 
+            if pv[0] == None or pv[1] == None:
+                self.motors.stop()
+                return None
+
         self.log.info(f"Got to Ball successfully... e: {pv[0] - sp[0]}, {pv[1] - sp[1]}")
         print(f"Got to Ball successfully... e: {pv[0] - sp[0]}, {pv[1] - sp[1]}")
+    
+    def getBallStatus(self) -> data.BallStatus:
+        vcnl_prox = self.vcnl.proximity
+        cam_dist = self.serial.getBallLocation()
+        input(f"{cam_dist=}")
+
+        cam_found = True if cam_dist[0] and cam_dist[1] else False
+        if vcnl_prox < data.VCNL_PROX_NOT_DETECTED and not cam_found:
+            return data.BallStatus.NOT_FOUND
+        
+        if cam_found and vcnl_prox < data.VCNL_PROX_NOT_DETECTED:
+            return data.BallStatus.CAM_DETECTED
+        
+        if not cam_found and data.VCNL_PROX_IN_KICKER > vcnl_prox > data.VCNL_PROX_NOT_DETECTED:
+            return data.BallStatus.VCNL_CLOSE
+        
+        if not cam_found and data.VCNL_PROX_IN_KICKER < vcnl_prox:
+            return data.BallStatus.VCNL_IN_KICKER
+        
+        return data.BallStatus.CAM_DETECTED_AND_VCNL_CLOSE
+    
+    def forwardForBall(self, delay=0.1):
+        self.motors.setSpeed(*tuple(motor.motor7046.calculate_speed(0, 40)))
+        sleep(delay)
+        self.motors.stop()
 
     def hunt(self):
-        ballX, ballY = self.camSearch()
-        if ballX or ballY:
-            # ball found
-            pass
-        else: #ball not found
-            ballX, ballY = self.spinSearch()
-            if ballX or ballY:
-                #ball found
-                pass
-            else: # ball not found: returns to home.
-                return # TODO
+        # ballX, ballY = self.camSearch()
+        # if ballX or ballY:
+        #     # ball found
+        #     pass
+        # else: #ball not found
+        #     ballX, ballY = self.spinSearch()
+        #     if ballX or ballY:
+        #         #ball found
+        #         pass
+        #     else: # ball not found: returns to home.
+        #         return # TODO
 
-        # at this point, ballX + ballY is the ball coordinates
+        # # at this point, ballX + ballY is the ball coordinates
 
-        self.spinToBall() # perfectly aligns with the ball
+        while True:
+            status = self.getBallStatus()
 
-        # hit the ball:
-        self.goToBall()
+            if status == data.BallStatus.CAM_DETECTED:
+                print("Ball Detected!")
+                self.goToBall()
+
+            if status == data.BallStatus.NOT_FOUND:
+                print("Ball Not Found!")
+                self.spinSearch()
+            
+            if status == data.BallStatus.VCNL_CLOSE:
+                print("Ball is Close!")
+                self.forwardForBall(0.1)
+            
+            if status == data.BallStatus.CAM_DETECTED_AND_VCNL_CLOSE:
+                print("Ball is Close but not that much!")
+                self.forwardForBall(0.2)
+            
+            if status == data.BallStatus.VCNL_IN_KICKER:
+                print("Ball in Kicker Position!")
+        
+        input("First thing done. Waiting For Enter...")
+
 
     def __del__(self):
-        self.motors.setSpeedVxVy(0, 0)
+        self.motors.stop()
 
 class Keep:
     def __init__(self):
@@ -296,18 +361,21 @@ class Keep:
 
 
 if __name__ == "__main__":
+    # try:
     if data.SELF_IS_HUNTER:
         r = Hunt()
         # r.spinSearch(0.25)
         # r.spinToBall()
         # r.camSearch(delay=0.3)
-        r.spinToBall()
+        # r.spinToBall()
         # while True:
         #     pass
         # r.spinSearch()
         # r.spinToBall()
-        # r.goToBall()
+        r.hunt()
     else:
         r = Keep()
 
         r.trackBall()
+    # except KeyboardInterrupt:
+    #     r.motors.stop()

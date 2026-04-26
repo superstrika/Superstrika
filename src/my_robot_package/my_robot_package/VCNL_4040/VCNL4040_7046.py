@@ -24,6 +24,17 @@ class VCNL4040:
     PS_IF_CLOSE = 9
     PS_IF_AWAY = 8
 
+    # LED Current levels
+    LED_50MA  = 0x0
+    LED_75MA  = 0x1
+    LED_100MA = 0x2
+    LED_120MA = 0x4
+    LED_140MA = 0x4
+    LED_160MA = 0x5
+    LED_180MA = 0x6
+    LED_200MA = 0x7
+
+
     def __init__(self, bus_number=1, address=0x60):
         self.address = address
         self.bus = SMBus(bus_number)
@@ -101,6 +112,37 @@ class VCNL4040:
         self._modify_bits(0x00, new_it, 0x00C0, 6)
         time.sleep(it_delay)
 
+    @property
+    def led_current(self):
+        """Returns the current LED current setting (0-7)."""
+        return (self._read_reg(0x03) >> 8) & 0x07
+
+    @led_current.setter
+    def led_current(self, level):
+        """Sets the LED current (0=50mA, 7=200mA). Use constants like LED_200MA."""
+        self._modify_bits(0x03, level, 0x0700, 8)
+
+    @property
+    def proximity_integration_time(self):
+        """Returns the proximity integration time setting (0-7)."""
+        return (self._read_reg(0x03) >> 1) & 0x07
+
+    @proximity_integration_time.setter
+    def proximity_integration_time(self, new_it):
+        """Sets the proximity integration time (1T to 8T). Use constants like PS_8T."""
+        self._modify_bits(0x03, new_it, 0x000E, 1)
+
+    @property
+    def proximity_high_definition(self):
+        """Returns True if 16-bit mode is enabled, False if 8-bit."""
+        return bool((self._read_reg(0x03) >> 3) & 0x0001)
+
+    @proximity_high_definition.setter
+    def proximity_high_definition(self, val):
+        """Set to True for 16-bit (0-65535) or False for 8-bit (0-255)."""
+        self._modify_bits(0x03, int(val), 0x0008, 3)
+
+
     # --- Interrupt Handling ---
     def _update_interrupt_state(self):
         reg_val = self._read_reg(0x0B)
@@ -121,6 +163,10 @@ class VCNL4040:
 # --- Simple Test Script ---
 if __name__ == "__main__":
     sensor = VCNL4040()
+    sensor.led_current = sensor.LED_100MA
+    sensor.proximity_high_definition = True
+    sensor.proximity_integration_time = sensor.PS_8T
+
     print("VCNL4040 Ready (smbus2)")
     
     try:
