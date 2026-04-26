@@ -3,6 +3,7 @@ import motor
 from time import sleep
 import edgeLineDetection
 import gyro
+import dribbler
 import input7046
 import data
 from VCNL_4040.VCNL4040_7046 import VCNL4040 as VCNL
@@ -36,6 +37,7 @@ class Hunt:
         self.i2c = I2C(data.I2C_ID)
         self.servo = servo.Servo(data.SERVO_PIN, data.CHIP_ID)
         self.motors = motor.multipleMotors(data.MOTOR_PINS, data.CHIP_ID, verbose=False, speedVerbose=True, parent=self)
+        self.dribbler = dribbler.Dribbler(data.DRIBLER_PIN)
 
         #sensors
         self.gyro = gyro.MPU6050(self.i2c)
@@ -48,7 +50,7 @@ class Hunt:
         self.vcnl.proximity_integration_time = self.vcnl.PS_8T
 
         # processes
-        self.lineDetection = edgeLineDetection.EdgeLineDetection(pins=data.TCRT_PINS, chipID=data.CHIP_ID, motors=self.motors, parent=self)
+        # self.lineDetection = edgeLineDetection.EdgeLineDetection(pins=data.TCRT_PINS, chipID=data.CHIP_ID, motors=self.motors, parent=self)
         self.gyroMovement = gyroMovement.GyroMovement(self.i2c, self.gyro, self.motors, pidValues=[0.25, 0.01, 0.01, 500, 100, 100])
 
         self.log = logging.LoggerAdapter(
@@ -108,12 +110,11 @@ class Hunt:
         # print(f"DEBUG: error: {data.SPIN_SEARCH_ERROR}")
         while (startAngle + data.SPIN_SEARCH_ERROR > angle) or (startAngle - data.SPIN_SEARCH_ERROR < angle):
             self.motors.stop()
-            ballX, ballY = self.serial.getBallLocation()
             # input(f"Stopped... {self.serial.getBallLocation()}")
-            if ballX or ballY:
-                self.log.info(f"Ball Found: {ballX}, {ballY}")
-                print(f"Ball Found: {ballX}, {ballY}")
-                return ballX, ballY
+            if self.getBallStatus() != data.BallStatus.NOT_FOUND:
+                self.log.info(f"Ball Found")
+                print(f"Ball Found")
+                return None
 
             angle = self.gyro.get_z_angle()
             print(f"Angle: {angle}")
@@ -236,7 +237,8 @@ class Hunt:
         while (abs(pv[0] - sp[0]) > data.GO_TO_BALL_ERROR) or (abs(pv[1] - sp[1]) > data.GO_TO_BALL_ERROR):
 
             speedX = pidX.pidCalc(pv[0] - sp[0])
-            speedY = pidY.pidCalc(pv[1] - sp[1]) if pv[1] > 10 else 30
+            speedY = max(pidY.pidCalc(pv[1] - sp[1]), 30)
+            
             print(f"Vx: {speedX}, Vy: {speedY}")
 
             self.motors.setSpeed(*tuple(motor.motor7046.calculate_speed(speedX, speedY, 0)))
@@ -292,26 +294,33 @@ class Hunt:
         # # at this point, ballX + ballY is the ball coordinates
 
         while True:
+            self.motors.stop()
             status = self.getBallStatus()
 
             if status == data.BallStatus.CAM_DETECTED:
                 print("Ball Detected!")
+                self.dribbler.stop()
                 self.goToBall()
 
             if status == data.BallStatus.NOT_FOUND:
                 print("Ball Not Found!")
+                self.dribbler.stop()
                 self.spinSearch()
             
             if status == data.BallStatus.VCNL_CLOSE:
                 print("Ball is Close!")
+                self.dribbler.start()
+                input("Enter enter to continue")
                 self.forwardForBall(0.1)
             
             if status == data.BallStatus.CAM_DETECTED_AND_VCNL_CLOSE:
                 print("Ball is Close but not that much!")
+                self.dribbler.start()
+                input("Enter enter to continue")
                 self.forwardForBall(0.2)
             
             if status == data.BallStatus.VCNL_IN_KICKER:
-                print("Ball in Kicker Position!")
+                input("Ball in Kicker Position!")
         
         # input("First thing done. Waiting For Enter...")
 

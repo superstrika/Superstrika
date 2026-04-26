@@ -6,7 +6,7 @@ class Dribbler:
         self.dribbler = motor.motor7046(*pins)
     
     def start(self):
-        self.dribbler.speed = 100
+        self.dribbler.speed = 80
     
     def stop(self):
         self.dribbler.stop()
@@ -17,9 +17,5 @@ class Dribbler:
 if __name__ == "__main__":
     d = Dribbler(tuple(data.DRIBLER_PIN))
     d.start()
-    input()
-    d.stop()
-    input()
-    d.counterStart()
     input()
     d.stop()

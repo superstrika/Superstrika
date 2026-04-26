@@ -44,9 +44,9 @@ SPIN_TO_BALL_ERROR: float = 1.5
 GO_TO_BALL_ERROR: float = 1.5
 ROBOT_BALL_DISTANCE: float = (1, 1)
 
-VCNL_PROX_CLOSE = 380
-VCNL_PROX_IN_KICKER = 800
-VCNL_PROX_NOT_DETECTED = 300
+VCNL_PROX_CLOSE = 30
+VCNL_PROX_IN_KICKER = 1000
+VCNL_PROX_NOT_DETECTED = 25
 
 """----------------------------------------------
               Game configuration
