@@ -110,7 +110,7 @@ class Hunt:
             self.motors.stop()
             ballX, ballY = self.serial.getBallLocation()
             # input(f"Stopped... {self.serial.getBallLocation()}")
-            if ballX != 0 or ballY != 0:
+            if ballX or ballY:
                 self.log.info(f"Ball Found: {ballX}, {ballY}")
                 print(f"Ball Found: {ballX}, {ballY}")
                 return ballX, ballY
@@ -222,8 +222,8 @@ class Hunt:
         print("Going to Ball...")
         sp = data.ROBOT_BALL_DISTANCE
 
-        pidY = PidCalc(0.5, 0.1, 0.1, 100, 100, 500, verbose=False)
-        pidX = PidCalc(0.05, 0.05, 0.1, 100, 100, 500, verbose=False)
+        pidY = PidCalc(0.8, 0.2, 0.1, 100, 100, 500, verbose=False)
+        pidX = PidCalc(0.03, 0.05, 0.1, 100, 100, 500, verbose=False)
 
         pv = self.serial.getBallLocation() # distance
         print(f"{pv=}")
@@ -254,7 +254,7 @@ class Hunt:
     def getBallStatus(self) -> data.BallStatus:
         vcnl_prox = self.vcnl.proximity
         cam_dist = self.serial.getBallLocation()
-        input(f"{cam_dist=}")
+        print(f"{cam_dist=}")
 
         cam_found = True if cam_dist[0] and cam_dist[1] else False
         if vcnl_prox < data.VCNL_PROX_NOT_DETECTED and not cam_found:
@@ -272,7 +272,7 @@ class Hunt:
         return data.BallStatus.CAM_DETECTED_AND_VCNL_CLOSE
     
     def forwardForBall(self, delay=0.1):
-        self.motors.setSpeed(*tuple(motor.motor7046.calculate_speed(0, 40)))
+        self.motors.setSpeed(*tuple(motor.motor7046.calculate_speed(0, 40, 0)))
         sleep(delay)
         self.motors.stop()
 
@@ -313,7 +313,7 @@ class Hunt:
             if status == data.BallStatus.VCNL_IN_KICKER:
                 print("Ball in Kicker Position!")
         
-        input("First thing done. Waiting For Enter...")
+        # input("First thing done. Waiting For Enter...")
 
 
     def __del__(self):
