@@ -288,6 +288,17 @@ class Hunt:
             return data.BallStatus.VCNL_IN_KICKER
         
         return data.BallStatus.CAM_DETECTED_AND_VCNL_CLOSE
+
+    def getGoalStatus(self, obj: data.Object) -> data.GoalStatus:
+        dis = self.getObjectLocation(obj)
+
+        if not dis[0] or not dis[1]:
+            return data.GoalStatus.NOT_FOUND
+
+        if dis[0] < data.ROBOT_GOAL_DISTANCE[0] or dis[1] < data.ROBOT_GOAL_DISTANCE[1]:
+            return data.GoalStatus.CLOSE
+
+        return data.GoalStatus.FAR
     
     def forwardForBall(self, delay=0.1):
         self.motors.setSpeed(*tuple(motor.motor7046.calculate_speed(0, 40, 0)))
@@ -347,8 +358,30 @@ class Hunt:
                 self.forwardForBall(0.2)
             
             if status == data.BallStatus.VCNL_IN_KICKER:
-                input("Ball in Kicker Position!")
-        
+                print("Ball in Kicker Position!")
+                self.dribbler.start()
+                obj: data.Object = data.Object.YellowGoal if data.SELF_IS_BLUE else data.Object.YellowGoal
+
+                while True:
+                    goalStatus = self.getGoalStatus(obj)
+
+                    if goalStatus == data.GoalStatus.NOT_FOUND:
+                        print("Searching for goal!")
+                        self.spinSearch(obj=obj)
+
+                    if goalStatus == data.GoalStatus.FAR:
+                        print("Going to Goal!")
+                        self.goToBall(obj=obj)
+
+                    if goalStatus == data.GoalStatus.CLOSE:
+                        print("Kicked Ball!!!!!")
+                        self.dribbler.counterStart()
+                        sleep(0.4)
+                        if self.getBallStatus() == data.BallStatus.CAM_DETECTED:
+                            print("Goal!!!!! Game finished!")
+                        else:
+                            break
+
         # input("First thing done. Waiting For Enter...")
 
 
