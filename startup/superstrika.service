@@ -5,8 +5,8 @@ After=local-fs.target
 [Service]
 Type=simple
 User=admin
-WorkingDirectory=/home/superstrika/cubie-1/src/my_robot_package/my_robot_package/console
-ExecStart=/home/superstrika/cubie-1/src/my_robot_package/my_robot_package/.venv/bin/python /home/superstrika/cubie-1/src/my_robot_package/my_robot_package/console/server.py
+WorkingDirectory=/home/superstrika/cubie-1/Superstrika/src/my_robot_package/my_robot_package/console
+ExecStart=/home/superstrika/cubie-1/Superstrika/venv/bin/python /home/superstrika/cubie-1/Superstrika/src/my_robot_package/my_robot_package/console/server.py
 Restart=always
 RestartSec=1
 

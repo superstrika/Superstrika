@@ -12,6 +12,7 @@ import serial7046
 from pidCalc import PidCalc
 import gyroMovement
 import threading
+import mainSwitch7046
 import math
 
 try:
@@ -33,6 +34,10 @@ class Hunt:
         self.servoCondition = threading.Condition(self.servoLock)
         self.servoPriorityActive = False
 
+        #exit gate
+        self.running_gate = threading.Event()
+        self.running_gate.clear()
+
         # motors
         self.i2c = I2C(data.I2C_ID)
         self.servo = servo.Servo(data.SERVO_PIN, data.CHIP_ID)
@@ -52,11 +57,15 @@ class Hunt:
         # processes
         # self.lineDetection = edgeLineDetection.EdgeLineDetection(pins=data.TCRT_PINS, chipID=data.CHIP_ID, motors=self.motors, parent=self)
         self.gyroMovement = gyroMovement.GyroMovement(self.i2c, self.gyro, self.motors, pidValues=[0.25, 0.01, 0.01, 500, 100, 100])
+        mainSwitch7046.Switch7046(self, data.START_BUTTON_PIN)
 
         self.log = logging.LoggerAdapter(
             logging.getLogger(__name__),
             {'cls': self.__class__.__name__}
         )
+    
+    def check_pause(self, timeout=None):
+        return self.running_gate.wait(timeout=timeout)
 
     def camSearch(self, delay=0.3) -> tuple[float, float] | None:
         """
@@ -109,6 +118,9 @@ class Hunt:
         # print(f"DEBUG: startAngle: {startAngle}")
         # print(f"DEBUG: error: {data.SPIN_SEARCH_ERROR}")
         while (startAngle + data.SPIN_SEARCH_ERROR > angle) or (startAngle - data.SPIN_SEARCH_ERROR < angle):
+            if not self.running_gate.is_set(): #------------------------------------------------------------------- Check if end button was pressed.
+                return None
+            
             self.motors.stop()
             # input(f"Stopped... {self.serial.getBallLocation()}")
             if self.getBallStatus() != data.BallStatus.NOT_FOUND:
@@ -235,6 +247,8 @@ class Hunt:
             # pv = self.serial.getBallLocation()
 
         while (abs(pv[0] - sp[0]) > data.GO_TO_BALL_ERROR) or (abs(pv[1] - sp[1]) > data.GO_TO_BALL_ERROR):
+            if not self.running_gate.is_set(): #------------------------------------------------------------------- Check if end button was pressed.
+                return None
 
             speedX = pidX.pidCalc(pv[0] - sp[0])
             speedY = max(pidY.pidCalc(pv[1] - sp[1]), 30)
@@ -295,6 +309,7 @@ class Hunt:
 
         while True:
             self.motors.stop()
+            self.check_pause()
             status = self.getBallStatus()
 
             if status == data.BallStatus.CAM_DETECTED:
