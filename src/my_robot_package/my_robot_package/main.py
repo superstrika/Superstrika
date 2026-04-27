@@ -94,11 +94,12 @@ class Hunt:
         print("Camera Search failed...")
         return None
 
-    def spinSearch(self, delay=0.25, right: bool = True) -> tuple[float, float] | None:
+    def spinSearch(self, delay=0.25, right: bool = True, obj: data.Object = data.Object.Ball) -> tuple[float, float] | None:
         """
         Spins the robot 360 degrees or until ball is found.
         :param delay: the delay between the start of spinning to first angle check.
         :param right: the direction of the spinning
+        :param obj: which object to search: ball, yellow goal or blue goal
         :return: [0] - X coordinate of the returned object. [1] - Y coordinate of the returned object. None if not found.
         """
         speed = data.ROTATION_SPEED if right else -data.ROTATION_SPEED
@@ -123,7 +124,8 @@ class Hunt:
             
             self.motors.stop()
             # input(f"Stopped... {self.serial.getBallLocation()}")
-            if self.getBallStatus() != data.BallStatus.NOT_FOUND:
+            loc = self.getObjectLocation(obj)
+            if loc:
                 self.log.info(f"Ball Found")
                 print(f"Ball Found")
                 return None
@@ -230,15 +232,15 @@ class Hunt:
         self.log.info(f"Got to Ball successfully... e: {pv - sp}")
         print(f"Got to Ball successfully... e: {pv - sp}")
     
-    def goToBall(self, delay=0.3) -> None:
+    def goToBall(self, delay=0.3, obj: data.Object = data.Object.Ball) -> None:
         self.log.info("Going to Ball...")
         print("Going to Ball...")
-        sp = data.ROBOT_BALL_DISTANCE
+        sp = data.ROBOT_BALL_DISTANCE if obj == data.Object.Ball else data.ROBOT_GOAL_DISTANCE
 
         pidY = PidCalc(0.8, 0.2, 0.1, 100, 100, 500, verbose=False)
         pidX = PidCalc(0.03, 0.05, 0.1, 100, 100, 500, verbose=False)
 
-        pv = self.serial.getBallLocation() # distance
+        pv = self.getObjectLocation(obj) # distance
         print(f"{pv=}")
 
         if not pv[0] or not pv[1]:
@@ -258,14 +260,14 @@ class Hunt:
             self.motors.setSpeed(*tuple(motor.motor7046.calculate_speed(speedX, speedY, 0)))
 
             sleep(delay)
-            pv = self.serial.getBallLocation()
+            pv = self.getObjectLocation(obj)
 
             if pv[0] == None or pv[1] == None:
                 self.motors.stop()
                 return None
 
-        self.log.info(f"Got to Ball successfully... e: {pv[0] - sp[0]}, {pv[1] - sp[1]}")
-        print(f"Got to Ball successfully... e: {pv[0] - sp[0]}, {pv[1] - sp[1]}")
+        self.log.info(f"Got to Object {obj.name} successfully... e: {pv[0] - sp[0]}, {pv[1] - sp[1]}")
+        print(f"Got to Object {obj.name} successfully... e: {pv[0] - sp[0]}, {pv[1] - sp[1]}")
     
     def getBallStatus(self) -> data.BallStatus:
         vcnl_prox = self.vcnl.proximity
@@ -291,6 +293,16 @@ class Hunt:
         self.motors.setSpeed(*tuple(motor.motor7046.calculate_speed(0, 40, 0)))
         sleep(delay)
         self.motors.stop()
+
+    def getObjectLocation(self, obj: data.Object) -> tuple[float | None, float | None]:
+        if obj == data.Object.Ball:
+            return self.serial.getBallLocation()
+        elif obj == data.Object.YellowGoal:
+            return self.serial.getYellowGoalLocation()
+        elif obj == data.Object.BlueGoal:
+            return self.serial.getBlueGoalLocation()
+        return None, None
+
 
     def hunt(self):
         # ballX, ballY = self.camSearch()
