@@ -7,11 +7,11 @@ class Switch7046:
 
         print("Switch is Ready!")
     
-    def toogle_pause(self):
+    def toggle_pause(self):
         if self.parent.running_gate.is_set():
             print("[!] PAUSEING")
             self.parent.running_gate.clear()
-            self.parent.motors.stop()
+            self.parent.motors.setSpeed(0, 0, 0, 0)
 
         else:
             print("\n[>] RESUMING")

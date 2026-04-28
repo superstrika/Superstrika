@@ -160,4 +160,5 @@ if __name__ == "__main__":
     gyro = MPU6050(i2c)
 
     while (True):
-        print(gyro.get_theta())
+        # print(gyro.get_theta())
+        print(gyro.get_z_angle())

@@ -3,7 +3,7 @@ import data
 
 def main() -> None:
     motors = multipleMotors(data.MOTOR_PINS)
-    speed = 100
+    speed = -100
 
     print(speed)
     motors.setSpeed(speed, 0, 0, 0)
