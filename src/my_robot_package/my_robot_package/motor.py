@@ -146,27 +146,20 @@ class multipleMotors:
     def stop(self):
         self.setSpeed(1, 1, 1, 1)
 
-    def setSpeed(self, V1, V2, V3, V4):
+    def setSpeed(self, V1, V2, V3, V4, bypass_priority=False):
 
-        if self.parent and not (V1 == 1 and V2 == 1 and V3 == 1 and V4 == 1):
+        if self.parent and not bypass_priority and not (V1 == 1 and V2 == 1 and V3 == 1 and V4 == 1):
             with self.parent.condition:
                 while self.parent.priority_active:
                     print("Waiting for interupt...")
                     self.parent.condition.wait()
             
-                if self.speedVerbose:
-                    print(f"V1: {V1}. V2: {V2}. V3: {V3}. V4: {V4}")
-                self.motors[0].speed = V1
-                self.motors[1].speed = V2
-                self.motors[2].speed = V3
-                self.motors[3].speed = V4
-        else:
-            if self.speedVerbose:
-                print(f"V1: {V1}. V2: {V2}. V3: {V3}. V4: {V4}")
-            self.motors[0].speed = V1
-            self.motors[1].speed = V2
-            self.motors[2].speed = V3
-            self.motors[3].speed = V4
+        if self.speedVerbose:
+            print(f"V1: {V1}. V2: {V2}. V3: {V3}. V4: {V4}")
+        self.motors[0].speed = V1
+        self.motors[1].speed = V2
+        self.motors[2].speed = V3
+        self.motors[3].speed = V4
 
 if __name__ == "__main__":
     # motor1 = motor7046(19, 20, switch=False) # green
