@@ -4,7 +4,7 @@ import data
 def main() -> None:
     motors = multipleMotors(data.MOTOR_PINS)
     speed = 100
-    speeds = tuple(motor7046.calculate_speed(-100, 0, 0))
+    speeds = tuple(motor7046.calculate_speed(0, 40, 0))
     print(speeds)
     motors.setSpeed(*speeds)
     # motors.setSpeed(50, 50, -50, -50)

@@ -45,7 +45,7 @@ class Hunt:
         self.dribbler = dribbler.Dribbler(data.DRIBLER_PIN)
 
         #sensors
-        self.gyro = gyro.MPU6050(self.i2c)
+        self.gyro = gyro.MPU6050(self.i2c, updateThread=True)
         self.serial = serial7046.Serial7046(data.SERIAL_FREQUENCY)
 
         #vcnl
@@ -345,7 +345,7 @@ class Hunt:
 
             if status == data.BallStatus.CAM_DETECTED:
                 print("Ball Detected!")
-                self.dribbler.stop()
+                self.dribbler.start()
                 self.goToBall()
 
             if status == data.BallStatus.NOT_FOUND:
@@ -369,7 +369,7 @@ class Hunt:
             if status == data.BallStatus.VCNL_IN_KICKER:
                 print("Ball in Kicker Position!")
                 self.dribbler.start()
-                obj: data.Object = data.Object.YellowGoal if data.SELF_IS_BLUE else data.Object.YellowGoal
+                obj: data.Object = data.Object.YellowGoal if data.SELF_IS_BLUE else data.Object.BlueGoal
 
                 while True:
                     goalStatus = self.getGoalStatus(obj)

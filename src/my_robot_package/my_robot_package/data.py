@@ -38,7 +38,7 @@ LOG_FORMAT: str = "[%(levelname)s] %(cls)s: %(funcName)s: %(message)s"
 """----------------------------------------------
               Hunt Configuration
 ----------------------------------------------"""
-ROTATION_SPEED: int = 30
+ROTATION_SPEED: int = 25
 
 SPIN_SEARCH_ERROR: float = 3
 SPIN_TO_BALL_ERROR: float = 1.5
@@ -53,7 +53,7 @@ VCNL_PROX_NOT_DETECTED = 15
 """----------------------------------------------
               Game configuration
 ----------------------------------------------"""
-SELF_IS_BLUE: bool = True
+SELF_IS_BLUE: bool = False
 
 import socket
 

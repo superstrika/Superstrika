@@ -24,6 +24,7 @@ Functions:
 
 import time
 import logging
+import threading
 
 try:
     from machine import I2C
@@ -31,7 +32,7 @@ except ImportError:
     from smbus2 import SMBus as I2C  # For RPI compatibility
 
 class MPU6050:
-    def __init__(self, i2c, addr=0x68):
+    def __init__(self, i2c, addr=0x68, updateThread: bool = False):
         self.i2c = i2c
 
         self.addr = addr
@@ -63,6 +64,18 @@ class MPU6050:
         self.last_update = time.ticks_ms() if hasattr(time, 'ticks_ms') else int(time.time() * 1000)
 
         self.omega_offset = self._calibrate_gyro()
+
+        # ------------- new thread:
+        self._stop_event = threading.Event()
+
+        if updateThread:
+            self._thread = threading.Thread(target=self._update_loop, daemon=True)
+            self._thread.start()
+    
+    def _update_loop(self):
+        while not self._stop_event.is_set():
+            self.update()
+            time.sleep(0.01)
 
     def _write_register(self, reg, value):
         if hasattr(self.i2c, 'writeto_mem'):

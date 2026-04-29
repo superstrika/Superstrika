@@ -13,6 +13,8 @@ class servoCalibration:
         self.MIN_ANGLE = data.MIN_ANGLE
         self.MAX_ANGLE = data.MAX_ANGLE
 
+        
+
         if auto_calibrate:
             self.calibrate()
 
