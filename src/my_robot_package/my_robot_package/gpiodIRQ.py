@@ -11,7 +11,7 @@ class GPIOD_IRQ:
         self.chip_path = f"/dev/gpiochip{chipID}"
                 
         self._last_interrupt_time = 0
-        self._debounce_ns = 1_000_000_000  # 1s
+        self._debounce_ns = 1_000_000  # 100ms
         
         self._running = False
         self.rising = rising

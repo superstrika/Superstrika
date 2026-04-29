@@ -32,7 +32,7 @@ class EdgeLineDetection:
         with self.parent.condition:
             self.parent.priority_active = True
 
-            self.motors.setSpeed(*(tuple(speeds)))
+            self.motors.setSpeed(*(tuple(speeds)), bypass_priority=True)
             self.log.warning("Escaping left!")
             sleep(0.15)
             self.motors.stop()
@@ -47,7 +47,7 @@ class EdgeLineDetection:
         with self.parent.condition:
             self.parent.priority_active = True
 
-            self.motors.setSpeed(*(tuple(speeds)))
+            self.motors.setSpeed(*(tuple(speeds)), bypass_priority=True)
             self.log.warning("Escaping right!")
             sleep(0.15)
             self.motors.stop()
@@ -62,7 +62,7 @@ class EdgeLineDetection:
         with self.parent.condition:
             self.parent.priority_active = True
 
-            self.motors.setSpeed(*(tuple(speeds)))
+            self.motors.setSpeed(*(tuple(speeds)), bypass_priority=True)
             self.log.warning("Escaping Forward!")
             sleep(0.15)
             self.motors.stop()

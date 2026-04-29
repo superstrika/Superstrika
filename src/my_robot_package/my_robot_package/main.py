@@ -25,7 +25,7 @@ logging.basicConfig(filename=data.LOG_PATH, filemode='w', level=logging.DEBUG, f
 class Hunt:
     def __init__(self):
         #race conditions of motors
-        self.lock = threading.Lock()
+        self.lock = threading.RLock()
         self.condition = threading.Condition(self.lock)
         self.priority_active = False
 
