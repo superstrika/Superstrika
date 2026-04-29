@@ -4,6 +4,8 @@ from motor import multipleMotors, motor7046
 from smbus2 import SMBus as I2C  # For RPI compatibility
 from time import sleep
 import data
+import motor
+import time
 
 class GyroMovement:
     
@@ -43,6 +45,42 @@ class GyroMovement:
 
             sleep(0.3)
             error: float = setPoint - self.gyro.get_z_angle()
+
+    def move_forward_cm(self, distance_cm: float, speed=30):
+        """
+        Moves the robot forward for a specified distance with gyro heading correction.
+        Note: This implementation uses time as a proxy for distance.
+        For exact distance, motor encoders would be required.
+        """
+        # 1. Record the starting heading to maintain it
+        target_heading = self.gyro.get_z_angle()
+        pid = PidCalc(1.5, 0.01, 0.1, 100, 100, 500)
+
+        # 2. Calculate duration based on distance (Calibration required)
+        # Example: 0.05 seconds per cm at base speed 50
+        duration = distance_cm * 0.05
+        start_time = time.time()
+
+        try:
+            while time.time() - start_time < duration:
+                # 3. Get current heading and calculate correction
+                current_heading = self.gyro.get_z_angle()
+                correction = pid.pidCalc(target_heading - current_heading)
+
+                # 4. Apply correction to motor speeds
+                # move_speed is forward (Y), correction is rotation (W)
+                # calculate_speed(x, y, w)
+                motor_speeds = motor.motor7046.calculate_speed(0, speed, correction)
+
+                # 5. Set the calculated speeds
+                self.motors.setSpeed(*motor_speeds)
+
+                # Small sleep to prevent CPU hogging
+                time.sleep(0.01)
+
+        finally:
+            # Always stop motors when done or if interrupted
+            self.motors.stop()
 
 if __name__ == "__main__":
     mov = GyroMovement()
