@@ -6,9 +6,9 @@ from operator import imod
 MOTOR_PINS: list[int] = [23, 24, 21, 22, 25, 26, 19, 20]
 TCRT_PINS: list[int] = [1, 0, 5]
 SERVO_PIN: int = 6
-RELAY_PIN: int = 7
+RELAY_PIN: int = 8
 
-DRIBLER_PIN: tuple[int, int] = (13, 16)
+DRIBLER_PIN: tuple[int, int] = (17, 18)
 START_BUTTON_PIN: int = 4
 
 """----------------------------------------------
@@ -38,7 +38,7 @@ LOG_FORMAT: str = "[%(levelname)s] %(cls)s: %(funcName)s: %(message)s"
 """----------------------------------------------
               Hunt Configuration
 ----------------------------------------------"""
-ROTATION_SPEED: int = 25
+ROTATION_SPEED: int = 28
 
 SPIN_SEARCH_ERROR: float = 3
 SPIN_TO_BALL_ERROR: float = 1.5

@@ -70,12 +70,13 @@ if __name__ == "__main__":
 
     
 
-    led = PWM7046(12)
+    led = PWM7046(8)
     # led2 = PWM7046(24, 800)
-    led.value = 100
+    led.value = 0
     # led2.value = 0
 
     input()
+    led.value=100
     # # for motor in motors:
     # #     led = PWM7046(motor, 800)
 

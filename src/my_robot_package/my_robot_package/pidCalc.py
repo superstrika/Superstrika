@@ -75,4 +75,3 @@ class PidCalc:
         self.log.info("----------------------------------------------")
         return speed
 
-    def reset(self):

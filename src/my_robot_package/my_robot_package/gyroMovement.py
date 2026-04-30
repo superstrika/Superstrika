@@ -83,5 +83,14 @@ class GyroMovement:
             self.motors.stop()
 
 if __name__ == "__main__":
+    import dribbler
+
+    # d = dribbler.Dribbler(data.DRIBLER_PIN)
     mov = GyroMovement()
+
+    # d.start()
+    # mov.move_forward_cm(15, 30)
     mov.spinToAngle(90)
+
+    input()
+    # d.stop()

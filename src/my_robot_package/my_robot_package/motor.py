@@ -138,7 +138,7 @@ class multipleMotors:
 
         motor1 = motor7046(pins[0], pins[1], switch=False, chipID=chipID, verbose=verbose)
         motor2 = motor7046(pins[2], pins[3], switch=False, chipID=chipID, verbose=verbose)
-        motor3 = motor7046(pins[4], pins[5], switch=True, chipID=chipID, verbose=verbose)
+        motor3 = motor7046(pins[4], pins[5], switch=False, chipID=chipID, verbose=verbose)
         motor4 = motor7046(pins[6], pins[7], switch=True, chipID=chipID, verbose=verbose)
 
         self.motors: list[motor7046] = [motor1, motor2, motor3, motor4]
