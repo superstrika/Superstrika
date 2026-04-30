@@ -358,7 +358,8 @@ class Hunt:
                 self.dribbler.stop()
                 if not self.spinSearch():
                     self.servo.angle = data.MIN_ANGLE
-                    self.spinSearch()
+                    if not self.spinSearch():
+                        self.gyroMovement.move_forward_cm(30, 30)
             
             if status == data.BallStatus.VCNL_CLOSE:
                 print("Ball is Close!")
