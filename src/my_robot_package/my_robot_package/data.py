@@ -22,7 +22,7 @@ CHIP_ID: int = 0
 ----------------------------------------------"""
 MIN_ANGLE: int = 75
 MAX_ANGLE: int = 180
-GOOD_ANGLE: int = 150
+GOOD_ANGLE: int = 140
 
 """----------------------------------------------
               Serial configuration

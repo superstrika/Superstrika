@@ -53,13 +53,13 @@ class Hunt:
         self.serial = serial7046.Serial7046(data.SERIAL_FREQUENCY)
 
         #vcnl
-        self.vcnl = VCNL()
-        self.vcnl.led_current = self.vcnl.LED_100MA
-        self.vcnl.proximity_high_definition = True
-        self.vcnl.proximity_integration_time = self.vcnl.PS_8T
+        # self.vcnl = VCNL()
+        # self.vcnl.led_current = self.vcnl.LED_100MA
+        # self.vcnl.proximity_high_definition = True
+        # self.vcnl.proximity_integration_time = self.vcnl.PS_8T
 
         # processes
-        self.lineDetection = edgeLineDetection.EdgeLineDetection(pins=data.TCRT_PINS, chipID=data.CHIP_ID, motors=self.motors, parent=self)
+        # self.lineDetection = edgeLineDetection.EdgeLineDetection(pins=data.TCRT_PINS, chipID=data.CHIP_ID, motors=self.motors, parent=self)
         self.gyroMovement = gyroMovement.GyroMovement(self.i2c, self.gyro, self.motors, pidValues=[0.25, 0.01, 0.01, 500, 100, 100])
 
         self.log = logging.LoggerAdapter(
@@ -68,7 +68,8 @@ class Hunt:
         )
     
     def check_pause(self, timeout=None):
-        return self.running_gate.wait(timeout=timeout)
+        # return self.running_gate.wait(timeout=timeout)
+        return None
 
     def camSearch(self, delay=0.3) -> tuple[float, float] | None:
         """
@@ -125,8 +126,8 @@ class Hunt:
         # print(f"DEBUG: startAngle: {startAngle}")
         # print(f"DEBUG: error: {data.SPIN_SEARCH_ERROR}")
         while (abs(angle) < 360):
-            if not self.running_gate.is_set(): #------------------------------------------------------------------- Check if end button was pressed.
-                return None
+            # if not self.running_gate.is_set(): #------------------------------------------------------------------- Check if end button was pressed.
+            #     return None
             
                         # input(f"Stopped... {self.serial.getBallLocation()}")
             if obj == data.Object.Ball:
@@ -249,6 +250,7 @@ class Hunt:
         self.log.info("Going to Ball...")
         print("Going to Ball...")
         sp = data.ROBOT_BALL_DISTANCE if obj == data.Object.Ball else data.ROBOT_GOAL_DISTANCE
+        print(f"{sp=}")
 
         pidY = PidCalc(0.6, 0, 0, 100, 100, 500, verbose=False)
         pidX = PidCalc(0.01, 0, 0.1, 100, 100, 500, verbose=False)
@@ -262,8 +264,8 @@ class Hunt:
             # pv = self.serial.getBallLocation()
 
         while (abs(pv[0] - sp[0]) > data.GO_TO_BALL_ERROR) or (abs(pv[1] - sp[1]) > data.GO_TO_BALL_ERROR):
-            if not self.running_gate.is_set(): #------------------------------------------------------------------- Check if end button was pressed.
-                return None
+            # if not self.running_gate.is_set(): #------------------------------------------------------------------- Check if end button was pressed.
+            #     return None
 
             speedX = pidX.pidCalc(pv[0] - sp[0]) * p
             speedY = max(pidY.pidCalc(pv[1] - sp[1]), 30) * p
@@ -283,7 +285,7 @@ class Hunt:
         print(f"Got to Object {obj.name} successfully... e: {pv[0] - sp[0]}, {pv[1] - sp[1]}")
     
     def getBallStatus(self) -> data.BallStatus:
-        vcnl_prox = self.vcnl.proximity
+        vcnl_prox = 0
         cam_dist = self.serial.getBallLocation()
         print(f"{cam_dist=}, {vcnl_prox=}")
 
@@ -342,20 +344,20 @@ class Hunt:
         #         return # TODO
 
         # # at this point, ballX + ballY is the ball coordinates
-
+        self.dribbler.start()
         while True:
             self.check_pause()
             status = self.getBallStatus()
 
             if status == data.BallStatus.CAM_DETECTED:
                 print("Ball Detected!")
-                self.dribbler.start()
+                # self.dribbler.start()
                 self.goToBall()
 
             if status == data.BallStatus.NOT_FOUND:
                 print("Ball Not Found!")
                 self.servo.angle = data.GOOD_ANGLE
-                self.dribbler.stop()
+                # self.dribbler.start()
                 if not self.spinSearch():
                     self.servo.angle = data.MIN_ANGLE
                     if not self.spinSearch():
@@ -363,17 +365,17 @@ class Hunt:
             
             if status == data.BallStatus.VCNL_CLOSE:
                 print("Ball is Close!")
-                self.dribbler.start()
+                # self.dribbler.start()
                 self.gyroMovement.move_forward_cm(10, 30)
             
             if status == data.BallStatus.CAM_DETECTED_AND_VCNL_CLOSE:
                 print("Ball is Close but not that much!")
-                self.dribbler.start()
+                # self.dribbler.start()
                 self.gyroMovement.move_forward_cm(25, 30)
             
             if status == data.BallStatus.VCNL_IN_KICKER:
                 print("Ball in Kicker Position!")
-                self.dribbler.start()
+                # self.dribbler.start()
                 obj: data.Object = data.Object.YellowGoal if data.SELF_IS_BLUE else data.Object.BlueGoal
 
                 self.servo.angle = data.GOOD_ANGLE
@@ -391,7 +393,7 @@ class Hunt:
 
                     if goalStatus == data.GoalStatus.CLOSE:
                         print("Kicked Ball!!!!!")
-                        self.dribbler.counterStart()
+                        # self.dribbler.counterStart()
                         sleep(0.4)
                         if self.getBallStatus() == data.BallStatus.CAM_DETECTED:
                             print("Goal!!!!! Game finished!")
@@ -404,6 +406,7 @@ class Hunt:
 
     def __del__(self):
         self.motors.stop()
+        self.dribbler.stop()
 
 class Keep:
     def __init__(self):

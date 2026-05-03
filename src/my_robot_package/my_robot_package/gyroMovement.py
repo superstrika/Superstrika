@@ -9,7 +9,7 @@ import time
 
 class GyroMovement:
     
-    def __init__(self, i2c: I2C = None, gyro: MPU6050 = None, motors: multipleMotors = None, pidValues: list[float] = [0.35, 0.15, 0.01, 10, 100, 100], errorOffset: float = 0.5):
+    def __init__(self, i2c: I2C = None, gyro: MPU6050 = None, motors: multipleMotors = None, pidValues: list[float] = [0.20, 0.1, 0.01, 10, 100, 100], errorOffset: float = 0.5):
         if i2c and not gyro:
             self.i2c = i2c
             self.gyro = MPU6050(self.i2c)
@@ -40,7 +40,7 @@ class GyroMovement:
             if speed < -10 and speed > -30:
                 speed -= 20
 
-            speeds: list[int] = motor7046.calculate_rotation_speed(speed)
+            speeds: list[int] = motor7046.calculate_rotation_speed(-speed)
             self.motors.setSpeed(speeds[0], speeds[1], speeds[2], speeds[3])
 
             sleep(0.3)
