@@ -1,83 +1,104 @@
-# Superstrika - RoboCup Junior Soccer Robot
+# Superstrika
 
-This project contains the software for the **Superstrika** robot, developed by the RoboCup team from **Gvanim School (Ein Shemer)**. The robot is designed for the **RoboCup Junior Soccer** competition, specifically focusing on autonomous movement and camera-based ball tracking (football cam).
+Software for the **Superstrika** RoboCup Junior Soccer robot, developed by the team at **Gvanim School (Ein Shemer)**. The project runs on a Raspberry Pi and brings together robot movement, sensor input, ball detection, and match behaviour.
 
-The system runs on a **Raspberry Pi 4 (4GB RAM)** using **ROS 2 Humble**.
+## New repository
 
-## 🏆 RoboCup Junior Soccer
-The robot is built to compete in the RoboCup Junior soccer league. The primary goal is to create a fully autonomous robot capable of:
-- Locating a specialized IR or color-based ball using a camera system.
-- Navigating an omnidirectional field using a 4-wheel drive system.
-- Implementing strategic movement to score goals while avoiding obstacles.
+**This is the current Superstrika repository:**
 
----
+### [github.com/Superstrika/Superstrika-new](https://github.com/Superstrika/Superstrika-new)
 
-## 🏗 Project Architecture & Code Model
+## What it does
 
-The project is designed with a clear separation between hardware abstraction and the ROS 2 communication layer. This modularity allows the core robot logic to be reused or tested independently of ROS.
+- Drives a four-wheel omnidirectional base.
+- Uses a camera model to detect the ball and goals.
+- Reads hardware such as the MPU6050 gyro, VCNL4040 proximity sensor, line sensors, servo, dribbler, and kicker.
+- Provides hunter behaviour, movement control with PID correction, calibration tools, and hardware tests.
 
-### The "Code Model"
-Our design philosophy follows a two-tier approach:
-1.  **Hardware Abstraction Classes**: For every physical component (Motors, Servos, Gyro, Screen), we create a dedicated Python class that handles low-level GPIO/I2C communication.
-2.  **ROS 2 Node Wrappers**: We then wrap these classes into ROS 2 nodes. The nodes handle subscriptions, publications, and integration into the larger robot ecosystem.
+## Dependencies installation
 
-> This structure ensures that if we decide to move away from ROS in the future, the core hardware control logic remains intact and easily portable.
+1. Install the system dependencies:
 
-### Directory Structure & Components
-- **`src/my_robot_package`**: The main ROS 2 package containing hardware nodes and robot logic.
-  - `motor.py` / `motorNode.py`: 4-wheel omnidirectional movement using PWM (via `gpiozero` and `pwm7046`).
-  - `servo.py` / `servoNode.py`: Precise servo angle control for robot mechanisms.
-  - `screenNode.py`: 20x4 I2C LCD display handling for real-time debugging.
-  - `Gyro.py`: BNO055/MPU6050 integration for orientation and stability.
-  - `pidCalc.py`: PID control logic for smooth and accurate movement.
-  - `UartNode.py` / `UartNoNode.py`: UART communication handling for external sensors or controllers.
-  - `VCNL_4040/`: Drivers for proximity and ambient light sensing.
-- **`connection/`**: A custom socket-based communication directory. This serves as the main communication between the two robots, allowing for direct client-server command execution over the network.
-  - `server.py` / `client.py`: High-speed socket communication layer.
-  - `commandManager.py`: Parsing and routing of remote commands.
+   ```bash
+   sudo apt update
+   sudo apt install neovim build-essential swig python3-dev liblgpio-dev
+   ```
 
----
+2. Create a virtual environment if one does not already exist:
 
-## ❤️ Special Thanks
+   ```bash
+   python3 -m venv venv
+   ```
 
-A huge thank you to the following people who helped make this project possible:
+3. Activate it:
 
-- **[Gal Arbel](https://github.com/galarb)** - Team mentor.
-- **[Tomer Ozer](https://github.com/TomerOzer)** - Team member.
-- **[Yoav Aharoni](https://github.com/teddybearpc)** - Team member.
-- **[Noam Ron](https://github.com/NoamRon1)** - Team member.
-- **[Itamar Hoter Ishai](https://github.com/itamarhoter)** - Team member
+   ```bash
+   source venv/bin/activate
+   ```
 
----
+4. Install the project requirements:
 
-## 🛠 Setup & Troubleshooting
+   ```bash
+   pip3 install -r robot/requirements.txt
+   ```
 
-### Permissions
-If you encounter permission errors when using Visual Studio Code (especially inside a container), run:
-```bash
-sudo chown -R $USER:$USER /home/kev/cubie-1
+5. Install the vision packages:
+
+   ```bash
+   pip3 install --no-cache-dir --extra-index-url https://download.pytorch.org/whl/cpu ultralytics torch torchvision
+   ```
+
+## Project structure
+
+```text
+.
+├── main.py                 # Selects and starts the current robot entry point
+├── tests.py                # Top-level test script
+├── robot/
+│   ├── hunter.py           # Main attacking (hunter) behaviour
+│   ├── keeper.py           # Goalkeeper behaviour
+│   ├── joy_ride.py         # Manual movement sequence for testing
+│   ├── components/         # Hardware drivers: motors, cameras, gyro, sensors, servo, kicker
+│   ├── processes/          # Higher-level control: multi-motor drive, PID, gyro movement, line detection
+│   ├── consts/             # Robot configuration, pins, constants, and enums
+│   ├── models/             # ONNX models used for vision detection
+│   ├── calibration/        # Motor and servo calibration scripts
+│   ├── tests/              # Focused hardware and camera test scripts
+│   ├── PIDAnalysis/        # PID logging and analysis utilities
+│   ├── console/            # Local web console and its configuration
+│   └── requirements.txt    # Python dependencies
+├── startup/                # Raspberry Pi service/startup configuration
+└── log/                    # Runtime log output
 ```
 
-### ROS 2 Environment
-If ROS 2 commands are not detected, ensure your environment is sourced:
+## Configuration and running
+
+Hardware pins, sensor settings, camera dimensions, and game options are defined in `robot/consts/data.py`. The main application entry point is `main.py`; choose the behaviour or test you want to run there, then start it from the repository root:
+
 ```bash
-source /opt/ros/humble/setup.sh
+python3 main.py
 ```
 
-### Boot file
-If you'd like to change the boot file in your raspberry pi 4:
+Useful standalone scripts include:
+
 ```bash
-sudo nvim /boot/firmware/config.txt
+python3 -m robot.calibration.motor_identification
+python3 -m robot.calibration.servo_calibration
+python3 -m robot.tests.captureFrames
 ```
 
-An example for a boot file: ```src/my_robot_package/my_robot_package/bootCopy.txt```
+To inspect devices connected to the Raspberry Pi I2C bus:
 
-To show all connected i2c devices run:
-
-``` bash
+```bash
 sudo i2cdetect -y 1
 ```
 
----
+## Special thanks
+
+- [Gal Arbel](https://github.com/galarb) — Team mentor
+- [Tomer Ozer](https://github.com/TomerOzer) — Team member
+- [Yoav Aharoni](https://github.com/teddybearpc) — Team member
+- [Noam Ron](https://github.com/NoamRon1) — Team member
+- [Itamar Hoter Ishai](https://github.com/itamarhoter) — Team member
 
 *Maintained by the Superstrika Team.*
