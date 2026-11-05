@@ -16,8 +16,13 @@ class IAICamera(ICamera):
                  objectNames = None,
                  focalLength: float = 0.0,
                  imageRes: tuple[int, int] = (256, 256),
-                 outputDir: str = "saved_frames"
+                 outputDir: str = "saved_frames",
+                 showLiveFeed: bool = False
                  ) -> None:
+
+        # Live feed window (shows annotated frames with detections)
+        self._showLiveFeed = showLiveFeed
+        self._liveFeedWindow = "Live Feed"
 
         # Folder to save output images
         self._outputDir = outputDir
@@ -145,6 +150,11 @@ class IAICamera(ICamera):
         timestamp = time.strftime("%Y%m%d_%H%M%S_%f")
         save_path = os.path.join(self._outputDir, f"frame_{timestamp}.jpg")
         cv2.imwrite(save_path, frame)
+
+        # --- 5. Live Feed ---
+        if self._showLiveFeed:
+            cv2.imshow(self._liveFeedWindow, frame)
+            cv2.waitKey(1)  # needed for the window to refresh
 
     def calculateDistance(self, objectInfo: ObjectInfo, obj: Object) -> DisplacementVector:
         """Calculates distance and angle from camera."""
