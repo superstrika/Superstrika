@@ -2,7 +2,7 @@
                    GPIO
 ----------------------------------------------"""
 
-MOTOR_PINS: list[int] = [23, 24, 19, 20, 25, 26, 21, 22]
+MOTOR_PINS: list[int] = [13, 16, 17, 18, 19, 20, 21, 22]
 TCRT_PINS: list[int] = [1, 0, 5]
 SERVO_PIN: int = 6
 RELAY_PIN: int = 7

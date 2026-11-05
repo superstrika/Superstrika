@@ -5,12 +5,12 @@ from picamera2 import Picamera2, controls
 import cv2
 
 # Roboflow API
-API_KEY = ""
-WORKSPACE_NAME = ""
-PROJECT_NAME = ""
+API_KEY = "cusl2ccXMxk6QduuNBGM"
+WORKSPACE_NAME = "noams-workspace-vecda"
+PROJECT_NAME = "Superstrika"
 
 # Camera configuration - low resolution as requested
-IMAGE_RES = (256, 256)
+IMAGE_RES = (2592, 2592)
 
 # Directory where captured frames will be saved
 output_dir = "saved_frames"
@@ -92,7 +92,7 @@ def main() -> None:
     # Set manual focus to infinity
     picam.set_controls({
         "AfMode": 0,  # manual focus
-        "LensPosition": 5.0,  # focus to infinity
+        "LensPosition": 50.0,  # focus to infinity
     })
 
     print(f"Camera started. Resolution: {IMAGE_RES[0]}x{IMAGE_RES[1]}")
@@ -152,3 +152,7 @@ def main() -> None:
         cv2.destroyAllWindows()
         print(f"\nSession complete. Total frames captured: {frame_count}")
         print(f"Frames saved in: {os.path.abspath(output_dir)}/")
+
+
+if __name__ == "__main__":
+    main()

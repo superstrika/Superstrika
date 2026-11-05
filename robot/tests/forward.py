@@ -1,5 +1,10 @@
+import sys
+
+from flask import logging
+
 from robot.processes.multipleMotors import multipleMotors
 import robot.consts.data as data
+
 
 def main():
     motors = multipleMotors(data.MOTOR_PINS)

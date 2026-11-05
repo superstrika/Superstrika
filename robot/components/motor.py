@@ -10,6 +10,8 @@ class motor7046:
         if switch:
             pin1, pin2 = pin2, pin1
 
+        self._pin1, self._pin2 = pin1, pin2
+
         self.mot1 = gpiozero.PWMLED(pin1, frequency=800)
         self.mot2 = gpiozero.PWMLED(pin2, frequency=800)
 
@@ -29,6 +31,7 @@ class motor7046:
     @speed.setter
     def speed(self, speed: float):
         # self._speed = map(speed, -100, 100, -1, 1)
+        print(f"Setting motor {self._pin1, self._pin2} speed to: {speed}")
         self._speed = speed / 100
         self.log.debug(f"{self._speed}")
         pwm_value = abs(self._speed)
