@@ -52,7 +52,7 @@ if __name__ == "__main__":
                         help="Camera index to use (default: 0).")
     args = parser.parse_args()
 
-    VERSION = 3.0
+    VERSION = 4.5
     c = WebCamera(f"/home/admin/Superstrika/robot/models/best-V{VERSION}.onnx",
                   focalLength=594.8065824286882,
                   cameraIndex=args.camera,

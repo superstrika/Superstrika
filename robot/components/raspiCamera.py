@@ -56,13 +56,13 @@ if __name__ == "__main__":
                         help="Camera index to use (default: 0).")
     args = parser.parse_args()
 
-    cam = RaspiCamera("robot/models/best-V3.0.onnx",
+    cam = RaspiCamera("robot/models/best-V4.5.onnx",
                       cameraIndex=args.camera,
                       showLiveFeed=args.showLiveFeed)
 
     try:
         while True:
-            print(cam.getObjects())
+            print(cam.getObjects(mirror=True))
             time.sleep(1)
     except KeyboardInterrupt:
         pass
