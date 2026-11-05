@@ -11,7 +11,7 @@ class RaspiCamera(IAICamera):
                  modelPath: str,
                  objectNames = None,
                  focalLength: float = 0.0,
-                 imageRes: tuple[int, int] = (256, 256),
+                 imageRes: tuple[int, int] = (2592, 2592),
                  outputDir: str = "saved_frames",
                  cameraIndex: int = 0,
                  showLiveFeed: bool = False,
@@ -31,7 +31,7 @@ class RaspiCamera(IAICamera):
 
         self._picam.set_controls({
             "AfMode": 0,  # manual focus
-            "LensPosition": 5.0,  # focus to infinity
+            "LensPosition": 50.0,  # focus to infinity
         })
 
         # calibration:
