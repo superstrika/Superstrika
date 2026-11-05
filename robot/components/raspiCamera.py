@@ -11,7 +11,7 @@ class RaspiCamera(IAICamera):
                  modelPath: str,
                  objectNames = None,
                  focalLength: float = 0.0,
-                 imageRes: tuple[int, int] = (2592, 2592),
+                 imageRes: tuple[int, int] = (512, 512),
                  outputDir: str = "saved_frames",
                  cameraIndex: int = 0,
                  showLiveFeed: bool = False,
@@ -22,17 +22,34 @@ class RaspiCamera(IAICamera):
 
         # camera configuration:
         self._picam = Picamera2(camera_num=cameraIndex)
-        previewConfig = self._picam.preview_configuration
-        previewConfig.main.size = imageRes
-        previewConfig.main.format = "RGB888"
-        self._picam.configure("preview")
+
+        # Use the full-sensor mode so we get the entire FOV (smaller modes are often cropped).
+        sensorW, sensorH = self._picam.sensor_resolution
+
+        # Ask the ISP for a frame with the SENSOR's aspect ratio (a square main size would make
+        # libcamera crop the sides). Scale it down so its short side is just big enough
+        # for the target resolution - the final square crop + resize happens in captureFrame().
+        targetDim = max(imageRes)
+        scale = min(1.0, targetDim / min(sensorW, sensorH))
+        mainSize = (int(sensorW * scale) // 2 * 2, int(sensorH * scale) // 2 * 2)
+
+        config = self._picam.create_preview_configuration(
+            main={"size": mainSize, "format": "RGB888"},
+            raw={"size": (sensorW, sensorH)},
+        )
+        self._picam.align_configuration(config)
+        self._picam.configure(config)
 
         self._picam.start()
 
-        self._picam.set_controls({
+        cameraControls = {
             "AfMode": 0,  # manual focus
             "LensPosition": 50.0,  # focus to infinity
-        })
+        }
+        # Make sure the ISP reads the whole sensor area (no digital zoom/crop).
+        if "ScalerCrop" in self._picam.camera_controls:
+            cameraControls["ScalerCrop"] = self._picam.camera_controls["ScalerCrop"][1]
+        self._picam.set_controls(cameraControls)
 
         # calibration:
         if self._focalLength == 0.0:
@@ -45,7 +62,8 @@ class RaspiCamera(IAICamera):
 
         # Picamera2's "RGB888" format is stored in memory as B,G,R per pixel,
         # which is already the channel order OpenCV expects - no conversion needed.
-        return self._picam.capture_array()
+        # Cut the sides to a square, then scale the whole square down to imageRes.
+        return self._cropAndScale(self._picam.capture_array())
 
 
 if __name__ == "__main__":

@@ -32,15 +32,8 @@ class WebCamera(IAICamera):
         if not ret:
             return None
 
-        # Frame dimensions
-        frame_h, frame_w, _ = frame.shape
-
-        min_dim = min(frame_h, frame_w)
-        start_x = (frame_w - min_dim) // 2
-        start_y = (frame_h - min_dim) // 2
-
-        return cv2.resize(frame[start_y:start_y + min_dim, start_x:start_x + min_dim], self._imageRes,
-                          interpolation=cv2.INTER_AREA)
+        # Cut the sides to a square, then scale the whole square down to imageRes.
+        return self._cropAndScale(frame)
 
 if __name__ == "__main__":
     import time

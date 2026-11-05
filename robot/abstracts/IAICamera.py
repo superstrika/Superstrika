@@ -199,6 +199,20 @@ class IAICamera(ICamera):
         self.updateObjects()
         return not any(value is None for value in self._objects[obj].__dict__.values())
 
+    def _cropAndScale(self, frame):
+        """Center-crops the frame to a square (trimming the long side),
+        then scales the whole square down to self._imageRes."""
+        if frame is None:
+            return None
+
+        frame_h, frame_w = frame.shape[:2]
+        min_dim = min(frame_h, frame_w)
+        start_x = (frame_w - min_dim) // 2
+        start_y = (frame_h - min_dim) // 2
+        square = frame[start_y:start_y + min_dim, start_x:start_x + min_dim]
+
+        return cv2.resize(square, self._imageRes, interpolation=cv2.INTER_AREA)
+
     @abstractmethod
     def captureFrame(self):
         """Pure Virtual method; must be overridden."""
