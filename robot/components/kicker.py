@@ -1,42 +1,35 @@
-import robot.components.motor as motor
+import gpiozero
 import logging
 from time import sleep
 import time
+from robot.consts.data import KICKER_PIN
 
 class Kicker:
-    GEAR_TEETH = 1
+    CHARGING_TIME_SEC = 20
+    KICKING_TIME_SEC = 0.5
 
-    def __init__(self, pin1, pin2):
-        self.motor = motor.motor7046(pin1, pin2, switch=False)
-        motor.speed = 0
+    def __init__(self, pin1: int):
+        self._lastInitializationTime = time.time()
+
+        self._kicker = gpiozero.DigitalOutputDevice(pin1)
 
         self.log = logging.LoggerAdapter(
             logging.getLogger(__name__),
             {'cls': self.__class__.__name__}
         )
 
-    def loadPoint(self, speed=65):
-        cur = time.time()
-        self.motor.speed = speed
-        sleep(0.7)
-        self.motor.stophard()
-        print(f"{time.time() - cur}")
-        
+    def kick(self) -> bool:
+        if (time.time() - self._lastInitializationTime) < self.CHARGING_TIME_SEC:
+            return False
 
-    def load(self, p: int):
-        for i in range(Kicker.GEAR_TEETH):
-            self.motor.speed = i * p
-            sleep(i + 0.3)
+        self._kicker.on()
+        sleep(self.KICKING_TIME_SEC)
+        self._kicker.off()
 
-    def release(self):
-        self.log.info("Releasing")
-        self.motor.speed = 100
-        sleep(0.1)
-        self.motor.stophard()
+        self._lastInitializationTime = time.time()
+        return True
 
 if __name__ == "__main__":
-    import robot.consts.data as data
-    k = Kicker(*data.KICKER_PIN)
-    k.loadPoint()
-    input()
-    k.release()
+    input("Press Enter to kick")
+    Kicker = Kicker(KICKER_PIN)
+    Kicker.kick()
