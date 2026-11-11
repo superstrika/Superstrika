@@ -9,6 +9,36 @@ Software for the **Superstrika** RoboCup Junior Soccer robot, developed by the t
 - Reads hardware such as the MPU6050 gyro, VCNL4040 proximity sensor, line sensors, servo, dribbler, and kicker.
 - Provides hunter behaviour, movement control with PID correction, calibration tools, and hardware tests.
 
+## Related repositories
+
+| Repository | What it is |
+|---|---|
+| [superstrika/Superstrika](https://github.com/superstrika/Superstrika) | **This repository**: the current robot code (formerly `Superstrika-new`, which still redirects here) |
+| [superstrika/simulator](https://github.com/superstrika/simulator) | 2D RoboCupJunior Soccer simulator that can run this repository's robot code unchanged |
+| [superstrika/Superstrika-old](https://github.com/superstrika/Superstrika-old) | The previous, ROS 2 based code base, kept for reference |
+
+## Simulator
+
+The [Superstrika simulator](https://github.com/superstrika/simulator) (`rcj_sim`) is a 2D top-down simulator for RoboCupJunior Soccer, written in Python with pygame and pymunk. It models the official 2026 field, ball and goals, a Ø 18 cm robot with four X-mounted omni wheels, a 360° and a front camera, dribbler, kicker, 16 line sensors and a gyro, and has an automatic referee with `free`, `basic` and `full` rule modes. You can watch matches live, pause and step, drag the ball and robots around, or run headless matches for quick tests. Standalone builds for Windows, Linux and macOS are published from its GitHub Actions, so no Python install is needed to try it.
+
+Its `superstrika/` folder runs **our real `robot/hunter.py` unchanged**. Only the hardware layer is replaced: `gpiozero`/`smbus2` are faked, `motor7046` drives the simulated omni wheels, `MPU6050` reads the simulated heading, `WebCamera` becomes a simulated camera on the tilt servo, and `time.time()`/`time.sleep()` run on simulation time. This makes it a quick way to test behaviour changes before putting them on the robot.
+
+To run our code in the simulator, clone it next to this repository and point it at this checkout:
+
+```bash
+git clone https://github.com/superstrika/simulator.git
+cd simulator
+python3 -m venv .venv
+.venv/bin/pip install -r requirements.txt
+SUPERSTRIKA_PATH=../Superstrika .venv/bin/python -m rcj_sim superstrika/match.yaml
+```
+
+Without `SUPERSTRIKA_PATH` the bridge looks for `../Superstrika-new`. The motor speed, camera and servo values it assumes are in `SETTINGS` in `superstrika/superstrika_bridge.py`. See the simulator's [Superstrika README](https://github.com/superstrika/simulator/blob/main/superstrika/README.md) for what is simulated, the calibration assumptions, and the issues it found in `hunter.py`.
+
+## Previous code base
+
+[Superstrika-old](https://github.com/superstrika/Superstrika-old) holds the earlier version of the robot software (its last code change, in May 2026, was the hunter code for that tournament). It was built as a ROS 2 package (`src/my_robot_package`, built with colcon) with motor, servo, UART and screen nodes, used `pigpio` for GPIO, had a network client/server for controlling the robot from a laptop (`connection/`), and MicroPython code for ESP32 boards running the kicker and motors (`esp32/`). Many of the drivers here (motor, gyro, VCNL4040, TCRT5000, servo, dribbler, kicker, PID, edge-line detection) started there. It is no longer maintained; new work belongs in this repository.
+
 ## Dependencies installation
 
 1. Install the system dependencies:
@@ -49,8 +79,8 @@ The Docker image holds only the dependencies. The code is bind-mounted from this
 Set up a new Pi (Docker installed, I2C/SPI/UART enabled in `raspi-config`):
 
 ```bash
-git clone https://github.com/superstrika/Superstrika-new.git
-cd Superstrika-new
+git clone https://github.com/superstrika/Superstrika.git
+cd Superstrika
 docker compose pull
 docker compose up -d
 ```
@@ -72,7 +102,10 @@ The console launches `main.py` itself, so stop `robot-core` before using it to k
 ```text
 .
 ├── main.py                 # Selects and starts the current robot entry point
-├── tests.py                # Top-level test script
+├── Dockerfile              # Dependency-only robot image
+├── docker-compose.yaml     # robot-core and console services
+├── constraints.txt         # Pinned versions for the Docker build
+├── .github/workflows/      # Builds and pushes the Docker image
 ├── robot/
 │   ├── hunter.py           # Main attacking (hunter) behaviour
 │   ├── keeper.py           # Goalkeeper behaviour
@@ -86,7 +119,9 @@ The console launches `main.py` itself, so stop `robot-core` before using it to k
 │   ├── PIDAnalysis/        # PID logging and analysis utilities
 │   ├── console/            # Local web console and its configuration
 │   └── requirements.txt    # Python dependencies
-├── startup/                # Raspberry Pi service/startup configuration
+├── rp2040-zero/            # PlatformIO project for the Waveshare RP2040-Zero (early stage)
+├── mirror/                 # Hyperbolic mirror calculations (notebook) and DXF drawing
+├── startup/                # systemd service for running the web console without Docker
 └── log/                    # Runtime log output
 ```
 
@@ -103,7 +138,8 @@ Useful standalone scripts include:
 ```bash
 python3 -m robot.calibration.motor_identification
 python3 -m robot.calibration.servo_calibration
-python3 -m robot.tests.captureFrames
+python3 -m robot.tests.captureRaspiFrame
+python3 -m robot.tests.captureWebFrames
 ```
 
 To inspect devices connected to the Raspberry Pi I2C bus:
