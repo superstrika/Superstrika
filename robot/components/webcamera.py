@@ -47,10 +47,10 @@ if __name__ == "__main__":
 
     VERSION = 4.5
     c = WebCamera(f"/home/admin/Superstrika/robot/models/best-V{VERSION}.onnx",
-                  focalLength=594.8065824286882,
                   cameraIndex=args.camera,
+                  focalLength=194.487,
                   showLiveFeed=args.showLiveFeed)
-
+    c.calibrate(75)
     try:
         while True:
             distances = c.getObjects()

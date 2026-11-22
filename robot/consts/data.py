@@ -2,7 +2,7 @@
                    GPIO
 ----------------------------------------------"""
 
-MOTOR_PINS: list[int] = [13, 16, 17, 18, 19, 20, 21, 22]
+MOTOR_PINS: list[int] = [21, 22, 17, 18, 13, 16, 19, 20]
 TCRT_PINS: list[int] = [1, 0, 5]
 SERVO_PIN: int = 6
 RELAY_PIN: int = 7
@@ -42,7 +42,7 @@ LOG_FORMAT: str = "[%(levelname)s] %(cls)s: %(funcName)s: %(message)s"
 
 BALL_SIZE_CM: float = 4.3
 GOAL_SIZE_CM: float = 64.0
-CAMERA_HEIGHT_CM: float = 14.5
+CAMERA_HEIGHT_CM: float = 7.1
 
 """----------------------------------------------
               Hunt Configuration

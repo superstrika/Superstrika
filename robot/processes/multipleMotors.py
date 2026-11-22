@@ -52,12 +52,12 @@ class multipleMotors:
 
         # Front Right
         wheel1_speed = (Vy - Vx + rotation) if not back_only else 0.0
-        # Rear Right
-        wheel2_speed = Vx + Vy + rotation
-        # Rear Left
-        wheel3_speed = Vx - Vy + rotation
         # Front Left
-        wheel4_speed = (-Vx - Vy + rotation) if not back_only else 0.0
+        wheel2_speed = -Vx - Vy + rotation
+        # Back Left
+        wheel3_speed = (Vx - Vy + rotation) if not back_only else 0.0
+        # Back Right
+        wheel4_speed = Vx + Vy + rotation
 
         speeds = [wheel1_speed, wheel2_speed, wheel3_speed, wheel4_speed]
 

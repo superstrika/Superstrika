@@ -1,6 +1,6 @@
 import sys
 
-from flask import logging
+#from flask import logging
 
 from robot.processes.multipleMotors import multipleMotors
 import robot.consts.data as data

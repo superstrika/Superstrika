@@ -8,14 +8,15 @@ def main() -> None:
     # relay.on()
     motors = multipleMotors(data.MOTOR_PINS)
     speed = 100
-    
-    motors.setMotorOn(3, speed)
-    motors.setMotorOn(2, speed)
 
-    input()
+    #motors.setMotorOn(2, speed)
 
-    for i in range(2):
+    #input()
+
+    for i in range(4):
         motors.setMotorOn(i, speed)
+        input("Press Enter to continue...")
+        motors.setMotorOn(i, -speed)
         input("Press Enter to continue...")
 
 

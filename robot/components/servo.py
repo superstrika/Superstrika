@@ -35,6 +35,7 @@ class Servo:
         duty = Servo.calculateDuty(angle) / 100
 
         self.servo.value = duty
+        print(duty)
 
         self.log.debug(f"Changed angle to {angle} in duty {duty}")
 
@@ -44,6 +45,11 @@ class Servo:
         self.servo.value = 0
 
 if __name__ == "__main__":
+    #pin = gpiozero.PWMLED(6)
+    #pin.value = 0.7
+    #input()
+
+    
     s = Servo(6)
     while True:
         angle = input("Enter angle (0-180) or 'q' to quit: ")
@@ -51,3 +57,4 @@ if __name__ == "__main__":
         
         angle = float(angle)
         s.angle = angle
+    #"""

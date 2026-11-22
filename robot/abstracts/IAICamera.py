@@ -68,10 +68,11 @@ class IAICamera(ICamera):
             self.updateObjects()
 
             if not self.isObjectDetected(Object.Ball):
+                print("fuck")
                 continue
-
+            
             ballInfo = self._objects[Object.Ball]
-
+            print(ballInfo)
             perceivedSize = (ballInfo.width + ballInfo.height) / 2.0
             if perceivedSize > 0:
                 self._focalLength = (perceivedSize * calibrationDistanceCM) / BALL_SIZE_CM
