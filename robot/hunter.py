@@ -1,4 +1,5 @@
 import sys
+import argparse
 import robot.components.servo as servo
 from time import sleep
 import time
@@ -23,8 +24,13 @@ except ImportError:
 
 logging.basicConfig(filename=data.LOG_PATH, filemode='w', level=logging.DEBUG, format=data.LOG_FORMAT)
 
+# setSpeed() multiplies Vy by cos(crossAngle / 2) = cos(45 deg), so a forward command of 100 only
+# reaches ~71% on the wheels. This limit is the forward command that drives them at 100%.
+MAX_FORWARD_SPEED: float = 100 / math.cos(math.radians(45))
+
+
 class Hunt:
-    def __init__(self, debug=False):
+    def __init__(self, debug=False, showLiveFeed=False, saveFrames=False, cameraIndex=0):
         # race conditions of motors
         self.lock = threading.RLock()
         self.condition = threading.Condition(self.lock)
@@ -43,7 +49,10 @@ class Hunt:
         # sensors
         self.gyro = gyro.MPU6050(self.i2c)
         self.camera = webCamera.WebCamera(f"/home/admin/Superstrika/robot/models/best-V4.5.onnx",
-                  focalLength=194.487)
+                  focalLength=194.487,
+                  cameraIndex=cameraIndex,
+                  showLiveFeed=showLiveFeed,
+                  saveFrames=saveFrames)
 
         # processes
         # self.lineDetection = EdgeLineDetection.EdgeLineDetection(pins=data.TCRT_PINS, motors=self.motors, parent=self)
@@ -131,24 +140,37 @@ class Hunt:
         return False
 
     def goToBall(self, obj: Object = Object.Ball):
+        target = data.BALL_IN_KICKER_DISTANCE if obj == Object.Ball else data.ROBOT_GOAl_DISTANCE
+
         pid = PidCalc(0.4, 0.2, 0.0, 100, True)
-        pidDist = PidCalc(1.5, 0.3, 0.0, 100)
+        pidDist = PidCalc(1.5, 0.0, 0.0, MAX_FORWARD_SPEED)
+
+        loops = 0
+        startTime = time.time()
         error = self.camera.getObjects()[obj]
         try:
             while error:
-                print(error)
+                distError = error.distance - target
+                if distError < 0:
+                    break
 
                 correction = pid.pidCalc(-error.angle)
-                speedY = pidDist.pidCalc(error.distance)
+                # Never go below the speed the motors need to move, or the robot stalls short of the ball.
+                speedY = max(pidDist.pidCalc(distError), data.GO_TO_BALL_MIN_SPEED)
+                self.log.debug(f"{error=} {speedY=:.1f} {correction=:.1f}")
 
                 self.motors.setSpeed(0, speedY, correction)
                 time.sleep(0.01)
+                loops += 1
 
                 error = self.camera.getObjects()[obj]
         except Exception as e:
             self.log.error(f"{e}")
         finally:
             self.motors.stophard()
+            elapsed = time.time() - startTime
+            if loops and elapsed > 0:
+                self.log.info(f"{loops} loops in {elapsed:.2f}s ({loops / elapsed:.1f} Hz)")
 
         if not self.camera.isObjectDetected(obj):
             self.motors.stop()
@@ -225,7 +247,16 @@ class Hunt:
         self.motors.stop()
 
 if __name__ == "__main__":
-    r = Hunt(debug=True)
+    parser = argparse.ArgumentParser(description="Run the hunter robot.")
+    parser.add_argument("--showLiveFeed", action="store_true",
+                        help="Show a live window with the detected objects boxed.")
+    parser.add_argument("--saveFrames", action="store_true",
+                        help="Save every annotated camera frame to saved_frames/ (slows the control loop).")
+    parser.add_argument("--camera", type=int, default=0,
+                        help="Camera index to use (default: 0).")
+    args = parser.parse_args()
+
+    r = Hunt(debug=True, showLiveFeed=args.showLiveFeed, saveFrames=args.saveFrames, cameraIndex=args.camera)
     # r.hunt()
     r.goToBall()
     # while True:

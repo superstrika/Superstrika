@@ -17,16 +17,19 @@ class IAICamera(ICamera):
                  focalLength: float = 0.0,
                  imageRes: tuple[int, int] = (256, 256),
                  outputDir: str = "saved_frames",
-                 showLiveFeed: bool = False
+                 showLiveFeed: bool = False,
+                 saveFrames: bool = False
                  ) -> None:
 
         # Live feed window (shows annotated frames with detections)
         self._showLiveFeed = showLiveFeed
         self._liveFeedWindow = "Live Feed"
 
-        # Folder to save output images
+        # Saving every frame to disk is slow on the Pi, so it is off unless asked for.
+        self._saveFrames = saveFrames
         self._outputDir = outputDir
-        os.makedirs(self._outputDir, exist_ok=True)
+        if self._saveFrames:
+            os.makedirs(self._outputDir, exist_ok=True)
 
         # Image Configuration:
         self._imageRes = imageRes
@@ -87,6 +90,9 @@ class IAICamera(ICamera):
         """
         frame = self.captureFrame()
 
+        # Drawing is only needed when someone will see the frame.
+        annotate = self._saveFrames or self._showLiveFeed
+
         frame_h, frame_w, _ = frame.shape
         center_x, center_y = frame_w // 2, frame_h // 2
 
@@ -117,6 +123,9 @@ class IAICamera(ICamera):
                 if obj and (obj not in objects or area > objects[obj].area):
                     objects[obj] = ObjectInfo(h, w, x, y, area)
 
+                if not annotate:
+                    continue
+
                 # --- 1. Draw Bounding Box ---
                 cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 255, 0), 2)
 
@@ -140,6 +149,9 @@ class IAICamera(ICamera):
             else:
                 self._objects[obj] = ObjectInfo.empty()
 
+        if not annotate:
+            return
+
         # --- 3. Draw White Center Crosshair ---
         white_color = (255, 255, 255)
         # Horizontal line across the center
@@ -147,10 +159,11 @@ class IAICamera(ICamera):
         # Vertical line across the center
         cv2.line(frame, (center_x, 0), (center_x, frame_h), white_color, 1)
 
-        # --- 4. Auto-Save Frame ---
-        timestamp = time.strftime("%Y%m%d_%H%M%S_%f")
-        save_path = os.path.join(self._outputDir, f"frame_{timestamp}.jpg")
-        cv2.imwrite(save_path, frame)
+        # --- 4. Save Frame ---
+        if self._saveFrames:
+            timestamp = time.strftime("%Y%m%d_%H%M%S_%f")
+            save_path = os.path.join(self._outputDir, f"frame_{timestamp}.jpg")
+            cv2.imwrite(save_path, frame)
 
         # --- 5. Live Feed ---
         if self._showLiveFeed:
@@ -161,8 +174,7 @@ class IAICamera(ICamera):
         """Calculates distance and angle from camera."""
 
         actualSize: float = BALL_SIZE_CM if obj == Object.Ball else GOAL_SIZE_CM
-        averageDetectedSize: float = (objectInfo.width + objectInfo.height) / 2.0
-        # averageDetectedSize: float = objectInfo.width
+        averageDetectedSize: float = self._detectedSize(objectInfo, obj)
         directDistance: float = (actualSize * self._focalLength) / (averageDetectedSize)
 
         floorProjectionDistance: float = math.sqrt(max(directDistance ** 2 - CAMERA_HEIGHT_CM ** 2, 0.0))
@@ -172,8 +184,32 @@ class IAICamera(ICamera):
 
         actualXDistance: float = ballCenteredXCord * actualSize / averageDetectedSize
 
-        angle: float = math.degrees(math.asin(actualXDistance / floorProjectionDistance))
+        # Close to the camera the sideways offset can exceed the floor distance, which would make
+        # asin() raise. Clamp to [-1, 1] so a close, off-center object reads as about +-90 degrees.
+        if floorProjectionDistance > 0:
+            ratio = max(-1.0, min(1.0, actualXDistance / floorProjectionDistance))
+        else:
+            ratio = 1.0 if actualXDistance > 0 else -1.0 if actualXDistance < 0 else 0.0
+        angle: float = math.degrees(math.asin(ratio))
         return DisplacementVector(floorProjectionDistance, angle)
+
+    def _detectedSize(self, objectInfo: ObjectInfo, obj: Object, edgeMarginPx: float = 2.0) -> float:
+        """Size in pixels used for the distance estimate.
+
+        A ball that touches the image edge is cut off, so its box is smaller than the ball and the
+        distance comes out too large. The ball is round, so the uncut side (the larger one) still
+        shows its real size. Goals are not round, so they keep the width/height average.
+        """
+        average = (objectInfo.width + objectInfo.height) / 2.0
+        if obj != Object.Ball:
+            return average
+
+        imageW, imageH = self._imageRes
+        halfW, halfH = objectInfo.width / 2.0, objectInfo.height / 2.0
+        touchesEdge = (objectInfo.x - halfW <= edgeMarginPx or objectInfo.x + halfW >= imageW - edgeMarginPx or
+                       objectInfo.y - halfH <= edgeMarginPx or objectInfo.y + halfH >= imageH - edgeMarginPx)
+
+        return max(objectInfo.width, objectInfo.height) if touchesEdge else average
 
     @staticmethod
     def calculateMirrorAngle(objectInfo: ObjectInfo) -> DisplacementVector:

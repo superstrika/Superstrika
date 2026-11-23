@@ -15,10 +15,11 @@ class RaspiCamera(IAICamera):
                  outputDir: str = "saved_frames",
                  cameraIndex: int = 0,
                  showLiveFeed: bool = False,
+                 saveFrames: bool = False,
                  ):
 
         super().__init__(modelPath=modelPath, imageRes=imageRes, focalLength=focalLength, objectNames=objectNames,
-                         outputDir=outputDir, showLiveFeed=showLiveFeed)
+                         outputDir=outputDir, showLiveFeed=showLiveFeed, saveFrames=saveFrames)
 
         # camera configuration:
         self._picam = Picamera2(camera_num=cameraIndex)
@@ -72,11 +73,14 @@ if __name__ == "__main__":
                         help="Show a live window with the detected objects boxed.")
     parser.add_argument("--camera", type=int, default=0,
                         help="Camera index to use (default: 0).")
+    parser.add_argument("--saveFrames", action="store_true",
+                        help="Save every annotated frame to saved_frames/.")
     args = parser.parse_args()
 
     cam = RaspiCamera("robot/models/best-V4.5.onnx",
                       cameraIndex=args.camera,
-                      showLiveFeed=args.showLiveFeed)
+                      showLiveFeed=args.showLiveFeed,
+                      saveFrames=args.saveFrames)
 
     try:
         while True:

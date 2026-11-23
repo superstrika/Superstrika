@@ -31,7 +31,6 @@ class motor7046:
     @speed.setter
     def speed(self, speed: float):
         # self._speed = map(speed, -100, 100, -1, 1)
-        print(f"Setting motor {self._pin1, self._pin2} speed to: {speed}")
         self._speed = speed / 100
         self.log.debug(f"{self._speed}")
         pwm_value = abs(self._speed)

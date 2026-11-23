@@ -12,16 +12,21 @@ class WebCamera(IAICamera):
                  imageRes: tuple[int, int] = (256, 256),
                  outputDir: str = "saved_frames",
                  cameraIndex: int = 0,
-                 showLiveFeed: bool = False
+                 showLiveFeed: bool = False,
+                 saveFrames: bool = False
                  ) -> None:
 
         super().__init__(modelPath=modelPath, imageRes=imageRes, focalLength=focalLength, objectNames=objectNames,
-                         outputDir=outputDir, showLiveFeed=showLiveFeed)
+                         outputDir=outputDir, showLiveFeed=showLiveFeed, saveFrames=saveFrames)
 
         # Camera configuration
         self._webcam = cv2.VideoCapture(cameraIndex)
         if not self._webcam.isOpened():
             raise RuntimeError(f"Could not open camera {cameraIndex}")
+
+        # Keep only the newest frame. By default OpenCV queues a few frames, so when detection is
+        # slower than the camera, read() returns an old frame and the robot reacts late.
+        self._webcam.set(cv2.CAP_PROP_BUFFERSIZE, 1)
 
         # Calibration
         if self._focalLength == 0.0:
@@ -43,13 +48,16 @@ if __name__ == "__main__":
                         help="Show a live window with the detected objects boxed.")
     parser.add_argument("--camera", type=int, default=0,
                         help="Camera index to use (default: 0).")
+    parser.add_argument("--saveFrames", action="store_true",
+                        help="Save every annotated frame to saved_frames/.")
     args = parser.parse_args()
 
     VERSION = 4.5
     c = WebCamera(f"/home/admin/Superstrika/robot/models/best-V{VERSION}.onnx",
                   cameraIndex=args.camera,
                   focalLength=194.487,
-                  showLiveFeed=args.showLiveFeed)
+                  showLiveFeed=args.showLiveFeed,
+                  saveFrames=args.saveFrames)
     c.calibrate(75)
     try:
         while True:
