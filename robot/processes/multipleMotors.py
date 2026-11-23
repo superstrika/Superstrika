@@ -51,17 +51,21 @@ class multipleMotors:
         Vy *= VyScale
 
         # Front Right
-        wheel1_speed = (Vy - Vx + rotation) if not back_only else 0.0
+        wheel1_speed = Vy - Vx + rotation
         # Front Left
         wheel2_speed = -Vx - Vy + rotation
         # Back Left
         wheel3_speed = (Vx - Vy + rotation) if not back_only else 0.0
         # Back Right
-        wheel4_speed = Vx + Vy + rotation
+        wheel4_speed = (Vx + Vy + rotation) if not back_only else 0.0
 
         speeds = [wheel1_speed, wheel2_speed, wheel3_speed, wheel4_speed]
 
         self.log.debug(f"{speeds=}")
+
+        m = max(abs(s) for s in speeds)
+        if m > 100:
+            speeds = [s * 100 / m for s in speeds]
 
         for i in range(len(self.motors)):
             self.motors[i].speed = max(-100, min(100, speeds[i])) if abs(speeds[i]) > 0.01 else 0
