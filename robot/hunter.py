@@ -9,7 +9,7 @@ import robot.components.gyro as gyro
 import robot.components.dribbler as dribbler
 import robot.consts.data as data
 import logging
-#import robot.components.webcamera as webCamera
+import robot.components.webcamera as webCamera
 from robot.processes.pidCalc import PidCalc
 import robot.processes.gyroMovement as gyroMovement
 import robot.processes.multipleMotors as multipleMotors
@@ -42,13 +42,8 @@ class Hunt:
 
         # sensors
         self.gyro = gyro.MPU6050(self.i2c)
-        #self.camera = webCamera.WebCamera(f"/home/admin/Superstrika/robot/models/best-V2.1.onnx",
-        #          {
-        #              "Ball": Object.Ball,
-        #              "Blue Goal": Object.BlueGoal,
-        #              "Yellow goal": Object.YellowGoal
-        #          },
-        #          594.8065824286882)
+        self.camera = webCamera.WebCamera(f"/home/admin/Superstrika/robot/models/best-V4.5.onnx",
+                  focalLength=194.487)
 
         # processes
         # self.lineDetection = EdgeLineDetection.EdgeLineDetection(pins=data.TCRT_PINS, motors=self.motors, parent=self)
@@ -136,8 +131,8 @@ class Hunt:
         return False
 
     def goToBall(self, obj: Object = Object.Ball):
-        pid = PidCalc(0.35, 0.2, 0.0, 100, True)
-        pidDist = PidCalc(1, 0.3, 0.0, 100)
+        pid = PidCalc(0.4, 0.2, 0.0, 100, True)
+        pidDist = PidCalc(1.5, 0.3, 0.0, 100)
         error = self.camera.getObjects()[obj]
         try:
             while error:
@@ -157,7 +152,7 @@ class Hunt:
 
         if not self.camera.isObjectDetected(obj):
             self.motors.stop()
-            self.tryBallDownSearch(obj)
+            #self.tryBallDownSearch(obj)
             return None
 
 
