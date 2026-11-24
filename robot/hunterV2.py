@@ -104,3 +104,16 @@ class Hunter:
 
         self._motors.stophard()
         return False
+
+    def hunt(self):
+        while True:
+            status = self._camera.getObjectsStatus()[Object.Ball]
+
+            if status == BallStatus.CAM_DETECTED:
+                self._log.info("Ball Detected!")
+                self.goToObject(Object.Ball)
+
+            if status == BallStatus.NOT_FOUND:
+                self._log.info("Ball Not Found!")
+                if not self.spinSearch(Object.Ball):
+                    input("Spin Search Failed!")
