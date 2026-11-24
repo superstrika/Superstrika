@@ -2,12 +2,12 @@ import sys
 
 #from flask import logging
 
-from robot.processes.multipleMotors import multipleMotors
+from robot.processes.MultipleMotors import MultipleMotors
 import robot.consts.data as data
 
 
 def main():
-    motors = multipleMotors(data.MOTOR_PINS)
+    motors = MultipleMotors(data.MOTOR_PINS)
 
     motors.setSpeed(0, 100, 0)
     input()

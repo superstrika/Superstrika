@@ -2,12 +2,12 @@ import logging
 import robot.components.motor as motor
 import math
 
-class multipleMotors:
+class MultipleMotors:
     _CROSS_ANGLE: int
 
     def __init__(self, pins: list[int], crossAngle: int = 90, parent=None):
 
-        multipleMotors._CROSS_ANGLE = crossAngle
+        MultipleMotors._CROSS_ANGLE = crossAngle
 
         self.parent = parent
 
@@ -44,8 +44,8 @@ class multipleMotors:
     def setSpeed(self, Vx: float, Vy: float, rotation: float, bypass_priority: bool=False, back_only: bool=False):
         self.waitForLock(bypass_priority=bypass_priority)
 
-        VxScale = math.sin(math.radians(multipleMotors._CROSS_ANGLE / 2.0))
-        VyScale = math.cos(math.radians(multipleMotors._CROSS_ANGLE / 2.0))
+        VxScale = math.sin(math.radians(MultipleMotors._CROSS_ANGLE / 2.0))
+        VyScale = math.cos(math.radians(MultipleMotors._CROSS_ANGLE / 2.0))
 
         Vx *= VxScale
         Vy *= VyScale

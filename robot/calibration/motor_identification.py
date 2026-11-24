@@ -1,12 +1,12 @@
 from robot.components.motor import motor7046
-from robot.processes.multipleMotors import multipleMotors
+from robot.processes.MultipleMotors import MultipleMotors
 import robot.consts.data as data
 import gpiozero
 
 def main() -> None:
     # relay = gpiozero.LED(8)
     # relay.on()
-    motors = multipleMotors(data.MOTOR_PINS)
+    motors = MultipleMotors(data.MOTOR_PINS)
     speed = 100
 
     #motors.setMotorOn(2, speed)

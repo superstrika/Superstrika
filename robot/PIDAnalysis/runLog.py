@@ -1,5 +1,5 @@
 from .pidCalcLog import PidCalc
-import robot.processes.multipleMotors as multipleMotors
+import robot.processes.MultipleMotors as multipleMotors
 import robot.components.openmvCamera as openmvCamera
 import robot.consts.data as data
 import logging

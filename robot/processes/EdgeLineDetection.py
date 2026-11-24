@@ -1,4 +1,4 @@
-import robot.processes.multipleMotors as multipleMotors
+import robot.processes.MultipleMotors as multipleMotors
 import robot.components.motor as motor
 import robot.consts.data as data
 from time import sleep
@@ -8,11 +8,11 @@ import threading
 
 
 class EdgeLineDetection:
-    def __init__(self, pins: list[int], motors: multipleMotors.multipleMotors = None, parent=None):
+    def __init__(self, pins: list[int], motors: multipleMotors.MultipleMotors = None, parent=None):
         if motors:
             self.motors = motors
         else:
-            self.motors = multipleMotors.multipleMotors(data.MOTOR_PINS)
+            self.motors = multipleMotors.MultipleMotors(data.MOTOR_PINS)
 
         # Line detection flags (True = line detected)
         self.line_detected = {

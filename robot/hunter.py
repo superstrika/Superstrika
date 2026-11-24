@@ -1,5 +1,4 @@
 import sys
-import argparse
 import robot.components.servo as servo
 from time import sleep
 import time
@@ -13,7 +12,7 @@ import logging
 import robot.components.webcamera as webCamera
 from robot.processes.pidCalc import PidCalc
 import robot.processes.gyroMovement as gyroMovement
-import robot.processes.multipleMotors as multipleMotors
+import robot.processes.MultipleMotors as multipleMotors
 import threading
 from robot.consts.enum import GoalStatus, BallStatus, Object
 
@@ -45,7 +44,7 @@ class Hunt:
         self.servo = servo.Servo(data.SERVO_PIN)
         self.servo.angle = data.MAX_ANGLE
 
-        self.motors = multipleMotors.multipleMotors(data.MOTOR_PINS, parent=self)
+        self.motors = multipleMotors.MultipleMotors(data.MOTOR_PINS, parent=self)
         self.dribbler = dribbler.Dribbler(data.DRIBBLER_PIN)
 
         # sensors
@@ -258,14 +257,6 @@ class Hunt:
         self.motors.stop()
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Run the hunter robot.")
-    parser.add_argument("--showLiveFeed", action="store_true",
-                        help="Show a live window with the detected objects boxed.")
-    parser.add_argument("--saveFrames", action="store_true",
-                        help="Save every annotated camera frame to saved_frames/ (slows the control loop).")
-    parser.add_argument("--camera", type=int, default=0,
-                        help="Camera index to use (default: 0).")
-    args = parser.parse_args()
 
     r = Hunt(debug=True, showLiveFeed=args.showLiveFeed, saveFrames=args.saveFrames, cameraIndex=args.camera)
     r.hunt()

@@ -1,7 +1,7 @@
 from robot.processes.pidCalc import PidCalc as PidCalc
 from robot.components.gyro import MPU6050
 from robot.components.motor import motor7046
-from robot.processes.multipleMotors import multipleMotors
+from robot.processes.MultipleMotors import MultipleMotors
 from smbus2 import SMBus as I2C  # For RPI compatibility
 from time import sleep
 import robot.consts.data as data
@@ -10,7 +10,7 @@ import time
 
 
 class GyroMovement:
-    def __init__(self, i2c: I2C = None, gyro: MPU6050 = None, motors: multipleMotors = None):
+    def __init__(self, i2c: I2C = None, gyro: MPU6050 = None, motors: MultipleMotors = None):
         if i2c and not gyro:
             self.i2c = i2c
             self.gyro = MPU6050(self.i2c)
@@ -24,7 +24,7 @@ class GyroMovement:
         if motors:
             self.motors = motors
         else:
-            self.motors = multipleMotors(data.MOTOR_PINS)
+            self.motors = MultipleMotors(data.MOTOR_PINS)
 
     def spinToAngle(self, setPoint: int, pidValues: tuple=(2, 2, 0.1, 100), errorOffset: float=0.5) -> None:
         error: float = setPoint - self.gyro.get_z_angle()

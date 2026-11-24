@@ -12,7 +12,7 @@ import logging
 import robot.components.openmvCamera as openmvCamera
 from robot.processes.pidCalc import PidCalc
 import robot.processes.gyroMovement as gyroMovement
-import robot.processes.multipleMotors as multipleMotors
+import robot.processes.MultipleMotors as multipleMotors
 import threading
 from robot.hunter import Hunt
 
