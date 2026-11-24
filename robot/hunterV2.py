@@ -81,7 +81,7 @@ class Hunter:
         self._log.info(f"Object not detected: {obj.name}")
         return False
 
-    def goToObject(self, obj: Object = Object.Ball):
+    def goToObject(self, obj: Object = Object.Ball) -> bool:
         self._log.info(f"Started Going to: {obj.name}")
 
         target = data.BALL_IN_KICKER_DISTANCE if obj == Object.Ball else data.ROBOT_GOAl_DISTANCE
@@ -111,7 +111,8 @@ class Hunter:
 
             if status == BallStatus.CAM_DETECTED:
                 self._log.info("Ball Detected!")
-                self.goToObject(Object.Ball)
+                if self.goToObject(Object.Ball):
+                    input("Got to Ball!")
 
             if status == BallStatus.NOT_FOUND:
                 self._log.info("Ball Not Found!")
