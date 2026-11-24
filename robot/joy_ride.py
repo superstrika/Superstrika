@@ -6,6 +6,7 @@ import robot.processes.EdgeLineDetection as EdgeLineDetection
 import robot.components.gyro as gyro
 import robot.components.dribbler as dribbler
 import robot.consts.data as data
+import robot.consts.enum as enum
 # from robot.components.vcnl import VCNL4040 as VCNL
 import logging
 import robot.components.openmvCamera as openmvCamera
@@ -52,7 +53,7 @@ class Ride(Hunt):
         input()
         """
         while True:
-            self.goToBall()
+            self.goToBall(obj=enum.Object.BlueGoal)
 
 if __name__ == "__main__":
     j = Ride()

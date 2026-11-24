@@ -20,10 +20,10 @@ CHIP_ID: int = 0
 """----------------------------------------------
               Camera configuration
 ----------------------------------------------"""
-MIN_ANGLE: int = 40
-MID_ANGLE: int = 100
-MAX_ANGLE: int = 180
-GOOD_ANGLE: int = 160
+MIN_ANGLE: int = 0
+MID_ANGLE: int = 50
+MAX_ANGLE: int = 70
+GOOD_ANGLE: int = 60
 
 """----------------------------------------------
               Serial configuration
@@ -54,7 +54,7 @@ SPIN_TO_BALL_ERROR: float = 1.5
 GO_TO_BALL_ERROR: float = 1
 GO_TO_BALL_MIN_SPEED: float = 40
 # ROBOT_BALL_DISTANCE: tuple[float, float] = (0, 0)
-ROBOT_GOAl_DISTANCE: int = 25
+ROBOT_GOAl_DISTANCE: int = 70
 
 BALL_IN_KICKER_DISTANCE = 2 # cm
 

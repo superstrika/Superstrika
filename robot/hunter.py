@@ -43,6 +43,8 @@ class Hunt:
         # motors
         self.i2c = I2C(data.I2C_ID)
         self.servo = servo.Servo(data.SERVO_PIN)
+        self.servo.angle = data.MAX_ANGLE
+
         self.motors = multipleMotors.multipleMotors(data.MOTOR_PINS, parent=self)
         self.dribbler = dribbler.Dribbler(data.DRIBBLER_PIN)
 
@@ -96,12 +98,14 @@ class Hunt:
 
         self.log.info("Initializing Camera Search...")
 
-        for angle in range(data.MAX_ANGLE, data.MIN_ANGLE, -35):
+        for angle in range(data.MAX_ANGLE, data.MIN_ANGLE-35, -35):
             self.servo.angle = angle
+            time.sleep(0.2)
+
             if self.camera.isObjectDetected(obj):
+                self.goToBall()
                 return True
             
-            time.sleep(0.2)
         
         return False
 
@@ -123,12 +127,16 @@ class Hunt:
             if not self.running_gate.is_set():  # ------------------------------------------------------------------- Check if end button was pressed.
                 return None
             
-            if obj == Object.Ball and self.camSearch(obj):
+            if obj == Object.Ball:
                 self.log.info(f"Object {obj.name} Found")
                 return True
             elif (obj == Object.YellowGoal or obj == Object.BlueGoal) and (self.camera.getObjectsStatus()[obj] in (GoalStatus.FAR, GoalStatus.CLOSE)):
                 self.log.info(f"Object {obj.name} Found")
                 return True
+
+            if obj == Object.Ball:
+                if self.camSearch(obj):
+                    return True
 
             self.gyroMovement.spinToAngle(angle + 45)
             angle = self.gyro.get_z_angle()
@@ -215,33 +223,35 @@ class Hunt:
                 self.dribbler.stop()
                 if not self.spinSearch():
                     self.log.debug("Spin Search failed!")
-                    self.gyroMovement.move_forward_cm(15, (0, 30), (0.4, 0.01, 0.1, 100))
+                    input()
+                    # if not self.camSearch(Object.Ball):
+                    #     self.gyroMovement.move_forward_cm(15, (0, 30), (0.4, 0.01, 0.1, 100))
 
-            if status == BallStatus.IN_KICKER:
-                self.log.info("Ball in Kicker Position!")
-                self.dribbler.start()
-                obj: Object = Object.YellowGoal if data.SELF_IS_BLUE else Object.YellowGoal
+            # if status == BallStatus.IN_KICKER:
+            #     self.log.info("Ball in Kicker Position!")
+            #     self.dribbler.start()
+            #     obj: Object = Object.YellowGoal if data.SELF_IS_BLUE else Object.YellowGoal
 
-                while True:
-                    goalStatus = self.camera.getObjectsStatus()[obj]
+            #     while True:
+            #         goalStatus = self.camera.getObjectsStatus()[obj]
 
-                    if goalStatus == GoalStatus.NOT_FOUND:
-                        self.log.info("Searching for goal!")
-                        self.servo.angle = data.MAX_ANGLE
-                        self.spinSearch(obj=obj)
+            #         if goalStatus == GoalStatus.NOT_FOUND:
+            #             self.log.info("Searching for goal!")
+            #             self.servo.angle = data.MAX_ANGLE
+            #             self.spinSearch(obj=obj)
 
-                    if goalStatus == GoalStatus.FAR:
-                        self.log.info("Going to Goal!")
-                        self.goToBall(obj=obj)
+            #         if goalStatus == GoalStatus.FAR:
+            #             self.log.info("Going to Goal!")
+            #             self.goToBall(obj=obj)
 
-                    if goalStatus == GoalStatus.CLOSE:
-                        self.log.info("Kicked Ball!!!!!")
-                        self.dribbler.counterStart()
-                        sleep(0.4)
-                        if self.camera.getObjectsStatus(self.vcnl.proximity)[Object.Ball] == BallStatus.CAM_DETECTED:
-                            self.log.info("Goal!!!!! Game finished!")
-                        else:
-                            break
+            #         if goalStatus == GoalStatus.CLOSE:
+            #             self.log.info("Kicked Ball!!!!!")
+            #             self.dribbler.counterStart()
+            #             sleep(0.4)
+            #             if self.camera.getObjectsStatus(self.vcnl.proximity)[Object.Ball] == BallStatus.CAM_DETECTED:
+            #                 self.log.info("Goal!!!!! Game finished!")
+            #             else:
+            #                 break
             self.motors.stop()
 
     def __del__(self):
@@ -258,7 +268,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     r = Hunt(debug=True, showLiveFeed=args.showLiveFeed, saveFrames=args.saveFrames, cameraIndex=args.camera)
-    # r.hunt()
-    r.goToBall()
+    r.hunt()
+    #r.goToBall()
     # while True:
     #     r.spinSearch()
