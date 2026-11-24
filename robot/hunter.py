@@ -131,7 +131,7 @@ class Hunt:
         return False
 
     def goToBall(self, obj: Object = Object.Ball):
-        pid = PidCalc(0.4, 0.2, 0.0, 100, True)
+        pid = PidCalc(0.4, 0.2, 0.1, 100, True)
         pidDist = PidCalc(1.5, 0.3, 0.0, 100)
         error = self.camera.getObjects()[obj]
         try:
