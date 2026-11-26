@@ -52,7 +52,7 @@ if __name__ == "__main__":
                         help="Save every annotated frame to saved_frames/.")
     args = parser.parse_args()
 
-    VERSION = 4.5
+    VERSION = 7.0
     c = WebCamera(f"/home/admin/Superstrika/robot/models/best-V{VERSION}.onnx",
                   cameraIndex=args.camera,
                   focalLength=194.487,
