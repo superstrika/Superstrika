@@ -1,1 +1,1 @@
-import compass, dribbler, gyro, kicker, motor, openmvCamera, raspiCamera, servo, tcrt5000, vcnl, webcamera
+from robot.components import compass, dribbler, gyro, kicker, motor, openmvCamera, raspiCamera, servo, tcrt5000, vcnl, webcamera

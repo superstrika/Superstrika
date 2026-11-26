@@ -1,1 +1,1 @@
-import EdgeLineDetection, gyroMovement, MultipleMotors, pidCalc
+from robot.processes import EdgeLineDetection, gyroMovement, MultipleMotors, pidCalc

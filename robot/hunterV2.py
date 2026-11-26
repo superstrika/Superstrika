@@ -1,11 +1,12 @@
 import argparse
 import sys
 
-import consts.data as data
-from consts.enum import *
-from calibration import *
-from components import *
-from processes import *
+from . import args
+import robot.consts.data as data
+from robot.consts.enum import *
+from robot.calibration import *
+from robot.components import *
+from robot.processes import *
 
 from smbus2 import SMBus as I2C
 import gpiozero
@@ -93,6 +94,7 @@ class Hunter:
         while error:
             if error.distance - target < data.BALL_IN_KICKER_DISTANCE:
                 self._log.info(f"Found Object: {obj.name}")
+                self._motors.stophard()
                 return True
 
             correction = pidAngle.pidCalc(-error.angle)
@@ -118,3 +120,7 @@ class Hunter:
                 self._log.info("Ball Not Found!")
                 if not self.spinSearch(Object.Ball):
                     input("Spin Search Failed!")
+
+if __name__ == "__main__":
+    h = Hunter(args)
+    h.hunt()

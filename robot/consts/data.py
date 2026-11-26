@@ -16,7 +16,7 @@ START_BUTTON_PIN: int = 4
 ----------------------------------------------"""
 MIN_ANGLE: int = 0
 MID_ANGLE: int = 35
-MAX_ANGLE: int = 70
+MAX_ANGLE: int = 80
 # GOOD_ANGLE: int = 60
 
 """----------------------------------------------
@@ -50,7 +50,7 @@ GO_TO_BALL_MIN_SPEED: float = 40
 # ROBOT_BALL_DISTANCE: tuple[float, float] = (0, 0)
 ROBOT_GOAl_DISTANCE: int = 70
 
-BALL_IN_KICKER_DISTANCE: int = 2 # cm
+BALL_IN_KICKER_DISTANCE: int = 0.5 # cm
 MOTOR_CROSS_ANGLE: int = 45
 
 """----------------------------------------------

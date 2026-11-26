@@ -1,1 +1,1 @@
-import motor_identification, servo_calibration
+from robot.calibration import motor_identification, servo_calibration

@@ -1,1 +1,1 @@
-import IAICamera, ICamera
+from robot.abstracts import IAICamera, ICamera
