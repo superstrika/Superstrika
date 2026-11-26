@@ -53,10 +53,15 @@ class Hunter:
     def cameraSearch(self, obj: Object = Object.Ball) -> bool:
         self._log.info("Started Camera Search")
 
+        if self._camera.isObjectDetected(obj):
+            self._log.info(f"Object detected: {obj.name}")
+            return True
+
         for angle in [data.MAX_ANGLE, data.MID_ANGLE, data.MIN_ANGLE]:
             self._servo.angle = angle
             sleep(0.1)
             if self._camera.isObjectDetected(obj):
+                self._log.info(f"Object detected: {obj.name}")
                 return True
 
         return False

@@ -46,7 +46,7 @@ ROTATION_SPEED: int = 25
 SPIN_SEARCH_ERROR: float = 3
 SPIN_TO_BALL_ERROR: float = 1.5
 GO_TO_BALL_ERROR: float = 1
-GO_TO_BALL_MIN_SPEED: float = 40
+GO_TO_BALL_MIN_SPEED: float = 30
 # ROBOT_BALL_DISTANCE: tuple[float, float] = (0, 0)
 ROBOT_GOAl_DISTANCE: int = 70
 

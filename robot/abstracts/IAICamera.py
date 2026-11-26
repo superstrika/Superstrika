@@ -190,7 +190,7 @@ class IAICamera(ICamera):
             ratio = max(-1.0, min(1.0, actualXDistance / floorProjectionDistance))
         else:
             ratio = 1.0 if actualXDistance > 0 else -1.0 if actualXDistance < 0 else 0.0
-        angle: float = math.degrees(math.asin(ratio))
+        angle: float = math.degrees(math.atan(ratio))
         return DisplacementVector(floorProjectionDistance, angle)
 
     def _detectedSize(self, objectInfo: ObjectInfo, obj: Object, edgeMarginPx: float = 2.0) -> float:
